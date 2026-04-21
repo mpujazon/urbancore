@@ -1,0 +1,10 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="64" height="64" rx="16" fill="url(#favicon-gradient)"/>
+  <path d="M42.6666 33.3333C42.6666 39.9999 38 43.3333 32.4533 45.2666C32.1629 45.365 31.8474 45.3603 31.56 45.2533C26 43.3333 21.3333 39.9999 21.3333 33.3333V23.9999C21.3333 23.6463 21.4738 23.3072 21.7238 23.0571C21.9739 22.8071 22.313 22.6666 22.6666 22.6666C25.3333 22.6666 28.6666 21.0666 30.9866 19.0399C31.2691 18.7986 31.6285 18.666 32 18.666C32.3715 18.666 32.7308 18.7986 33.0133 19.0399C35.3466 21.0799 38.6666 22.6666 41.3333 22.6666C41.6869 22.6666 42.0261 22.8071 42.2761 23.0571C42.5262 23.3072 42.6666 23.6463 42.6666 23.9999V33.3333Z" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <defs>
+    <linearGradient id="favicon-gradient" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00BBA7"/>
+      <stop offset="1" stop-color="#009966"/>
+    </linearGradient>
+  </defs>
+</svg>
