@@ -32,7 +32,37 @@ nav{
     text-transform: uppercase;
   }
 }
-
+.desktop-menu{
+  display: none;
+}
 #menu-icon{
   font-size: 1.5rem;
+}
+
+li{
+  list-style: none;
+  color: $neutral;
+  &:hover{
+    cursor: pointer;
+    color: $primary;
+  }
+}
+#mobile-menu{
+  
+}
+@media (min-width: $bp-md){
+  nav{
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    background-color: $surface;
+    gap: $space-md;
+  }
+  #menu-icon{
+    display: none;
+  }
+  .desktop-menu{
+    display: flex;
+    gap: $space-md;
+  }
 }

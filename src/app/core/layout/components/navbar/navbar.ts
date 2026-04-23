@@ -1,16 +1,36 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { Link } from '../../../../shared/models/LinkInterface';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-navbar',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Navbar {
-  onMenuIconClick(event: Event){
-    const icon = event.target as HTMLLIElement;
-    icon.classList.toggle('fa-bars');
-    icon.classList.toggle('fa-xmark');
+  links: Link[] = [
+    {
+      label: 'Homepage',
+      basedRole: 'public',
+      url: '/'
+    },
+    {
+      label: 'Incidents Explorer',
+      basedRole: 'public',
+      url: '/incidents'
+    }
+  ];
+
+  isMenuOpen = signal(false);
+  menuIconClass = computed(() =>
+    this.isMenuOpen()?
+      'fa-solid fa-xmark':
+      'fa-solid fa-bars'
+  );
+
+  onMenuIconClick(){
+    this.isMenuOpen.update(val => !val);
   }
 }

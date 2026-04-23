@@ -3,5 +3,19 @@
     <img src="/icons/logo.svg" alt="UrbanCore Logo">
     <p>URBAN<br>CORE</p>
   </div>
-  <i (click)="onMenuIconClick($event)" id="menu-icon" class="fa-solid fa-bars"></i>
+
+  <ul class="desktop-menu">
+    @for (link of links; track $index) {
+      <li [routerLink]="link.url">{{link.label}}</li>
+    }
+  </ul>
+
+  <i (click)="onMenuIconClick()" id="menu-icon" [class]="menuIconClass()"></i>
+
+  <ul id="mobile-menu" [class.hidden]="!isMenuOpen()">
+    @for (link of links; track $index) {
+      <li [routerLink]="link.url">{{link.label}}</li>
+    }
+  </ul>
 </nav>
+
