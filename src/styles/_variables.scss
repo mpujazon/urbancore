@@ -1,0 +1,103 @@
+ // Colors: Surfaces
+$surface:                  #faf8ff;
+$surface-container-low:    #f2f3fd;
+$surface-container:        #ecedf5;
+$surface-container-high:   #e7e7f1;
+$surface-container-lowest: #ffffff;
+
+// Colors: Primary
+$primary:                  #002855;
+$primary-container:        #001430;
+$primary-fixed:            #d3e4ff;
+$on-primary:               #ffffff;
+
+// Colors: Secondary
+$secondary:                #0052cc;
+$secondary-fixed:          #dce6ff;
+$on-secondary:             #ffffff;
+
+// Colors: Tertiary
+$tertiary:                 #00875a;
+$tertiary-container:       #d6f0e4;
+$on-tertiary-container:    #34a273;
+
+// Colors: Error
+$error-container:          #ffdad6;
+$on-error-container:       #93000a;
+
+// Colors: Neutral
+$neutral:                  #45474f;
+$neutral-variant:          #5a5d6e;
+$on-surface:               #191b22;
+$outline-variant:          rgba(#191b22, 0.15);
+
+// Colors: Badges
+$badge-resolved-bg:        $tertiary-container;
+$badge-resolved-text:      $on-tertiary-container;
+$badge-critical-bg:        $error-container;
+$badge-critical-text:      $on-error-container;
+$badge-planned-bg:         $secondary-fixed;
+$badge-planned-text:       $secondary;
+
+// Gradient
+$gradient-primary-cta:     linear-gradient(135deg, $primary 0%, $primary-container 100%);
+
+// Typography: Fonts
+$font-display:             'Public Sans', sans-serif;
+$font-body:                'Inter', sans-serif;
+
+// Typography: Scale
+$display-lg:               3.5rem;
+$display-md:               2.8125rem;
+$display-sm:               2.25rem;
+$headline-lg:              2rem;
+$headline-md:              1.75rem;
+$headline-sm:              1.5rem;
+$body-lg:                  1rem;
+$body-md:                  0.875rem;
+$body-sm:                  0.75rem;
+$label-md:                 0.875rem;
+$label-sm:                 0.75rem;
+
+// Typography: Detail
+$font-weight-regular:      400;
+$font-weight-medium:       500;
+$font-weight-semibold:     600;
+$letter-spacing-archival:  0.05em;
+$font-variant-numeric:     tabular-nums;
+
+// Spacing
+$space-xs:                 0.25rem;
+$space-sm:                 0.5rem;
+$space-md:                 1rem;
+$space-lg:                 1.5rem;
+$space-xl:                 2rem;
+$space-2xl:                3rem;
+
+// Border Radius
+$radius-sm:                0.25rem;
+$radius-md:                0.375rem;
+$radius-lg:                0.5rem;
+$radius-full:              9999px;
+
+// Shadows
+$shadow-lg:                0 8px 40px rgba($on-surface, 0.04);
+$shadow-md:                0 4px 24px rgba($on-surface, 0.04);
+$shadow-lift:              0 2px 12px rgba($on-surface, 0.04);
+
+// Glassmorphism
+$glass-bg:                 rgba($surface, 0.80);
+$glass-panel-bg:           rgba($surface-container-lowest, 0.85);
+$glass-blur:               blur(20px);
+
+// Transition
+$transition-hover:         all 200ms ease-in-out;
+
+// Breakpoints
+$bp-xs:                    320px;
+$bp-sm:                    480px;
+$bp-md:                    768px;
+$bp-lg:                    1024px;
+$bp-xl:                    1280px;
+$bp-2xl:                   1440px;
+$bp-3xl:                   1920px;
