@@ -6,6 +6,7 @@ nav{
   justify-content: space-between;
   align-items: center;
   align-self: stretch;
+  background-color: $surface;
 }
 
 .uc-logo{
@@ -14,16 +15,18 @@ nav{
   gap: 1rem;
 
   img{
+    width: 100%;
+    min-width: 1.5rem;
     max-width: 3rem;
   }
 
   p{
-    color: $primary;
+    color: $primary-container;
     font-family: "Public Sans";
     font-size: 1.5rem;
     font-style: normal;
     font-weight: 900;
-    line-height: 2rem; /* 133.333% */
+    line-height: 1.3rem; /* 133.333% */
     letter-spacing: -0.075rem;
     text-transform: uppercase;
   }
