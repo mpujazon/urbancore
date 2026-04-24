@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
-import { Link } from '../../../../shared/models/LinkInterface';
+import { Link } from '../../../../../shared/models/LinkInterface';
 import { RouterLink } from "@angular/router";
+import { MobileUserAvatar } from "../mobile-user-avatar/mobile-user-avatar";
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink],
+  imports: [RouterLink, MobileUserAvatar],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

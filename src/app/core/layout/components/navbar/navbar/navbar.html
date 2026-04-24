@@ -41,6 +41,7 @@
         <i class="menu-icon fa-solid fa-xmark"></i>
     </button>
   </header>
+  <app-mobile-user-avatar/>
   <ul>
     @for (link of links; track $index) {
         <li [routerLink]="link.url">{{link.label}}</li>
