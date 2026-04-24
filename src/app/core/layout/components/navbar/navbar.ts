@@ -24,13 +24,11 @@ export class Navbar {
   ];
 
   isMenuOpen = signal(false);
-  menuIconClass = computed(() =>
-    this.isMenuOpen()?
-      'fa-solid fa-xmark':
-      'fa-solid fa-bars'
-  );
 
-  onMenuIconClick(){
-    this.isMenuOpen.update(val => !val);
+  onOpenMenuClick(){
+    this.isMenuOpen.set(true);
+  }
+  onCloseMenuClick(){
+    this.isMenuOpen.set(false);
   }
 }

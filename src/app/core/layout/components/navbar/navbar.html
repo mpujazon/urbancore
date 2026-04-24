@@ -1,7 +1,7 @@
-<nav>
+<nav id="desktop-navigation">
   <div class="company-logo">
     <img src="/icons/logo.svg" alt="UrbanCore Logo">
-    <p>URBAN<br>CORE</p>
+    <p>URBAN CORE</p>
   </div>
 
   <ul class="desktop-menu">
@@ -10,12 +10,41 @@
     }
   </ul>
 
-  <i (click)="onMenuIconClick()" id="menu-icon" [class]="menuIconClass()"></i>
+  <button
+    (click)="onOpenMenuClick()"
+    id="open-menu-button"
+    aria-controls="mobile-navigation"
+    [ariaExpanded]="isMenuOpen()"
+    [class.hidden]="isMenuOpen()"
 
-  <ul id="mobile-menu" [class.hidden]="!isMenuOpen()">
+    >
+      <i class="menu-icon fa-solid fa-bars"></i>
+  </button>
+</nav>
+<nav
+  id="mobile-navigation"
+  aria-label="Mobile Navigation"
+  [class.visible]="isMenuOpen()"
+
+>
+  <header>
+    <div class="company-logo">
+      <img src="/icons/logo.svg" alt="UrbanCore Logo">
+      <p>URBAN CORE</p>
+    </div>
+    <button
+        (click)="onCloseMenuClick()"
+        id="close-menu-button"
+        aria-controls="mobile-navigation"
+        [ariaExpanded]="isMenuOpen()"
+      >
+        <i class="menu-icon fa-solid fa-xmark"></i>
+    </button>
+  </header>
+  <ul>
     @for (link of links; track $index) {
-      <li [routerLink]="link.url">{{link.label}}</li>
-    }
+        <li [routerLink]="link.url">{{link.label}}</li>
+      }
   </ul>
 </nav>
 
