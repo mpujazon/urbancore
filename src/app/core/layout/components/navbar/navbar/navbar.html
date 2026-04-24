@@ -25,7 +25,6 @@
   id="mobile-navigation"
   aria-label="Mobile Navigation"
   [class.visible]="isMenuOpen()"
-
 >
   <header>
     <div class="company-logo">
@@ -44,8 +43,10 @@
   <app-mobile-user-avatar/>
   <ul>
     @for (link of links; track $index) {
-        <li [routerLink]="link.url">{{link.label}}</li>
-      }
+      <app-nav-mobile-link
+        [link]="link"
+      />
+    }
   </ul>
 </nav>
 

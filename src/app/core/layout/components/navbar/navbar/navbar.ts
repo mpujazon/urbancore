@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/c
 import { Link } from '../../../../../shared/models/LinkInterface';
 import { RouterLink } from "@angular/router";
 import { MobileUserAvatar } from "../mobile-user-avatar/mobile-user-avatar";
+import { NavMobileLink } from "../nav-link/nav-mobile-link";
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, MobileUserAvatar],
+  imports: [RouterLink, MobileUserAvatar, NavMobileLink],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -15,12 +16,14 @@ export class Navbar {
     {
       label: 'Homepage',
       basedRole: 'public',
-      url: '/'
+      url: '/',
+      iconClasses: 'fa-solid fa-house'
     },
     {
       label: 'Incidents Explorer',
       basedRole: 'public',
-      url: '/incidents'
+      url: '/incidents',
+      iconClasses: 'fa-solid fa-magnifying-glass-location'
     }
   ];
 

@@ -1,0 +1,28 @@
+@use 'styles/variables' as *;
+.link{
+  display: flex;
+  align-items: center;
+  gap: $space-sm;
+  padding: $space-sm $space-md ;
+  border-radius: $radius-sm;
+  max-width: 16rem;
+  color: $primary;
+
+  i{
+    color: $primary;
+  }
+
+  p{
+    font-size: $body-md;
+    font-weight: $font-weight-semibold;
+  }
+
+  &.active{
+    background-color: $primary;
+    color: $on-primary;
+    i{
+      color: $on-primary;
+
+    }
+  }
+}
