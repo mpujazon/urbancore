@@ -1,0 +1,5 @@
+@use 'styles/variables' as *;
+
+main{
+  padding-top: calc($navbar-height + env(safe-area-inset-top));
+}

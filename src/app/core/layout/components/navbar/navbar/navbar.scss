@@ -3,12 +3,14 @@
 #desktop-navigation{
   width: 100%;
   display: flex;
+  position: fixed;
   padding: $space-md $space-xl;
   justify-content: space-between;
   align-items: center;
   align-self: stretch;
   background-color: $surface;
   gap: $space-md;
+
 }
 .company-logo{
   display: flex;
