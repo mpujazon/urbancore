@@ -12,6 +12,7 @@ import { NavMobileLink } from "../nav-link/nav-mobile-link";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Navbar {
+  links: Links[] = ;
   links: Link[] = [
     {
       label: 'Homepage',
@@ -24,6 +25,18 @@ export class Navbar {
       basedRole: 'public',
       url: '/incidents',
       iconClasses: 'fa-solid fa-magnifying-glass-location'
+    },
+    {
+      label: 'Planned Actions',
+      basedRole: 'public',
+      url: '/planned-actions',
+      iconClasses: 'fa-solid fa-calendar'
+    },
+    {
+      label: 'Stats',
+      basedRole: 'public',
+      url: '/stats',
+      iconClasses: 'fa-solid fa-chart-simple'
     }
   ];
 

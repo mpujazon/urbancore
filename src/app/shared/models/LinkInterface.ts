@@ -1,6 +1,8 @@
 export interface Link{
   label: string;
   url: string;
-  basedRole: 'public' | 'citizen' | 'admin';
+  roles: UserRole[];
   iconClasses?: string;
 }
+
+type UserRole = 'public' | 'citizen' | 'admin';;

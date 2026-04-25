@@ -10,9 +10,6 @@
   background-color: $surface;
   gap: $space-md;
 }
-// Poner una icono para cerrar el mobile menu dentro del mismo.
-// Cuando se hace click en el hamburger del desktop navigation se oculta.
-// Mirar de hacer animacion easineaseout con transform
 .company-logo{
   display: flex;
   align-items: center;
@@ -30,7 +27,7 @@
     font-size: 1.25rem;
     font-style: normal;
     font-weight: 900;
-    line-height: 1.3rem; /* 133.333% */
+    line-height: 1.3rem;
     letter-spacing: -0.075rem;
     text-transform: uppercase;
     margin: 0;
@@ -73,6 +70,7 @@ li{
   position: absolute;
   top: 0;
   width: 85%;
+  max-width: 20.1563rem;
   background-color: $surface;
   padding: $space-md $space-xl;
   height: 100vh;
