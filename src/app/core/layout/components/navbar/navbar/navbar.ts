@@ -16,7 +16,7 @@ export class Navbar {
   // TODO: links will be given by a computed expression based on a signal of AuthService.
   links: Link[] = NAV_LINKS.filter(link => link.roles.includes('unlogged'));
   isMenuOpen = signal(false);
-  isUserLogged = signal(false);
+  isUserLogged = signal(true);
 
   onOpenMenuClick(){
     this.isMenuOpen.set(true);
