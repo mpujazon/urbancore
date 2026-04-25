@@ -3,6 +3,7 @@ import { Link } from '../../../../../shared/models/LinkInterface';
 import { RouterLink } from "@angular/router";
 import { MobileUserAvatar } from "../mobile-user-avatar/mobile-user-avatar";
 import { NavMobileLink } from "../nav-link/nav-mobile-link";
+import { NAV_LINKS } from '../../../config/nav-links';
 
 @Component({
   selector: 'app-navbar',
@@ -12,35 +13,10 @@ import { NavMobileLink } from "../nav-link/nav-mobile-link";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Navbar {
-  links: Links[] = ;
-  links: Link[] = [
-    {
-      label: 'Homepage',
-      basedRole: 'public',
-      url: '/',
-      iconClasses: 'fa-solid fa-house'
-    },
-    {
-      label: 'Incidents Explorer',
-      basedRole: 'public',
-      url: '/incidents',
-      iconClasses: 'fa-solid fa-magnifying-glass-location'
-    },
-    {
-      label: 'Planned Actions',
-      basedRole: 'public',
-      url: '/planned-actions',
-      iconClasses: 'fa-solid fa-calendar'
-    },
-    {
-      label: 'Stats',
-      basedRole: 'public',
-      url: '/stats',
-      iconClasses: 'fa-solid fa-chart-simple'
-    }
-  ];
-
+  // TODO: links will be given by a computed expression based on a signal of AuthService.
+  links: Link[] = NAV_LINKS.filter(link => link.roles.includes('unlogged'));
   isMenuOpen = signal(false);
+  isUserLogged = signal(false);
 
   onOpenMenuClick(){
     this.isMenuOpen.set(true);

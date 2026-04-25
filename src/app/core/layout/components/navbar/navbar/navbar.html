@@ -40,7 +40,11 @@
         <i class="menu-icon fa-solid fa-xmark"></i>
     </button>
   </header>
-  <app-mobile-user-avatar/>
+  @if (isUserLogged()) {
+    <app-mobile-user-avatar/>
+  }@else {
+    
+  }
   <ul>
     @for (link of links; track $index) {
       <app-nav-mobile-link

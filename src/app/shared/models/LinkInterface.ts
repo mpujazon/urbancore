@@ -5,4 +5,4 @@ export interface Link{
   iconClasses?: string;
 }
 
-type UserRole = 'public' | 'citizen' | 'admin';;
+type UserRole = 'unlogged' | 'citizen' | 'admin';
