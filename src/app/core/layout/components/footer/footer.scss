@@ -3,30 +3,33 @@ footer{
   color: $neutral;
   background-color: $surface;
   padding: $space-xl 0;
-  .content{
-    padding: 0 $space-xl;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: $space-lg;
-  }
-  .links{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: $space-sm;
-    margin: 0 auto;
-    a{
-      color: $neutral;
-    }
+}
+.content{
+  padding: 0 $space-xl;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+}
+.links{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-sm;
+  margin: 0 auto;
+  a{
+    color: $neutral;
   }
 }
-
 @media(min-width: $bp-lg){
-  footer{
-    .links{
-      flex-direction: row;
-      justify-content: space-around;
-    }
+  .content{
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  .links{
+    flex-direction: row;
+    gap: $space-lg;
+    justify-content: space-around;
+    margin: 0;
   }
 }
