@@ -102,11 +102,16 @@ footer{
   color: $on-primary;
   font-weight: $font-weight-semibold;
   padding: $space-sm $space-md ;
-  border-radius: $radius-sm;
-  margin-left: $space-md
+  border-radius: $radius-md;
+  margin-left: $space-md;
+  transition: all 350ms ease-in-out;
 }
 
-@media (min-width: $bp-md){
+.desktop-login-buttons{
+  display: none;
+}
+
+@media (min-width: $bp-lg){
   #desktop-navigation{
     position: fixed;
     justify-content: space-between;
@@ -120,6 +125,20 @@ footer{
   }
   .desktop-menu{
     display: flex;
-    gap: $space-md;
+    gap: $space-xl;
+  }
+  .login-button,.logout-button{
+    &:hover{
+      cursor: pointer;
+    }
+  }
+  .login-button:hover{
+    background-color: $on-primary;
+    color: $primary;
+    outline: $primary 2px solid;
+    outline-offset: -2px;
+  }
+  .desktop-login-buttons{
+    display: inline;
   }
 }

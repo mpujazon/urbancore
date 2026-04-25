@@ -3,12 +3,12 @@ import { Link } from '../../../../../shared/models/LinkInterface';
 import { RouterLink, RouterLinkActive } from "@angular/router";
 
 @Component({
-  selector: 'app-nav-mobile-link',
+  selector: 'app-nav-link',
   imports: [RouterLink, RouterLinkActive],
-  templateUrl: './nav-mobile-link.html',
-  styleUrl: './nav-mobile-link.scss',
+  templateUrl: './nav-link.html',
+  styleUrl: './nav-link.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NavMobileLink {
+export class NavLink {
   link = input.required<Link>();
 }

@@ -22,7 +22,26 @@
     color: $on-primary;
     i{
       color: $on-primary;
+    }
+  }
+}
 
+@media (min-width: $bp-lg){
+  .link{
+    padding: $space-xs 0;
+    &.active{
+      border-radius: 0;
+      border-bottom: 2px solid;
+      background-color: transparent;
+      color: $primary;
+      i{
+        color: $primary;
+      }
+    }
+    &:hover{
+      cursor: pointer;
+      border-bottom: 2px solid;
+      border-radius: 0;
     }
   }
 }

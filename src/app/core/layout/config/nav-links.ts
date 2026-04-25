@@ -21,7 +21,7 @@ export const NAV_LINKS: Link[] = [
     },
     {
       label: 'Incidents Explorer',
-      roles: ['unlogged','citizen','admin'],
+      roles: ['unlogged','citizen'],
       url: '/incidents',
       iconClasses: 'fa-solid fa-magnifying-glass-location'
     },

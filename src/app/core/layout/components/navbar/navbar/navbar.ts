@@ -2,12 +2,12 @@ import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/c
 import { Link } from '../../../../../shared/models/LinkInterface';
 import { RouterLink } from "@angular/router";
 import { MobileUserAvatar } from "../mobile-user-avatar/mobile-user-avatar";
-import { NavMobileLink } from "../nav-link/nav-mobile-link";
+import { NavLink } from "../nav-link/nav-link";
 import { NAV_LINKS } from '../../../config/nav-links';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, MobileUserAvatar, NavMobileLink],
+  imports: [RouterLink, MobileUserAvatar, NavLink],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

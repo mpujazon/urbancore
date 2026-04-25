@@ -6,9 +6,24 @@
 
   <ul class="desktop-menu">
     @for (link of links; track $index) {
-      <li [routerLink]="link.url">{{link.label}}</li>
+      <app-nav-link
+        [link]="link"
+      />
     }
   </ul>
+
+  <div class="desktop-login-buttons">
+    @if(isUserLogged()){
+      <button class="logout-button">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        <span>Log Out</span>
+      </button>
+    }@else {
+      <button class="login-button" routerLink="/login">
+        <span>Log In</span>
+      </button>
+    }
+  </div>
 
   <button
     (click)="onOpenMenuClick()"
@@ -24,7 +39,7 @@
 <nav
   id="mobile-navigation"
   aria-label="Mobile Navigation"
-  [class.visible]="!isMenuOpen()"
+  [class.visible]="isMenuOpen()"
 >
   <header>
     <div class="company-logo">
@@ -45,7 +60,7 @@
   }
   <ul>
     @for (link of links; track $index) {
-      <app-nav-mobile-link
+      <app-nav-link
         [link]="link"
       />
     }
