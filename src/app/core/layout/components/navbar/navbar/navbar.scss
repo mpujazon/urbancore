@@ -36,28 +36,12 @@
 .desktop-menu{
   display: none;
 }
-.menu-icon, .close-menu-icon{
+.menu-icon{
   font-size: 1.5rem;
   display: block;
   line-height: 1;
   color: $primary;
 }
-
-#open-menu-button, #close-menu-button{
-  border: none;
-  background-color: transparent;
-  appearance: none;
-  -webkit-appearance: none;
-  -webkit-tap-highlight-color: transparent;
-
-  &:focus,
-  &:focus-visible,
-  &:active{
-    outline: none;
-    box-shadow: none;
-  }
-}
-
 li{
   list-style: none;
   color: $neutral;
@@ -86,10 +70,40 @@ li{
     justify-content: space-between;
     align-items: center;
   }
-
+  ul{
+    display: flex;
+    flex-direction: column;
+    gap: $space-sm;
+  }
   &.visible{
     transform: translateX(0);
   }
+}
+
+footer{
+  margin-top: auto;
+  margin-bottom: $space-xl;
+}
+
+.logout-button{
+  display: flex;
+  gap: $space-sm;
+  align-items: center;
+  color: $on-error-container;
+  font-weight: $font-weight-semibold;
+  padding: $space-sm $space-md ;
+}
+
+.login-button{
+  display: flex;
+  gap: $space-sm;
+  align-items: center;
+  background-color: $primary;
+  color: $on-primary;
+  font-weight: $font-weight-semibold;
+  padding: $space-sm $space-md ;
+  border-radius: $radius-sm;
+  margin-left: $space-md
 }
 
 @media (min-width: $bp-md){

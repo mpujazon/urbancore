@@ -24,7 +24,7 @@
 <nav
   id="mobile-navigation"
   aria-label="Mobile Navigation"
-  [class.visible]="isMenuOpen()"
+  [class.visible]="!isMenuOpen()"
 >
   <header>
     <div class="company-logo">
@@ -42,8 +42,6 @@
   </header>
   @if (isUserLogged()) {
     <app-mobile-user-avatar/>
-  }@else {
-    
   }
   <ul>
     @for (link of links; track $index) {
@@ -52,5 +50,18 @@
       />
     }
   </ul>
+  <footer>
+    @if(isUserLogged()){
+      <button class="logout-button">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        <span>Log Out</span>
+      </button>
+    }@else {
+      <button class="login-button" routerLink="/login">
+        <span>Log In</span>
+      </button>
+    }
+
+  </footer>
 </nav>
 
