@@ -16,12 +16,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 export class Navbar {
   private auth = inject(AuthService);
-  user = toSignal(this.auth.user$, {initialValue: null});
 
   // TODO: links will be given by a computed expression based on a signal of AuthService.
   links: Link[] = NAV_LINKS.filter(link => link.roles.includes('unlogged'));
   isMenuOpen = signal(false);
-  isUserLogged = computed(()=> this.user());
+  isUserLogged = computed(()=> this.auth.user());
 
   onOpenMenuClick(){
     this.isMenuOpen.set(true);

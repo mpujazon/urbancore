@@ -1,4 +1,5 @@
 import { inject, Injectable } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Auth, authState, getIdToken, GoogleAuthProvider, signInWithPopup, signOut, User } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 
@@ -9,6 +10,7 @@ export class AuthService {
   private auth: Auth = inject(Auth);
 
   public user$: Observable<User | null> = authState(this.auth);
+  public user = toSignal(this.user$, {initialValue: null});
 
   async loginWithGoogle(): Promise<void> {
     const provider = new GoogleAuthProvider();
