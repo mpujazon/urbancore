@@ -29,17 +29,17 @@ export class Navbar {
     this.isMenuOpen.set(false);
   }
 
-  onSignInWithGoogle(){
+  async onSignInWithGoogle(){
     try{
-      this.auth.loginWithGoogle();
+      await this.auth.loginWithGoogle();
     }catch(error){
       console.error('Error signing in');
     }
   }
 
-  onSignOut(){
+  async onSignOut(){
     try{
-      this.auth.logout();
+      await this.auth.logout();
     }catch(error){
       console.error('Error signing out');
     }
