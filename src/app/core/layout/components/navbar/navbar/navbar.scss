@@ -83,6 +83,7 @@ li{
 }
 
 footer{
+  display: flex;
   margin-top: auto;
   margin-bottom: $space-xl;
 }
@@ -93,20 +94,24 @@ footer{
   align-items: center;
   color: $on-error-container;
   font-weight: $font-weight-semibold;
-  padding: $space-sm $space-md ;
+  padding: $space-sm $space-md;
+  margin-inline: 0;
+
 }
 
 .login-button{
   display: flex;
   gap: $space-sm;
   align-items: center;
-  background-color: $primary;
-  color: $on-primary;
+  font-size: $body-md;
+  background-color: $surface;
+  color: $primary;
+  border: 1px solid $primary;
   font-weight: $font-weight-semibold;
   padding: $space-sm $space-md ;
   border-radius: $radius-md;
-  margin-left: $space-md;
   transition: all 350ms ease-in-out;
+  margin-inline: auto;
 }
 
 .desktop-login-buttons{
@@ -134,10 +139,7 @@ footer{
     }
   }
   .login-button:hover{
-    background-color: $on-primary;
-    color: $primary;
-    outline: $primary 2px solid;
-    outline-offset: -2px;
+    box-shadow: 2px 3px 5px  $neutral;
   }
   .desktop-login-buttons{
     display: inline;
