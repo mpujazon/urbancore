@@ -65,7 +65,7 @@
   </ul>
   <footer>
     @if(isUserLogged()){
-      <button class="logout-button">
+      <button class="logout-button" (click)="onSignOut()">
         <i class="fa-solid fa-arrow-right-from-bracket"></i>
         <span>Log Out</span>
       </button>

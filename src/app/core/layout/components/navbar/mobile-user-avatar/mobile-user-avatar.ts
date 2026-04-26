@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, HostListener, inject } from '@angular/core';
+import { AuthService } from '../../../../services/auth-service';
 
 @Component({
   selector: 'app-mobile-user-avatar',
@@ -9,6 +10,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, HostListener, inject } 
 })
 export class MobileUserAvatar {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
+  private auth = inject(AuthService);
 
   name='Unknown User';
   imgUrl='/user-avatar.svg';
@@ -38,5 +40,13 @@ export class MobileUserAvatar {
   @HostListener('document:keydown.escape')
   onEscape(): void {
     this.closeDesktopMenu();
+  }
+
+  onSignOut(){
+    try{
+      this.auth.logout();
+    }catch(error){
+      console.error('Error signing out');
+    }
   }
 }

@@ -34,8 +34,15 @@ export class Navbar {
     try{
       this.auth.loginWithGoogle();
     }catch(error){
-      console.error('Error');
+      console.error('Error signing in');
+    }
+  }
 
+  onSignOut(){
+    try{
+      this.auth.logout();
+    }catch(error){
+      console.error('Error signing out');
     }
   }
 }
