@@ -7,11 +7,11 @@
     aria-haspopup="menu"
     aria-label="Open user menu"
   >
-    <img [src]="imgUrl" alt="User Avatar">
+    <img [src]="imgUrl()" alt="User Avatar">
   </button>
   <div class="user-card__info">
     <div class="user_details">
-      <p class="name">{{name}}</p>
+      <p class="name">{{name()}}</p>
       <p>{{role}}</p>
     </div>
     <p class="active_session"><i class="fa-solid fa-circle-dot"></i> Active Session</p>
@@ -21,7 +21,7 @@
   <div class="avatar-desktop-menu" role="menu" aria-label="User menu">
     <div class="avatar-desktop-menu__user">
       <div class="user_details">
-        <p class="name">{{name}}</p>
+        <p class="name">{{name()}}</p>
         <p>{{role}}</p>
       </div>
       <p class="active_session"><i class="fa-solid fa-circle-dot"></i> Active Session</p>
