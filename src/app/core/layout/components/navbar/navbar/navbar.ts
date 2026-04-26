@@ -7,7 +7,7 @@ import { NAV_LINKS } from '../../../config/nav-links';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, MobileUserAvatar, NavLink],
+  imports: [MobileUserAvatar, NavLink],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

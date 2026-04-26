@@ -1,5 +1,14 @@
 <div class="user-card">
-  <img [src]="imgUrl" alt="User Avatar">
+  <button
+    class="avatar-button"
+    type="button"
+    (click)="toggleDesktopMenu($event)"
+    [attr.aria-expanded]="isDesktopMenuOpen"
+    aria-haspopup="menu"
+    aria-label="Open user menu"
+  >
+    <img [src]="imgUrl" alt="User Avatar">
+  </button>
   <div class="user-card__info">
     <div class="user_details">
       <p class="name">{{name}}</p>
@@ -8,3 +17,18 @@
     <p class="active_session"><i class="fa-solid fa-circle-dot"></i> Active Session</p>
   </div>
 </div>
+@if (isDesktopMenuOpen) {
+  <div class="avatar-desktop-menu" role="menu" aria-label="User menu">
+    <div class="avatar-desktop-menu__user">
+      <div class="user_details">
+        <p class="name">{{name}}</p>
+        <p>{{role}}</p>
+      </div>
+      <p class="active_session"><i class="fa-solid fa-circle-dot"></i> Active Session</p>
+    </div>
+    <button type="button" role="menuitem" id="logout-button" (click)="closeDesktopMenu()">
+      <i class="fa-solid fa-arrow-right-from-bracket"></i>
+      <span>Log Out</span>
+    </button>
+  </div>
+}

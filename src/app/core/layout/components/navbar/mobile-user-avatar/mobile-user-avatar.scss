@@ -7,6 +7,15 @@
   gap: $space-xl;
   align-items: center;
   max-width: 16rem;
+  position: relative;
+
+  .avatar-button{
+    border: 0;
+    background: transparent;
+    padding: 0;
+    line-height: 0;
+    border-radius: 100%;
+  }
 
   img{
     border-radius: 100%;
@@ -29,5 +38,97 @@
         font-size: .6rem;
       }
     }
+  }
+}
+
+.avatar-desktop-menu{
+  display: none;
+}
+
+@media (min-width: $bp-lg){
+  .user-card{
+    background-color: transparent;
+    padding: 0;
+
+    .avatar-button{
+      &:hover,
+      &:focus-visible{
+        outline: $primary 2px solid;
+        outline-offset: 2px;
+        cursor: pointer;
+      }
+    }
+
+    img{
+      width: 40px;
+      padding: 0px;
+    }
+
+    .user-card__info{
+      display: none;
+    }
+  }
+
+  .avatar-desktop-menu{
+    display: flex;
+    flex-direction: column;
+    gap: $space-xs;
+    position: absolute;
+    top: calc(100% + 0.25rem);
+    right: 0;
+    width: fit-content;
+    padding: $space-xs;
+    border-radius: $radius-md;
+    background-color: $surface-container-low;
+    border: 1px solid $outline-variant;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+
+    .avatar-desktop-menu__user{
+      border-bottom: 1px solid $outline-variant;
+      padding: $space-sm;
+      margin-bottom: $space-xs;
+
+      p{
+        margin: 0;
+        font-size: $body-sm;
+      }
+
+      .name{
+        font-weight: $font-weight-semibold;
+      }
+
+      .active_session{
+        margin-top: $space-xs;
+        color: #34A273;
+        text-transform: uppercase;
+        font-weight: 600;
+        font-size: .6rem;
+      }
+    }
+
+    button{
+      text-align: left;
+      border: 0;
+      border-radius: $radius-sm;
+      background: transparent;
+      padding: $space-sm;
+      font-size: $body-sm;
+      color: $on-surface;
+
+      &:hover,
+      &:focus-visible{
+        cursor: pointer;
+        background-color: $surface-container;
+      }
+    }
+  }
+  #logout-button{
+    display: flex;
+    gap: $space-sm;
+    align-items: center;
+    color: $on-error-container;
+    font-weight: $font-weight-semibold;
+    padding: $space-sm $space-md;
+    margin-inline: 0;
   }
 }
