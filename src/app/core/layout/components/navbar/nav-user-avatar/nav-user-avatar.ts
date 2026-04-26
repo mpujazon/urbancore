@@ -2,13 +2,13 @@ import { ChangeDetectionStrategy, Component, ElementRef, HostListener, inject } 
 import { AuthService } from '../../../../services/auth-service';
 
 @Component({
-  selector: 'app-mobile-user-avatar',
+  selector: 'app-nav-user-avatar',
   imports: [],
-  templateUrl: './mobile-user-avatar.html',
-  styleUrl: './mobile-user-avatar.scss',
+  templateUrl: './nav-user-avatar.html',
+  styleUrl: './nav-user-avatar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MobileUserAvatar {
+export class NavUserAvatar {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private auth = inject(AuthService);
 

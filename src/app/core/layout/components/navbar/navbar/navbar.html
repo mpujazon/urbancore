@@ -14,7 +14,7 @@
 
   <div class="desktop-login-buttons">
     @if(isUserLogged()){
-      <app-mobile-user-avatar/>
+      <app-nav-user-avatar/>
     }@else {
       <button class="login-button" (click)="onSignInWithGoogle()">
         <img src="icons/google-icon.svg" alt="Google Icon">
@@ -54,7 +54,7 @@
     </button>
   </header>
   @if (isUserLogged()) {
-    <app-mobile-user-avatar/>
+    <app-nav-user-avatar/>
   }
   <ul>
     @for (link of links; track $index) {

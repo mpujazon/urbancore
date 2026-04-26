@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Link } from '../../../../../shared/models/LinkInterface';
 import { RouterLink } from "@angular/router";
-import { MobileUserAvatar } from "../mobile-user-avatar/mobile-user-avatar";
+import { NavUserAvatar } from "../nav-user-avatar/nav-user-avatar";
 import { NavLink } from "../nav-link/nav-link";
 import { NAV_LINKS } from '../../../config/nav-links';
 import { AuthService } from '../../../../services/auth-service';
@@ -9,7 +9,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-navbar',
-  imports: [MobileUserAvatar, NavLink],
+  imports: [NavUserAvatar, NavLink],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
