@@ -12,9 +12,9 @@ export class MobileUserAvatar {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private auth = inject(AuthService);
 
-  name='Unknown User';
-  imgUrl='/user-avatar.svg';
-  role = 'Unregistred';
+  name = this.auth.user()?.displayName;
+  imgUrl = this.auth.user()?.photoURL;
+  role = 'Citizen';
   isDesktopMenuOpen = false;
 
   toggleDesktopMenu(event: MouseEvent): void {
