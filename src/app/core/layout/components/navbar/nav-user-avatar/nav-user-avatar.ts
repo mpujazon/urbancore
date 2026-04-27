@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, ElementRef, HostListener, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, HostListener, inject, signal } from '@angular/core';
 import { AuthService } from '../../../../services/auth-service';
 
 @Component({
@@ -14,7 +14,9 @@ export class NavUserAvatar {
 
   name = computed(()=>this.auth.user()?.displayName);
 
-  imgUrl = computed(()=>this.auth.user()?.photoURL || '/user-avatar.svg');
+  imgUrl = computed(() =>
+    this.auth.user()?.photoURL ?? 'user-avatar.svg'
+  );
   role = 'Citizen';
   isDesktopMenuOpen = false;
 
