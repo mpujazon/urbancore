@@ -5,6 +5,11 @@ import { from, switchMap } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
+  const isUrbancoreApi = req.url.startsWith('http://localhost:8080/api');
+
+  if (!isUrbancoreApi) {
+    return next(req);
+  }
 
   return from(authService.getToken()).pipe(
     switchMap((token)=>{
