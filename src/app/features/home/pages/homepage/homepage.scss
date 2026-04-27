@@ -1,109 +1,21 @@
 @use 'styles/variables' as *;
 
-:host {
-  display: block;
-}
-
-.homepage {
-  min-height: 100dvh;
-  color: $on-surface;
-  background:
-    radial-gradient(circle at 8% 0, rgb(0 82 204 / 0.08), transparent 30%),
-    radial-gradient(circle at 100% 18%, rgb(0 40 85 / 0.12), transparent 34%),
-    linear-gradient(180deg, $surface 0%, $surface-container-low 72%, $surface 100%);
-}
-
 .container {
   width: min(72rem, calc(100% - 2rem));
   margin-inline: auto;
 }
 
-.topbar {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: rgb(250 248 255 / 0.94);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid $outline-variant;
-}
-
-.topbar-content,
-.brand-block,
-.actions,
-.main-nav,
 .hero-cta,
-.floating-meta,
-.footer-content,
-.footer nav {
+.floating-meta {
   display: flex;
   align-items: center;
 }
 
-.topbar-content {
-  justify-content: space-between;
-  gap: 0.75rem;
-  min-height: 4.5rem;
-}
-
-.brand-block {
-  gap: 1rem;
-  min-width: 0;
-}
-
-.brand {
-  text-decoration: none;
-  color: $primary;
-  font-family: $font-display;
-  font-weight: 900;
-  font-size: 1.1rem;
-  letter-spacing: -0.03em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.main-nav {
-  gap: 0.35rem;
-  overflow-x: auto;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-.nav-link {
-  text-decoration: none;
-  color: $neutral-variant;
-  font-size: $label-sm;
-  font-weight: $font-weight-semibold;
-  padding: 0.35rem 0.65rem;
-  border-radius: $radius-full;
-  white-space: nowrap;
-  transition: $transition-hover;
-
-  &:hover,
-  &:focus-visible {
-    color: $primary;
-    background-color: $surface-container;
-  }
-}
-
-.actions {
-  gap: 0.5rem;
-}
-
-.icon-btn {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  color: $primary;
-  background-color: transparent;
-  font-weight: 700;
-  transition: $transition-hover;
-
-  &:hover,
-  &:focus-visible {
-    background-color: $surface-container;
+button,
+a,
+.btn {
+  &:hover {
+    cursor: pointer;
   }
 }
 
@@ -356,36 +268,6 @@ h1 {
   }
 }
 
-.footer {
-  margin-top: 1.5rem;
-  border-top: 1px solid $outline-variant;
-  padding-block: 1.5rem;
-}
-
-.footer-content {
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.85rem;
-
-  p {
-    color: $neutral-variant;
-    font-size: $label-sm;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-}
-
-.footer nav {
-  flex-wrap: wrap;
-  gap: 0.8rem;
-
-  a {
-    color: $neutral;
-    font-size: $label-sm;
-    text-underline-offset: 0.22em;
-  }
-}
-
 @media (min-width: $bp-md) {
   .hero {
     padding-block: 3rem;
@@ -403,12 +285,6 @@ h1 {
   .stat-grid,
   .steps {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .footer-content {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
   }
 }
 
