@@ -1,4 +1,7 @@
 @use 'styles/variables' as *;
+#desktop-navigation, #mobile-navigation{
+  z-index: 10;
+}
 
 #desktop-navigation{
   width: 100%;
