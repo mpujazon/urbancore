@@ -1,13 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 
-// Asegúrate de que la carpeta existe
-const dir = './src/environments';
-if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+const environmentsDir = path.resolve(__dirname, '../src/environments');
+if (!fs.existsSync(environmentsDir)) {
+  fs.mkdirSync(environmentsDir, { recursive: true });
 }
 
-const targetPath = path.join(__dirname, 'src/environments/environment.ts');
+const targetPath = path.join(environmentsDir, 'environment.ts');
 
 const envConfigFile = `export const environment = {
   production: true,
@@ -25,4 +24,4 @@ const envConfigFile = `export const environment = {
 `;
 
 fs.writeFileSync(targetPath, envConfigFile);
-console.log('✅ environment.prod.ts generado correctamente.');
+console.log('environment.ts generated successfully.');
