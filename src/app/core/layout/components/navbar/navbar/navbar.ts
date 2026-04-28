@@ -1,11 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Link } from '../../../../../shared/models/LinkInterface';
-import { RouterLink } from "@angular/router";
 import { NavUserAvatar } from "../nav-user-avatar/nav-user-avatar";
 import { NavLink } from "../nav-link/nav-link";
 import { NAV_LINKS } from '../../../config/nav-links';
 import { AuthService } from '../../../../services/auth-service';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-navbar',
@@ -25,6 +23,7 @@ export class Navbar {
   );
   isMenuOpen = signal(false);
   isUserLogged = computed(()=> this.auth.user());
+  isSigningIn = signal(false);
 
   onOpenMenuClick(){
     this.isMenuOpen.set(true);
@@ -34,10 +33,14 @@ export class Navbar {
   }
 
   async onSignInWithGoogle(){
+    if(this.isSigningIn()) return;
+    this.isSigningIn.set(true);
     try{
       await this.auth.loginWithGoogle();
     }catch(error){
       console.error('Error signing in');
+    }finally {
+      this.isSigningIn.set(false);
     }
   }
 
