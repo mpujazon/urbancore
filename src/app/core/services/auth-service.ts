@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { effect, inject, Injectable } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Auth, authState, getIdToken, GoogleAuthProvider, signInWithPopup, signOut, User } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 import { Observable, switchMap, catchError, of } from 'rxjs';
 import { UserDto } from '../../shared/models/UserInterface';
 import { environment } from '../../../environments/environment';
@@ -14,6 +15,7 @@ export class AuthService {
   private auth: Auth = inject(Auth);
   private http: HttpClient = inject(HttpClient);
   private toastService: ToastService = inject(ToastService);
+  private router: Router = inject(Router);
 
   public user$: Observable<User | null> = authState(this.auth);
   public user = toSignal(this.user$, {initialValue: null});
@@ -31,6 +33,24 @@ export class AuthService {
     return of(null);
   }));
   public dbUser = toSignal(this.dbUser$, {initialValue: null});
+
+  redirectUserOnLogin = effect(()=>{
+    const firebaseUser = this.user();
+    const dbUser = this.dbUser();
+
+    if(!firebaseUser || !dbUser){
+      return;
+    }
+
+    if(dbUser.role === 'citizen'){
+      void this.router.navigateByUrl('/dashboard');
+      return;
+    }
+
+    if(dbUser.role === 'admin'){
+      void this.router.navigateByUrl('/manage-incidents');
+    }
+  });
 
   async loginWithGoogle(): Promise<void> {
     const provider = new GoogleAuthProvider();

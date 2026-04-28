@@ -16,9 +16,13 @@
     @if(isUserLogged()){
       <app-nav-user-avatar/>
     }@else {
-      <button class="login-button" (click)="onSignInWithGoogle()">
-        <img src="icons/google-icon.svg" alt="Google Icon">
-        <span>Sign in</span>
+      <button class="login-button" (click)="onSignInWithGoogle()" [disabled]="isSigningIn()" [attr.aria-busy]="isSigningIn()">
+        @if (isSigningIn()) {
+          <i class="fa-solid fa-spinner loading-icon" aria-hidden="true"></i>
+        } @else {
+          <img src="icons/google-icon.svg" alt="Google Icon">
+        }
+        <span>{{ isSigningIn() ? 'Signing in...' : 'Sign in' }}</span>
       </button>
     }
   </div>
@@ -70,11 +74,14 @@
         <span>Log Out</span>
       </button>
     }@else {
-      <button class="login-button" (click)="onSignInWithGoogle()">
-        <img src="icons/google-icon.svg" alt="Google Icon">
-        <span>Sign in with Google</span>
+      <button class="login-button" (click)="onSignInWithGoogle()" [disabled]="isSigningIn()" [attr.aria-busy]="isSigningIn()">
+        @if (isSigningIn()) {
+          <i class="fa-solid fa-spinner loading-icon" aria-hidden="true"></i>
+        } @else {
+          <img src="icons/google-icon.svg" alt="Google Icon">
+        }
+        <span>{{ isSigningIn() ? 'Signing in...' : 'Sign in with Google' }}</span>
       </button>
     }
   </footer>
 </nav>
-
