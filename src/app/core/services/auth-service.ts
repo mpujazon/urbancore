@@ -5,6 +5,7 @@ import { Auth, authState, getIdToken, GoogleAuthProvider, signInWithPopup, signO
 import { Observable, switchMap, catchError, of } from 'rxjs';
 import { UserDto } from '../../shared/models/UserInterface';
 import { environment } from '../../../environments/environment';
+import { ToastService } from './toast-service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +13,7 @@ import { environment } from '../../../environments/environment';
 export class AuthService {
   private auth: Auth = inject(Auth);
   private http: HttpClient = inject(HttpClient);
+  private toastService: ToastService = inject(ToastService);
 
   public user$: Observable<User | null> = authState(this.auth);
   public user = toSignal(this.user$, {initialValue: null});
@@ -35,8 +37,10 @@ export class AuthService {
 
     try{
       await signInWithPopup(this.auth, provider);
+      this.toastService.showSuccess('Successfully logged in! Welcome.');
     }catch(error){
       console.error('Error signing in with Google', error);
+      this.toastService.showError('Authentication failed or was cancelled.');
       throw error;
     }
   }
@@ -44,8 +48,10 @@ export class AuthService {
   async logout(): Promise<void> {
     try{
       await signOut(this.auth);
+      this.toastService.showInfo('You have been logged out.');
     }catch(error){
       console.error('Error signing out', error);
+      this.toastService.showError('Could not sign out. Please try again.');
       throw error;
     }
   }
