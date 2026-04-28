@@ -1,0 +1,80 @@
+<nav id="desktop-navigation">
+  <div class="company-logo">
+    <img src="/icons/logo.svg" alt="UrbanCore Logo">
+    <p>URBAN CORE</p>
+  </div>
+
+  <ul class="desktop-menu">
+    @for (link of links(); track $index) {
+      <app-nav-link
+        [link]="link"
+      />
+    }
+  </ul>
+
+  <div class="desktop-login-buttons">
+    @if(isUserLogged()){
+      <app-nav-user-avatar/>
+    }@else {
+      <button class="login-button" (click)="onSignInWithGoogle()">
+        <img src="icons/google-icon.svg" alt="Google Icon">
+        <span>Sign in</span>
+      </button>
+    }
+  </div>
+
+  <button
+    (click)="onOpenMenuClick()"
+    id="open-menu-button"
+    aria-controls="mobile-navigation"
+    [ariaExpanded]="isMenuOpen()"
+    [class.hidden]="isMenuOpen()"
+
+    >
+      <i class="menu-icon fa-solid fa-bars"></i>
+  </button>
+</nav>
+<nav
+  id="mobile-navigation"
+  aria-label="Mobile Navigation"
+  [class.visible]="isMenuOpen()"
+>
+  <header>
+    <div class="company-logo">
+      <img src="/icons/logo.svg" alt="UrbanCore Logo">
+      <p>URBAN CORE</p>
+    </div>
+    <button
+        (click)="onCloseMenuClick()"
+        id="close-menu-button"
+        aria-controls="mobile-navigation"
+        [ariaExpanded]="isMenuOpen()"
+      >
+        <i class="menu-icon fa-solid fa-xmark"></i>
+    </button>
+  </header>
+  @if (isUserLogged()) {
+    <app-nav-user-avatar/>
+  }
+  <ul>
+    @for (link of links(); track $index) {
+      <app-nav-link
+        [link]="link"
+      />
+    }
+  </ul>
+  <footer>
+    @if(isUserLogged()){
+      <button class="logout-button" (click)="onSignOut()">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        <span>Log Out</span>
+      </button>
+    }@else {
+      <button class="login-button" (click)="onSignInWithGoogle()">
+        <img src="icons/google-icon.svg" alt="Google Icon">
+        <span>Sign in with Google</span>
+      </button>
+    }
+  </footer>
+</nav>
+
