@@ -18,7 +18,11 @@ export class Navbar {
   private auth = inject(AuthService);
 
   // TODO: links will be given by a computed expression based on a signal of AuthService.
-  links: Link[] = NAV_LINKS.filter(link => link.roles.includes('unlogged'));
+  links = computed(()=>
+    NAV_LINKS.filter(link =>
+      link.roles.includes(this.auth.dbUser()?.role ?? 'unlogged')
+    )
+  );
   isMenuOpen = signal(false);
   isUserLogged = computed(()=> this.auth.user());
 

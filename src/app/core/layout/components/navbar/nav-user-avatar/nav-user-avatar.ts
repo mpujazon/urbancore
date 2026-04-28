@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, HostListener, inject, signal } from '@angular/core';
 import { AuthService } from '../../../../services/auth-service';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-nav-user-avatar',
-  imports: [],
+  imports: [TitleCasePipe],
   templateUrl: './nav-user-avatar.html',
   styleUrl: './nav-user-avatar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -17,7 +18,9 @@ export class NavUserAvatar {
   imgUrl = computed(() =>
     this.auth.user()?.photoURL ?? 'user-avatar.svg'
   );
-  role = 'Citizen';
+  role = computed(()=>
+    this.auth.dbUser()?.role
+);
   isDesktopMenuOpen = false;
 
   toggleDesktopMenu(event: MouseEvent): void {

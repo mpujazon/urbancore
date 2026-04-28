@@ -5,7 +5,7 @@
   </div>
 
   <ul class="desktop-menu">
-    @for (link of links; track $index) {
+    @for (link of links(); track $index) {
       <app-nav-link
         [link]="link"
       />
@@ -57,7 +57,7 @@
     <app-nav-user-avatar/>
   }
   <ul>
-    @for (link of links; track $index) {
+    @for (link of links(); track $index) {
       <app-nav-link
         [link]="link"
       />

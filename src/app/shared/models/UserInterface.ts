@@ -2,5 +2,6 @@ export interface UserDto{
   id: number;
   firebaseUid: string;
   email: string;
-  role: string;
+  role: UserRole;
 }
+export type UserRole = 'unlogged' | 'citizen' | 'admin';
