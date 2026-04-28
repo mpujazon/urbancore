@@ -1,0 +1,321 @@
+@use 'styles/variables' as *;
+
+.container {
+  width: min(72rem, calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+.hero-cta,
+.floating-meta {
+  display: flex;
+  align-items: center;
+}
+
+button,
+a,
+.btn {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.hero {
+  padding-block: 2rem 2.75rem;
+}
+
+.hero-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.hero-copy {
+  display: grid;
+  gap: 1rem;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: fit-content;
+  border-radius: $radius-full;
+  background-color: $surface-container;
+  padding: 0.25rem 0.7rem;
+  color: $neutral-variant;
+  font-size: $label-sm;
+  font-weight: $font-weight-semibold;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.eyebrow-dot {
+  width: 0.45rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-color: $secondary;
+}
+
+h1 {
+  margin: 0;
+  color: $primary-container;
+  font-family: $font-display;
+  font-size: clamp(2.05rem, 8vw, 3.1rem);
+  line-height: 1.03;
+  letter-spacing: -0.04em;
+
+  span {
+    color: $secondary;
+  }
+}
+
+.lead {
+  max-width: 48ch;
+  color: $neutral;
+  font-size: 1rem;
+}
+
+.hero-cta {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.65rem;
+}
+
+.btn {
+  border-radius: $radius-lg;
+  padding: 0.8rem 1rem;
+  font-size: $label-md;
+  font-weight: $font-weight-semibold;
+  text-align: center;
+  transition: $transition-hover;
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-1px);
+  }
+}
+
+.btn-primary {
+  color: $on-primary;
+  background: $gradient-primary-cta;
+  box-shadow: $shadow-md;
+}
+
+.btn-secondary {
+  color: $primary;
+  border: 1px solid rgba($primary, 0.25);
+  background-color: rgba($surface-container-lowest, 0.75);
+}
+
+.hero-media {
+  position: relative;
+  border-radius: 1.4rem;
+  overflow: hidden;
+  min-height: 19rem;
+  box-shadow: $shadow-lg;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgb(0 20 48 / 0.5), rgb(0 20 48 / 0.1));
+    pointer-events: none;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.floating-card {
+  position: absolute;
+  z-index: 2;
+  left: 0.85rem;
+  right: 0.85rem;
+  bottom: 0.85rem;
+  padding: 0.85rem;
+  border-radius: $radius-lg;
+  background: $glass-bg;
+  backdrop-filter: $glass-blur;
+  border: 1px solid rgba($surface-container-lowest, 0.45);
+}
+
+.floating-title {
+  font-family: $font-display;
+  color: $primary;
+  font-weight: 700;
+}
+
+.floating-location {
+  color: $neutral-variant;
+  font-size: $body-sm;
+}
+
+.floating-meta {
+  justify-content: space-between;
+  margin-top: 0.6rem;
+  gap: 0.5rem;
+}
+
+.status {
+  border-radius: $radius-full;
+  padding: 0.2rem 0.6rem;
+  color: $on-tertiary-container;
+  background-color: rgba($tertiary-container, 0.8);
+  font-size: $label-sm;
+  font-weight: $font-weight-semibold;
+}
+
+.timestamp {
+  font-size: $body-sm;
+  color: $neutral-variant;
+}
+
+.stats {
+  padding-block: 2.5rem;
+}
+
+.stat-grid,
+.steps {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.stat-card,
+.step-card {
+  border-radius: 1rem;
+  border: 1px solid $outline-variant;
+  background: rgb(255 255 255 / 0.85);
+  padding: 1rem;
+}
+
+.stat-title,
+.step-tag {
+  color: $neutral-variant;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-size: $label-sm;
+  font-weight: $font-weight-semibold;
+}
+
+.stat-value {
+  margin-top: 0.35rem;
+  color: $primary;
+  font-family: $font-display;
+  font-size: clamp(2rem, 8vw, 2.8rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+
+  span {
+    font-size: 0.45em;
+    color: $neutral-variant;
+    letter-spacing: 0;
+  }
+}
+
+.stat-detail,
+.step-card p {
+  color: $neutral;
+  font-size: $body-md;
+}
+
+.process {
+  padding-block: 2.5rem;
+}
+
+.process-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.process-copy {
+  h2 {
+    color: $primary;
+    font-family: $font-display;
+    font-size: clamp(1.7rem, 7vw, 2.35rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    margin-top: 0.75rem;
+    color: $neutral;
+    font-size: $body-lg;
+    max-width: 44ch;
+  }
+
+  a {
+    display: inline-flex;
+    margin-top: 0.95rem;
+    color: $secondary;
+    font-size: $label-md;
+    font-weight: 700;
+    text-underline-offset: 0.2em;
+  }
+}
+
+.step-card {
+  h3 {
+    margin-top: 0.2rem;
+    color: $primary;
+    font-family: $font-display;
+    font-size: 1.2rem;
+  }
+
+  p {
+    margin-top: 0.35rem;
+  }
+}
+
+@media (min-width: $bp-md) {
+  .hero {
+    padding-block: 3rem;
+  }
+
+  .hero-cta {
+    flex-direction: row;
+    align-items: center;
+
+    .btn {
+      min-width: 11.25rem;
+    }
+  }
+
+  .stat-grid,
+  .steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: $bp-lg) {
+  .hero {
+    padding-block: 3.75rem;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .hero-media {
+    min-height: 32rem;
+  }
+
+  .floating-card {
+    left: 1.25rem;
+    right: auto;
+    width: min(20rem, calc(100% - 2.5rem));
+  }
+
+  .process-grid {
+    grid-template-columns: 0.85fr 1.15fr;
+    align-items: start;
+    gap: 1.5rem;
+  }
+
+  .stat-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
