@@ -56,13 +56,15 @@ li{
   }
 }
 #mobile-navigation{
-  position: absolute;
+  position: fixed;
   top: 0;
+  left: 0;
   width: 85%;
   max-width: 20.1563rem;
   background-color: $surface;
   padding: $space-md $space-xl;
   height: 100vh;
+  height: 100dvh;
   box-shadow: 20px 0px 193px -52px rgba(0,0,0,0.8);
   transition: transform 500ms ease-in-out;
   transform: translateX(-200%);

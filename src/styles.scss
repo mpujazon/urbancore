@@ -21,6 +21,12 @@ body {
   background-color: $surface-container-low;
 }
 
+@media (max-width: ($bp-lg - 1px)) {
+  body.mobile-menu-open {
+    overflow: hidden;
+  }
+}
+
 img,
 picture,
 video,
