@@ -1,1 +1,155 @@
-<p>report-incident works!</p>
+<main class="report-page">
+  <section class="hero" aria-labelledby="report-title">
+    <span class="eyebrow">Citizen Action Portal</span>
+    <h1 id="report-title">Submit New Incident Report</h1>
+    <p>
+      Your contribution helps maintain the integrity of our shared urban space.
+      Provide as much detail as possible to ensure rapid municipal intervention.
+    </p>
+  </section>
+
+  <section class="form-layout" aria-label="Incident report form preview">
+    <div class="primary-column">
+      <article class="panel">
+        <div class="section-title">
+          <i class="icon fa-regular fa-file-lines"></i>
+          <h2>Incident Details</h2>
+        </div>
+
+        <div class="field-stack">
+          <label class="field">
+            <span>Incident Title</span>
+            <input type="text" placeholder="e.g. Broken streetlight on 5th Ave" required />
+          </label>
+
+          <div class="two-columns">
+            <label class="field">
+              <span>Category</span>
+              <select aria-label="Category">
+                <option>Infrastructure</option>
+                <option>Sanitation</option>
+                <option>Safety</option>
+                <option>Utilities</option>
+                <option>Vandalism</option>
+                <option>Other</option>
+              </select>
+            </label>
+
+            <div class="field">
+              <span>Urgency Level</span>
+              <div class="urgency-options" aria-label="Urgency level">
+                <button type="button">Low</button>
+                <button class="selected" type="button" aria-pressed="true">Medium</button>
+                <button type="button">High</button>
+              </div>
+            </div>
+          </div>
+
+          <label class="field">
+            <span>Detailed Description</span>
+            <textarea
+              rows="5"
+              placeholder="Describe the situation in detail. Include any identifying markers or specific hazards..."
+            ></textarea>
+          </label>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="section-title spread">
+          <div>
+            <i class="icon fa-regular fa-image"></i>
+            <h2>Media Evidence</h2>
+          </div>
+          <span class="file-limit">Up to 5 files</span>
+        </div>
+
+        <div class="media-grid">
+          <label class="upload-tile">
+            <i class="icon fa-solid fa-file-arrow-up"></i>
+            <span>Upload</span>
+            <input class="visually-hidden" type="file" multiple aria-label="Upload evidence files" />
+          </label>
+
+          <div class="preview-card">
+            <img
+              ngSrc="https://lh3.googleusercontent.com/aida-public/AB6AXuDeLQh2L9fmwQOKe-SOhehMGzxY6nDfFQhwsM4cJ8xNvyNpg5R7oJwlZDM1E0FLdBTfzrSmHl3raqU-XJe-6Gl9w6K1UfXM_d0RvRsIiuMf-koPNfR2jmemHwNJ3AzXEZchwPI-REtt1FXXKY3aBmnxKYSmR-zbSjO78VmNUJ0mndNp54OjUFcMfYK9_LfHzrdmkIj53TsbVUCtlwRY5fvr4J7KtH4AQMne1LPNNXjoBtQiuvTMb9xok_KRZ_bdqDEnQXkqlDuPpbE"
+              alt="Close-up of cracked asphalt on a city street with yellow traffic markings"
+              width="360"
+              height="360"
+            />
+            <button class="remove-media" type="button" aria-label="Remove cracked asphalt image">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+
+          <div class="preview-card">
+            <img
+              ngSrc="https://lh3.googleusercontent.com/aida-public/AB6AXuCpw2fiwefqxc5aZ4aTFc3H93SU7rnY3aehGhQSMjww0GyKz5lo0jpSR-f7eA_DDMDR5cJfyLuID0NqfjFe1jawiCfU4yrgZRYOtGlmg_pfJZBH1p7CnP36XRHyPR8aQHFetqmHpaO9qoaFFo5-vwDe9v5D2auCXt6groWoodSHOgG24rClhyPx-Ul_gS0ptRgaAS2nV41Mjas5uRDI2aS9GJBdZihBhpECZX-3PyIwwv5YT32dvSFlJUrvhja8r_3z_91FFR4fkho"
+              alt="Leaning metal street sign post on a concrete sidewalk"
+              width="360"
+              height="360"
+            />
+            <button class="remove-media" type="button" aria-label="Remove street sign image">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <aside class="side-column" aria-labelledby="location-title">
+      <article class="panel location-panel">
+        <div class="section-title">
+          <i class="icon fa-solid fa-location-dot"></i>
+          <h2 id="location-title">Location</h2>
+        </div>
+
+        <div class="map-card">
+          <img
+            ngSrc="https://lh3.googleusercontent.com/aida-public/AB6AXuDFhsbkoWR_iRl3WvHTlehBMt-W7XkT4I4m5KTAk3NnlAZIoXSb0ngxtTVxMxdZknhiaNbSw-sF1ZwMcbnFjp7S_bUhQRBNOsJbHiNG8LiuzgQ-8IufyuXV2wVt2Nj9CwFn8yVQVQ8T1wgkaCYtcBI286eFhgtlruAIGOGdLKqkZo_Upb6kdbNjxOkHR5K7C3dq8YArBl9sdgPJXSXNhEUMnlhu9rzTzQbe-uaH1dc2BF5tZHVWl_IMoeg5gpY3jTCiiKdAqM9ijsQ"
+            alt="Top-down digital map illustration showing city blocks"
+            width="720"
+            height="540"
+          />
+
+          <div class="map-controls" aria-label="Map zoom controls">
+            <button type="button" aria-label="Zoom in">
+              <span class="material-symbols-outlined" aria-hidden="true">add</span>
+            </button>
+            <button type="button" aria-label="Zoom out">
+              <span class="material-symbols-outlined" aria-hidden="true">remove</span>
+            </button>
+          </div>
+
+          <span class="map-pin material-symbols-outlined" aria-hidden="true">location_on</span>
+
+          <button class="locate-button" type="button">
+            <i class="fa-solid fa-location-crosshairs"></i>
+            Locate Me
+          </button>
+        </div>
+
+        <div class="location-fields">
+          <label class="field address-field">
+            <span>Street Address</span>
+            <span class="input-with-icon">
+              <input type="text" value="742 Evergreen Terrace, Sector 7G" aria-label="Street address" />
+              <span class="material-symbols-outlined" aria-hidden="true">edit</span>
+            </span>
+          </label>
+
+          <div class="notice">
+            <i class="icon fa-solid fa-circle-info"></i>
+            <p>Your GPS coordinates will be automatically bundled with this report for precision dispatching.</p>
+          </div>
+        </div>
+      </article>
+    </aside>
+  </section>
+
+  <div class="success-toast" role="status" aria-hidden="true">
+    <span class="material-symbols-outlined" aria-hidden="true">check</span>
+    <span>Report successfully logged in local database</span>
+  </div>
+</main>
