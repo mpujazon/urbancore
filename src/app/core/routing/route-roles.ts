@@ -7,4 +7,5 @@ export const ROUTE_ROLES = {
   incidents: ['unlogged', 'citizen'],
   plannedActions: ['unlogged', 'citizen', 'admin'],
   stats: ['unlogged', 'citizen', 'admin'],
+  reportIncident: ['citizen']
 } satisfies Record<string, UserRole[]>;

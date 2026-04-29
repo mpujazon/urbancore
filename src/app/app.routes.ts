@@ -6,6 +6,7 @@ import { authGuard } from './core/guards/auth-guard';
 import { roleGuard } from './core/guards/role-guard';
 import { ROUTE_ROLES } from './core/routing/route-roles';
 import { Unauthorized } from './features/auth/pages/unauthorized/unauthorized';
+import { ReportIncident } from './features/report-incident/pages/report-incident/report-incident';
 
 export const routes: Routes = [
   {
@@ -17,6 +18,12 @@ export const routes: Routes = [
     component: Dashboard,
     canActivate: [authGuard, roleGuard],
     data: { roles: ROUTE_ROLES.dashboard },
+  },
+  {
+    path: 'report-incident',
+    component: ReportIncident,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ROUTE_ROLES.reportIncident}
   },
   {
     path: 'manage-incidents',
