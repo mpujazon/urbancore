@@ -1,0 +1,71 @@
+@use 'styles/variables' as *;
+
+.unauthorized {
+  display: grid;
+  place-items: center;
+  min-height: min(38rem, calc(100vh - 10rem));
+  padding: $space-2xl $space-md;
+}
+
+.unauthorized-card {
+  width: min(100%, 42rem);
+  border: 1px solid $outline-variant;
+  border-radius: 1.25rem;
+  background:
+    radial-gradient(circle at top left, rgba($secondary-fixed, 0.75), transparent 16rem),
+    $surface-container-lowest;
+  box-shadow: $shadow-lg;
+  padding: clamp($space-lg, 5vw, $space-2xl);
+  text-align: center;
+}
+
+.eyebrow {
+  display: inline-flex;
+  margin: 0 0 $space-sm-md;
+  border-radius: $radius-full;
+  background-color: $error-container;
+  padding: 0.3rem 0.75rem;
+  color: $on-error-container;
+  font-size: $label-sm;
+  font-weight: $font-weight-semibold;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: $primary-container;
+  font-family: $font-display;
+  font-size: clamp(2rem, 7vw, 3.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+.message {
+  max-width: 34rem;
+  margin: $space-md auto 0;
+  color: $neutral;
+  font-size: $body-lg;
+  line-height: 1.65;
+}
+
+.home-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: $space-xl;
+  border-radius: $radius-lg;
+  background: $gradient-primary-cta;
+  color: $on-primary;
+  padding: 0.85rem 1.1rem;
+  font-size: $label-md;
+  font-weight: $font-weight-semibold;
+  text-decoration: none;
+  box-shadow: $shadow-md;
+  transition: $transition-hover;
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-1px);
+  }
+}

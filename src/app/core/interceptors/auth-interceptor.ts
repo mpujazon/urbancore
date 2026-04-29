@@ -5,7 +5,7 @@ import { from, switchMap } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
-  const isUrbancoreApi = req.url.startsWith('http://localhost:8080/api');
+  const isUrbancoreApi = req.url.startsWith('http://localhost:8080/api') || req.url.startsWith('https://urbancore-api.onrender.com');
 
   if (!isUrbancoreApi) {
     return next(req);

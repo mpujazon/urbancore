@@ -1,4 +1,4 @@
-<li class="link" [routerLink]="link().url" routerLinkActive="active">
+<li class="link" [routerLink]="link().url" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
   <i [class]="link().iconClasses"></i>
   <p>{{link().label}}</p>
 </li>

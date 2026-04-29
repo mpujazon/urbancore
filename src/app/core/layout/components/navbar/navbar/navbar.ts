@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { Link } from '../../../../../shared/models/LinkInterface';
+import { DOCUMENT } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { NavUserAvatar } from "../nav-user-avatar/nav-user-avatar";
 import { NavLink } from "../nav-link/nav-link";
 import { NAV_LINKS } from '../../../config/nav-links';
@@ -13,7 +13,16 @@ import { AuthService } from '../../../../services/auth-service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Navbar {
+  isMenuOpen = signal(false);
+
   private auth = inject(AuthService);
+  private document = inject(DOCUMENT);
+  private scrollLockEffect = effect((onCleanup) => {
+    const body = this.document.body;
+    body.classList.toggle('mobile-menu-open', this.isMenuOpen());
+
+    onCleanup(() => body.classList.remove('mobile-menu-open'));
+  });
 
   // TODO: links will be given by a computed expression based on a signal of AuthService.
   links = computed(()=>
@@ -21,7 +30,6 @@ export class Navbar {
       link.roles.includes(this.auth.dbUser()?.role ?? 'unlogged')
     )
   );
-  isMenuOpen = signal(false);
   isUserLogged = computed(()=> this.auth.user());
   isSigningIn = signal(false);
 
