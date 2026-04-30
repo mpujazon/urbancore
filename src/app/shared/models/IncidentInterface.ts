@@ -35,14 +35,15 @@ type IncidentStatus =
   | 'REJECTED'
   | 'CANCELLED';
 
-type IncidentPriorityDto = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+type IncidentPriorityDto = 'UNDEFINED' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 
 interface IncidentLocationDto {
   lat: number;
   lng: number;
   addressLabel?: string;
   area?: string;
-
+  city?: string;
+  geohash: string;
 }
 
 interface IncidentImageDto {
