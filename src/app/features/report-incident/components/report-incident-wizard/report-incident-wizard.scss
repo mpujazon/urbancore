@@ -45,7 +45,6 @@ textarea,
 
 .primary-column,
 .side-column,
-.field-stack,
 .location-fields {
   display: flex;
   flex-direction: column;
@@ -118,52 +117,6 @@ textarea {
 
   &::placeholder {
     color: rgba($neutral-variant, 0.72);
-  }
-}
-
-select {
-  appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, $neutral-variant 50%),
-    linear-gradient(135deg, $neutral-variant 50%, transparent 50%);
-  background-position: calc(100% - 1.25rem) 52%, calc(100% - 0.9rem) 52%;
-  background-repeat: no-repeat;
-  background-size: 0.35rem 0.35rem, 0.35rem 0.35rem;
-}
-
-textarea {
-  resize: vertical;
-}
-
-.two-columns {
-  display: grid;
-  gap: $space-md;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.urgency-options {
-  display: grid;
-  gap: $space-sm;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  min-height: 3.5rem;
-
-  button {
-    border-radius: $radius-lg;
-    background: $surface-container-high;
-    color: $neutral;
-    cursor: pointer;
-    font-size: $label-md;
-    font-weight: 700;
-    transition: $transition-hover;
-
-    &:hover {
-      background: $secondary-fixed;
-      color: $secondary;
-    }
-
-    &.selected {
-      background: $secondary;
-      color: $on-secondary;
-    }
   }
 }
 
@@ -385,7 +338,6 @@ textarea {
     padding: $space-lg;
   }
 
-  .two-columns,
   .media-grid {
     grid-template-columns: 1fr;
   }

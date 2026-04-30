@@ -1,49 +1,6 @@
 <section class="form-layout" aria-label="Incident report form preview">
   <div class="primary-column">
-    <article class="panel">
-      <div class="section-title">
-        <i class="icon fa-regular fa-file-lines"></i>
-        <h2>Incident Details</h2>
-      </div>
-
-      <div class="field-stack">
-        <label class="field">
-          <span>Incident Title</span>
-          <input type="text" placeholder="e.g. Broken streetlight on 5th Ave" required />
-        </label>
-
-        <div class="two-columns">
-          <label class="field">
-            <span>Category</span>
-            <select aria-label="Category">
-              <option>Infrastructure</option>
-              <option>Sanitation</option>
-              <option>Safety</option>
-              <option>Utilities</option>
-              <option>Vandalism</option>
-              <option>Other</option>
-            </select>
-          </label>
-
-          <div class="field">
-            <span>Urgency Level</span>
-            <div class="urgency-options" aria-label="Urgency level">
-              <button type="button">Low</button>
-              <button class="selected" type="button" aria-pressed="true">Medium</button>
-              <button type="button">High</button>
-            </div>
-          </div>
-        </div>
-
-        <label class="field">
-          <span>Detailed Description</span>
-          <textarea
-            rows="5"
-            placeholder="Describe the situation in detail. Include any identifying markers or specific hazards..."
-          ></textarea>
-        </label>
-      </div>
-    </article>
+    <app-report-incident-form />
 
     <article class="panel">
       <div class="section-title spread">
