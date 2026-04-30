@@ -1,56 +1,8 @@
 <section class="form-layout" aria-label="Incident report form preview">
   <div class="primary-column">
     <app-report-incident-form />
-
     <app-report-incident-media />
   </div>
 
-  <aside class="side-column" aria-labelledby="location-title">
-    <article class="panel location-panel">
-      <div class="section-title">
-        <i class="icon fa-solid fa-location-dot"></i>
-        <h2 id="location-title">Location</h2>
-      </div>
-
-      <div class="map-card">
-        <img
-          ngSrc="https://lh3.googleusercontent.com/aida-public/AB6AXuDFhsbkoWR_iRl3WvHTlehBMt-W7XkT4I4m5KTAk3NnlAZIoXSb0ngxtTVxMxdZknhiaNbSw-sF1ZwMcbnFjp7S_bUhQRBNOsJbHiNG8LiuzgQ-8IufyuXV2wVt2Nj9CwFn8yVQVQ8T1wgkaCYtcBI286eFhgtlruAIGOGdLKqkZo_Upb6kdbNjxOkHR5K7C3dq8YArBl9sdgPJXSXNhEUMnlhu9rzTzQbe-uaH1dc2BF5tZHVWl_IMoeg5gpY3jTCiiKdAqM9ijsQ"
-          alt="Top-down digital map illustration showing city blocks"
-          width="720"
-          height="540"
-        />
-
-        <div class="map-controls" aria-label="Map zoom controls">
-          <button type="button" aria-label="Zoom in">
-            <span class="material-symbols-outlined" aria-hidden="true">add</span>
-          </button>
-          <button type="button" aria-label="Zoom out">
-            <span class="material-symbols-outlined" aria-hidden="true">remove</span>
-          </button>
-        </div>
-
-        <span class="map-pin material-symbols-outlined" aria-hidden="true">location_on</span>
-
-        <button class="locate-button" type="button">
-          <i class="fa-solid fa-location-crosshairs"></i>
-          Locate Me
-        </button>
-      </div>
-
-      <div class="location-fields">
-        <label class="field address-field">
-          <span>Street Address</span>
-          <span class="input-with-icon">
-            <input type="text" value="742 Evergreen Terrace, Sector 7G" aria-label="Street address" />
-            <span class="material-symbols-outlined" aria-hidden="true">edit</span>
-          </span>
-        </label>
-
-        <div class="notice">
-          <i class="icon fa-solid fa-circle-info"></i>
-          <p>Your GPS coordinates will be automatically bundled with this report for precision dispatching.</p>
-        </div>
-      </div>
-    </article>
-  </aside>
+  <app-report-incident-location />
 </section>
