@@ -10,10 +10,33 @@
   grid-template-columns: minmax(0, 7fr) minmax(20rem, 5fr);
 }
 
-.primary-column {
+.primary-column,
+.side-column {
   display: flex;
   flex-direction: column;
   gap: $space-xl;
+}
+
+.submit-button {
+  width: 100%;
+  border-radius: $radius-lg;
+  background: $primary;
+  box-shadow: 0 16px 30px rgba($primary-container, 0.18);
+  color: $on-primary;
+  cursor: pointer;
+  font-size: $label-md;
+  font-weight: 800;
+  padding: $space-md $space-xl;
+  transition: $transition-hover;
+
+  &:hover {
+    transform: translateY(-1px) scale(1.03);
+  }
+
+  &:focus-visible {
+    outline: 3px solid rgba($secondary, 0.35);
+    outline-offset: 3px;
+  }
 }
 
 @media (max-width: ($bp-lg - 1px)) {
