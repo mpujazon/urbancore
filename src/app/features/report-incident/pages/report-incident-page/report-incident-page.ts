@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { NgOptimizedImage } from '@angular/common';
 import { ReportIncidentHeader } from '../../components/report-incident-header/report-incident-header';
+import { ReportIncidentWizard } from '../../components/report-incident-wizard/report-incident-wizard';
 
 @Component({
   selector: 'app-report-incident-page',
-  imports: [NgOptimizedImage, ReportIncidentHeader],
+  imports: [ReportIncidentHeader, ReportIncidentWizard],
   templateUrl: './report-incident-page.html',
   styleUrl: './report-incident-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
