@@ -9,33 +9,20 @@
       <span>Incident Title</span>
       <input type="text" placeholder="e.g. Broken streetlight on 5th Ave" required />
     </label>
-
-    <div class="two-columns">
-      <label class="field">
-        <span>Category</span>
-        <select aria-label="Category">
-          @for (category of incidentCategories; track category) {
-            <option [value]="category">{{ category | incidentCategoryLabel }}</option>
-          }
-        </select>
-      </label>
-
-      <div class="field">
-        <span>Urgency Level</span>
-        <div class="urgency-options" aria-label="Urgency level">
-          <button type="button">Low</button>
-          <button class="selected" type="button" aria-pressed="true">Medium</button>
-          <button type="button">High</button>
-        </div>
-      </div>
-    </div>
-
     <label class="field">
       <span>Detailed Description</span>
       <textarea
         rows="5"
         placeholder="Describe the situation in detail. Include any identifying markers or specific hazards..."
       ></textarea>
+    </label>
+    <label class="field">
+      <span>Category</span>
+      <select aria-label="Category">
+        @for (category of incidentCategories; track category) {
+          <option [value]="category">{{ category | incidentCategoryLabel }}</option>
+        }
+      </select>
     </label>
   </div>
 </article>
