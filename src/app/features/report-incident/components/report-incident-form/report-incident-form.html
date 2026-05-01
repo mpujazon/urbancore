@@ -14,12 +14,9 @@
       <label class="field">
         <span>Category</span>
         <select aria-label="Category">
-          <option>Infrastructure</option>
-          <option>Sanitation</option>
-          <option>Safety</option>
-          <option>Utilities</option>
-          <option>Vandalism</option>
-          <option>Other</option>
+          @for (category of incidentCategories; track category) {
+            <option [value]="category">{{ category | incidentCategoryLabel }}</option>
+          }
         </select>
       </label>
 

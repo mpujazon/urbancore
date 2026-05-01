@@ -17,7 +17,7 @@ export interface IncidentDto{
   updatedAt: string;
 }
 
-type IncidentCategory =
+export type IncidentCategory =
   | 'POTHOLE'
   | 'LIGHTING'
   | 'STREET_FURNITURE'
