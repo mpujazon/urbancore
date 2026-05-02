@@ -4,4 +4,4 @@ export interface UserDto{
   email: string;
   role: UserRole;
 }
-export type UserRole = 'unlogged' | 'citizen' | 'admin';
+export type UserRole = 'unlogged' | 'ROLE_CITIZEN' | 'ROLE_ADMIN';
