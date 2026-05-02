@@ -1,6 +1,9 @@
 <section class="form-layout" aria-label="Incident report form preview">
   <div class="primary-column">
-    <app-report-incident-form />
+    <app-report-incident-form
+      (formValidityChanged)="updateFormValidityState($event)"
+      (formValuesChanged)="updateFormValues($event)"
+    />
     <app-report-incident-media />
   </div>
   <aside class="side-column" aria-labelledby="location-title">

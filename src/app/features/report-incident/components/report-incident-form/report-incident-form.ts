@@ -65,7 +65,6 @@ export class ReportIncidentForm {
 
   protected hasControlError(controlName: ReportIncidentFormControlName): boolean {
     const control = this.incidentForm.controls[controlName];
-
     return control.invalid && control.touched;
   }
 
@@ -82,7 +81,6 @@ export class ReportIncidentForm {
 
     if (control.hasError('minlength')) {
       const requiredLength = control.getError('minlength').requiredLength;
-
       return `Must be at least ${requiredLength} characters.`;
     }
 
