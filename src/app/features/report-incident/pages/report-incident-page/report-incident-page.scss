@@ -1,0 +1,24 @@
+@use '../../../../../styles/variables' as *;
+
+:host {
+  display: block;
+  min-height: 100vh;
+  color: $on-surface;
+  background: $surface-container-low;
+}
+
+.report-page {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: $space-2xl $space-lg;
+}
+
+.success-toast {
+  display: none;
+}
+
+@media (max-width: ($bp-md - 1px)) {
+  .report-page {
+    padding: $space-xl $space-md;
+  }
+}

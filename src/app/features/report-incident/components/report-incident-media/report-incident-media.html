@@ -1,0 +1,44 @@
+<article class="panel">
+  <div class="section-title spread">
+    <div>
+      <i class="icon fa-regular fa-image"></i>
+      <h2>Media Evidence</h2>
+    </div>
+    <span class="file-limit">Up to 5 files</span>
+  </div>
+
+  <div class="media-grid">
+    @if (canUploadMore()) {
+      <label class="upload-tile">
+        <i class="icon fa-solid fa-file-arrow-up"></i>
+        <span>Upload</span>
+        <input
+          class="visually-hidden"
+          type="file"
+          multiple
+          accept=".jpg,.jpeg,.png,.webp,.heic,.heif,image/jpeg,image/png,image/webp,image/heic,image/heif"
+          aria-label="Upload evidence files"
+          (change)="onFilesSelected($event)"
+        />
+      </label>
+    }
+
+    @for (preview of previews(); track preview.id) {
+      <div class="preview-card">
+        <img [src]="preview.url" [alt]="preview.file.name" width="360" height="360" />
+        <button
+          class="remove-media"
+          type="button"
+          [attr.aria-label]="'Remove ' + preview.file.name"
+          (click)="removePreview(preview.id)"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    }
+  </div>
+
+  @if (errorMessage(); as error) {
+    <p class="upload-error" role="status" aria-live="polite">{{ error }}</p>
+  }
+</article>

@@ -15,6 +15,12 @@ export const NAV_LINKS: Link[] = [
       iconClasses: 'fa-solid fa-chalkboard-user'
     },
     {
+      label: 'Report incident',
+      roles: ROUTE_ROLES.reportIncident,
+      url: 'report-incident',
+      iconClasses: 'fa-solid fa-circle-plus'
+    },
+    {
       label: 'Manage incidents',
       roles: ROUTE_ROLES.manageIncidents,
       url: '/manage-incidents',

@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, HostListener, inject, signal } from '@angular/core';
 import { AuthService } from '../../../../services/auth-service';
-import { TitleCasePipe } from '@angular/common';
+import { UserRoleLabelPipe } from '../../../pipes/user-role-label.pipe';
 
 @Component({
   selector: 'app-nav-user-avatar',
-  imports: [TitleCasePipe],
+  imports: [UserRoleLabelPipe],
   templateUrl: './nav-user-avatar.html',
   styleUrl: './nav-user-avatar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
