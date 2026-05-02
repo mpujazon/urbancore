@@ -8,6 +8,6 @@
   </div>
   <aside class="side-column" aria-labelledby="location-title">
     <app-report-incident-location />
-    <button class="submit-button" type="submit">Submit Report</button>
+    <button class="submit-button" type="submit" [disabled]="!canSubmit()">Submit Report</button>
   </aside>
 </section>
