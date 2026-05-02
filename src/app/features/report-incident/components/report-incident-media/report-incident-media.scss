@@ -139,6 +139,13 @@ button,
   font-size: 1.5rem;
 }
 
+.upload-error {
+  margin-top: $space-md;
+  color: #ba1a1a;
+  font-size: $label-sm;
+  font-weight: $font-weight-medium;
+}
+
 @media (max-width: ($bp-md - 1px)) {
   .panel {
     padding: $space-lg;

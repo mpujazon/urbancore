@@ -76,12 +76,12 @@ export class AuthService {
   }
 
   private async redirectToDefaultRoute(dbUser: UserDto): Promise<void> {
-    if(dbUser.role === 'citizen'){
+    if(dbUser.role === 'ROLE_CITIZEN'){
       await this.router.navigateByUrl('/dashboard');
       return;
     }
 
-    if(dbUser.role === 'admin'){
+    if(dbUser.role === 'ROLE_ADMIN'){
       await this.router.navigateByUrl('/manage-incidents');
     }
   }
