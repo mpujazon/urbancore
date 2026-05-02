@@ -53,6 +53,20 @@
   }
 }
 
+.submit-feedback {
+  margin: 0;
+  font-size: $label-sm;
+  font-weight: $font-weight-medium;
+
+  &.error {
+    color: #ba1a1a;
+  }
+
+  &.success {
+    color: #136a34;
+  }
+}
+
 @media (max-width: ($bp-lg - 1px)) {
   .form-layout {
     grid-template-columns: 1fr;

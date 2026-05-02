@@ -4,10 +4,20 @@
       (formValidityChanged)="updateFormValidityState($event)"
       (formValuesChanged)="updateFormValues($event)"
     />
-    <app-report-incident-media />
+    <app-report-incident-media (selectedFilesChanged)="updateSelectedFiles($event)" />
   </div>
   <aside class="side-column" aria-labelledby="location-title">
     <app-report-incident-location />
-    <button class="submit-button" type="submit" [disabled]="!canSubmit()">Submit Report</button>
+    <button class="submit-button" type="button" [disabled]="!canSubmit()" (click)="submitReport()">
+      {{ isSubmitting() ? 'Submitting...' : 'Submit Report' }}
+    </button>
+
+    @if (submitError(); as error) {
+      <p class="submit-feedback error" role="status" aria-live="polite">{{ error }}</p>
+    }
+
+    @if (submitSuccess(); as success) {
+      <p class="submit-feedback success" role="status" aria-live="polite">{{ success }}</p>
+    }
   </aside>
 </section>

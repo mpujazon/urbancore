@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, output, signal } from '@angular/core';
 
 import { validateImageFile } from '../../utils/image-upload.validators';
 
@@ -18,6 +18,7 @@ const MAX_FILES = 5;
 })
 
 export class ReportIncidentMedia {
+  selectedFilesChanged = output<File[]>();
   protected readonly previews = signal<MediaPreview[]>([]);
   protected readonly errorMessage = signal<string | null>(null);
   protected readonly canUploadMore = computed(
@@ -72,6 +73,7 @@ export class ReportIncidentMedia {
 
     if (newPreviews.length > 0) {
       this.previews.update((current) => [...current, ...newPreviews]);
+      this.emitSelectedFiles();
     }
 
     input.value = '';
@@ -91,6 +93,12 @@ export class ReportIncidentMedia {
     if (this.previews().length < MAX_FILES) {
       this.errorMessage.set(null);
     }
+
+    this.emitSelectedFiles();
+  }
+
+  private emitSelectedFiles(): void {
+    this.selectedFilesChanged.emit(this.previews().map((preview) => preview.file));
   }
 
   ngOnDestroy(): void {
