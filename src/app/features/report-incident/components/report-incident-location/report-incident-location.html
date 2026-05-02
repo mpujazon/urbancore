@@ -5,20 +5,37 @@
   </div>
 
   <div class="map-card">
+    <div #mapContainer class="map-canvas" role="application" aria-label="Incident location map"></div>
 
+    <p class="map-hint">Click the map to select a location</p>
 
-    <button class="locate-button" type="button">
+    <button
+      class="locate-button"
+      type="button"
+      [disabled]="isLocating()"
+      (pointerdown)="$event.stopPropagation()"
+      (click)="locateMe($event)"
+    >
       <i class="fa-solid fa-location-crosshairs"></i>
-      Locate Me
+      {{ isLocating() ? 'Locating...' : 'Locate Me' }}
     </button>
   </div>
 
+  @if (locationMessage()) {
+    <p class="location-message" aria-live="polite">{{ locationMessage() }}</p>
+  }
+
   <div class="location-fields">
-    <label class="field address-field">
-      <span>Street Address</span>
+    <label class="field coordinates-field">
+      <span>Coordinates</span>
       <span class="input-with-icon">
-        <input type="text" value="742 Evergreen Terrace, Sector 7G" aria-label="Street address" />
-        <span class="material-symbols-outlined" aria-hidden="true">edit</span>
+        <input
+          type="text"
+          [value]="coordinates()"
+          aria-label="Coordinates"
+          placeholder="Select a location on the map"
+          readonly
+        />
       </span>
     </label>
 
