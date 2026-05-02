@@ -27,13 +27,13 @@ export function validateImageFile(file: File): string | null {
   );
 
   if (!hasValidMimeType && !hasValidExtension) {
-    return 'Solo se permiten imágenes JPG, PNG, WebP, HEIC o HEIF.';
+    return 'Only JPG, PNG, WebP, HEIC or HEIF images are allowed.';
   }
 
   const sizeMb = file.size / 1024 / 1024;
 
   if (sizeMb > MAX_FILE_SIZE_MB) {
-    return `La imagen no puede superar ${MAX_FILE_SIZE_MB} MB.`;
+    return `The image must not exceed ${MAX_FILE_SIZE_MB} MB.`;
   }
 
   return null;
