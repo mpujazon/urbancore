@@ -55,6 +55,14 @@ textarea {
   }
 }
 
+.field-error {
+  color: $on-error-container;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.3;
+  padding-inline: $space-xs;
+}
+
 input,
 select,
 textarea {
@@ -89,33 +97,6 @@ textarea {
   display: grid;
   gap: $space-md;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.urgency-options {
-  display: grid;
-  gap: $space-sm;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  min-height: 3.5rem;
-
-  button {
-    border-radius: $radius-lg;
-    background: $surface-container-high;
-    color: $neutral;
-    cursor: pointer;
-    font-size: $label-md;
-    font-weight: 700;
-    transition: $transition-hover;
-
-    &:hover {
-      background: $secondary-fixed;
-      color: $secondary;
-    }
-
-    &.selected {
-      background: $secondary;
-      color: $on-secondary;
-    }
-  }
 }
 
 .icon {

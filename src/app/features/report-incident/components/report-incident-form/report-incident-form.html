@@ -4,25 +4,35 @@
     <h2>Incident Details</h2>
   </div>
 
-  <div class="field-stack">
+  <form class="field-stack" [formGroup]="reportIncidentForm">
     <label class="field">
       <span>Incident Title</span>
-      <input type="text" placeholder="e.g. Broken streetlight on 5th Ave" required />
+      <input type="text" formControlName="title" placeholder="e.g. Broken streetlight on 5th Ave" required />
+      @if (hasControlError('title')) {
+        <span class="field-error">{{ getControlError('title') }}</span>
+      }
     </label>
     <label class="field">
       <span>Detailed Description</span>
       <textarea
+        formControlName="description"
         rows="5"
         placeholder="Describe the situation in detail. Include any identifying markers or specific hazards..."
       ></textarea>
+      @if (hasControlError('description')) {
+        <span class="field-error">{{ getControlError('description') }}</span>
+      }
     </label>
     <label class="field">
       <span>Category</span>
-      <select aria-label="Category">
+      <select formControlName="category" aria-label="Category">
         @for (category of incidentCategories; track category) {
           <option [value]="category">{{ category | incidentCategoryLabel }}</option>
         }
       </select>
+      @if (hasControlError('category')) {
+        <span class="field-error">{{ getControlError('category') }}</span>
+      }
     </label>
-  </div>
+  </form>
 </article>
