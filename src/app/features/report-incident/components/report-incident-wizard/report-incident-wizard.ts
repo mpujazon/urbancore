@@ -1,10 +1,15 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { forkJoin } from 'rxjs';
-import { IncidentImageDto } from '../../models/upload.models';
+import { encode } from 'ngeohash';
+import { finalize, forkJoin, Observable, of, switchMap, tap } from 'rxjs';
+import type { CreateIncidentRequest } from '../../models/incident-report.models';
+import type { IncidentImageDto } from '../../models/upload.models';
 import { ImageUploadService } from '../../services/image-upload-service';
+import { IncidentReportService } from '../../services/incident-report-service';
 import { ReportIncidentForm, ReportIncidentFormValues } from '../report-incident-form/report-incident-form';
 import {IncidentCoordinates, ReportIncidentLocation} from '../report-incident-location/report-incident-location';
 import { ReportIncidentMedia } from '../report-incident-media/report-incident-media';
+
+const GEOHASH_PRECISION = 9;
 
 @Component({
   selector: 'app-report-incident-wizard',
@@ -15,6 +20,7 @@ import { ReportIncidentMedia } from '../report-incident-media/report-incident-me
 })
 export class ReportIncidentWizard {
   private readonly imageUploadService = inject(ImageUploadService);
+  private readonly incidentReportService = inject(IncidentReportService);
 
   formValues = signal<ReportIncidentFormValues >({title: '', description: '', category: 'OTHER'});
   isFormValid = signal<boolean>(false);
@@ -54,33 +60,58 @@ export class ReportIncidentWizard {
       return;
     }
 
+    const coordinates = this.selectedCoordinates();
+
+    if (!coordinates) {
+      this.submitError.set('Please select an incident location.');
+      return;
+    }
+
     this.isSubmitting.set(true);
     this.submitError.set(null);
     this.submitSuccess.set(null);
 
     const files = this.selectedFiles();
 
+    this.uploadImages(files)
+      .pipe(
+        tap((uploadedImages) => this.uploadedImages.set(uploadedImages)),
+        switchMap((uploadedImages) =>
+          this.incidentReportService.createIncident(
+            this.buildCreateIncidentRequest(coordinates, uploadedImages)
+          )
+        ),
+        finalize(() => this.isSubmitting.set(false))
+      )
+      .subscribe({
+        next: () => {
+          this.submitSuccess.set('Incident reported successfully.');
+        },
+        error: () => {
+          this.submitError.set('Could not submit the incident. Please try again.');
+        },
+      });
+  }
+
+  private uploadImages(files: File[]): Observable<IncidentImageDto[]> {
     if (files.length === 0) {
-      this.uploadedImages.set([]);
-      this.submitSuccess.set('Report is valid. Ready to connect with backend submit.');
-      this.isSubmitting.set(false);
-      return;
+      return of<IncidentImageDto[]>([]);
     }
 
-    const uploads = files.map((file) => this.imageUploadService.uploadImage(file));
+    return forkJoin(files.map((file) => this.imageUploadService.uploadImage(file)));
+  }
 
-    forkJoin(uploads).subscribe({
-      next: (uploadedImages) => {
-        this.uploadedImages.set(uploadedImages);
-        this.submitSuccess.set(
-          `Report is valid and ${uploadedImages.length} image(s) uploaded. Ready to send final payload.`
-        );
-        this.isSubmitting.set(false);
+  private buildCreateIncidentRequest(
+    coordinates: IncidentCoordinates,
+    images: IncidentImageDto[]
+  ): CreateIncidentRequest {
+    return {
+      ...this.formValues(),
+      location: {
+        ...coordinates,
+        geohash: encode(coordinates.lat, coordinates.lng, GEOHASH_PRECISION),
       },
-      error: () => {
-        this.submitError.set('Could not upload one or more images. Please try again.');
-        this.isSubmitting.set(false);
-      },
-    });
+      images,
+    };
   }
 }
