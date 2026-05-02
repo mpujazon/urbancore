@@ -7,7 +7,9 @@
     <app-report-incident-media (selectedFilesChanged)="updateSelectedFiles($event)" />
   </div>
   <aside class="side-column" aria-labelledby="location-title">
-    <app-report-incident-location />
+    <app-report-incident-location
+      (coordinatesChanged)="updateCoordinates($event)"
+    />
     <button class="submit-button" type="button" [disabled]="!canSubmit()" (click)="submitReport()">
       {{ isSubmitting() ? 'Submitting...' : 'Submit Report' }}
     </button>

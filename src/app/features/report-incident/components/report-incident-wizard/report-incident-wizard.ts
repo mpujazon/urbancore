@@ -3,7 +3,7 @@ import { forkJoin } from 'rxjs';
 import { IncidentImageDto } from '../../models/upload.models';
 import { ImageUploadService } from '../../services/image-upload-service';
 import { ReportIncidentForm, ReportIncidentFormValues } from '../report-incident-form/report-incident-form';
-import { ReportIncidentLocation } from '../report-incident-location/report-incident-location';
+import {IncidentCoordinates, ReportIncidentLocation} from '../report-incident-location/report-incident-location';
 import { ReportIncidentMedia } from '../report-incident-media/report-incident-media';
 
 @Component({
@@ -14,28 +14,26 @@ import { ReportIncidentMedia } from '../report-incident-media/report-incident-me
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReportIncidentWizard {
-  // Services
   private readonly imageUploadService = inject(ImageUploadService);
 
-  // Values
   formValues = signal<ReportIncidentFormValues >({title: '', description: '', category: 'OTHER'});
+  isFormValid = signal<boolean>(false);
+
   selectedFiles = signal<File[]>([]);
   uploadedImages = signal<IncidentImageDto[]>([]);
 
-  // Validations
-  isFormValid = signal<boolean>(false);
+  selectedCoordinates = signal<IncidentCoordinates | null>(null);
 
   isSubmitting = signal<boolean>(false);
-
-
   submitError = signal<string | null>(null);
   submitSuccess = signal<string | null>(null);
 
   canSubmit = computed(()=>{
-    return this.isFormValid() && !this.isSubmitting();
+    return  this.isFormValid()    &&
+            !this.isSubmitting()  &&
+            this.selectedCoordinates() !== null
   });
 
-// Functions
   updateFormValues(values: ReportIncidentFormValues): void{
     this.formValues.set(values);
   }
@@ -45,6 +43,10 @@ export class ReportIncidentWizard {
 
   updateSelectedFiles(files: File[]): void {
     this.selectedFiles.set(files);
+  }
+
+  updateCoordinates(coordinates: IncidentCoordinates): void{
+    this.selectedCoordinates.set(coordinates);
   }
 
   submitReport(): void {
