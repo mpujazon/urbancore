@@ -1,5 +1,7 @@
+import { IncidentImageDto } from '../../features/report-incident/models/upload.models';
 import { PlannedActionDto } from './PlannedActionInterface';
 import { UserRole } from './UserInterface';
+
 export interface IncidentDto{
   id: string;
   title: string;
@@ -44,15 +46,6 @@ interface IncidentLocationDto {
   area?: string;
   city?: string;
   geohash: string;
-}
-
-interface IncidentImageDto {
-  id: string;
-  url: string;
-  thumbnailUrl?: string;
-  publicId: string;
-  mimeType?: string;
-  sizeKb?: number;
 }
 
 interface IncidentReporterDto {
