@@ -50,7 +50,7 @@ export class ReportIncidentForm {
   constructor() {
     this.incidentForm.valueChanges
       .pipe(
-        debounceTime(1000),
+        debounceTime(500),
         distinctUntilChanged(
           (prev, curr) =>
             prev.title === curr.title &&

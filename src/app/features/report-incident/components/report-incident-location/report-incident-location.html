@@ -5,36 +5,37 @@
   </div>
 
   <div class="map-card">
-    <img
-      ngSrc="https://lh3.googleusercontent.com/aida-public/AB6AXuDFhsbkoWR_iRl3WvHTlehBMt-W7XkT4I4m5KTAk3NnlAZIoXSb0ngxtTVxMxdZknhiaNbSw-sF1ZwMcbnFjp7S_bUhQRBNOsJbHiNG8LiuzgQ-8IufyuXV2wVt2Nj9CwFn8yVQVQ8T1wgkaCYtcBI286eFhgtlruAIGOGdLKqkZo_Upb6kdbNjxOkHR5K7C3dq8YArBl9sdgPJXSXNhEUMnlhu9rzTzQbe-uaH1dc2BF5tZHVWl_IMoeg5gpY3jTCiiKdAqM9ijsQ"
-      alt="Top-down digital map illustration showing city blocks"
-      width="720"
-      height="540"
-    />
+    <div #mapContainer class="map-canvas" role="application" aria-label="Incident location map"></div>
 
-    <div class="map-controls" aria-label="Map zoom controls">
-      <button type="button" aria-label="Zoom in">
-        <span class="material-symbols-outlined" aria-hidden="true">add</span>
-      </button>
-      <button type="button" aria-label="Zoom out">
-        <span class="material-symbols-outlined" aria-hidden="true">remove</span>
-      </button>
-    </div>
+    <p class="map-hint">Click the map to select a location</p>
 
-    <span class="map-pin material-symbols-outlined" aria-hidden="true">location_on</span>
-
-    <button class="locate-button" type="button">
+    <button
+      class="locate-button"
+      type="button"
+      [disabled]="isLocating()"
+      (pointerdown)="$event.stopPropagation()"
+      (click)="locateMe($event)"
+    >
       <i class="fa-solid fa-location-crosshairs"></i>
-      Locate Me
+      {{ isLocating() ? 'Locating...' : 'Locate Me' }}
     </button>
   </div>
 
+  @if (locationMessage()) {
+    <p class="location-message" aria-live="polite">{{ locationMessage() }}</p>
+  }
+
   <div class="location-fields">
-    <label class="field address-field">
-      <span>Street Address</span>
+    <label class="field coordinates-field">
+      <span>Coordinates</span>
       <span class="input-with-icon">
-        <input type="text" value="742 Evergreen Terrace, Sector 7G" aria-label="Street address" />
-        <span class="material-symbols-outlined" aria-hidden="true">edit</span>
+        <input
+          type="text"
+          [value]="coordinates()"
+          aria-label="Coordinates"
+          placeholder="Select a location on the map"
+          readonly
+        />
       </span>
     </label>
 
