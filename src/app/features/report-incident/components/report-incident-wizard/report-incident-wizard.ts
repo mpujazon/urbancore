@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { encode } from 'ngeohash';
 import { finalize, forkJoin, Observable, of, switchMap, tap } from 'rxjs';
+import { ToastService } from '../../../../core/services/toast-service';
 import type { CreateIncidentRequest } from '../../models/incident-report.models';
 import type { IncidentImageDto } from '../../models/upload.models';
 import { ImageUploadService } from '../../services/image-upload-service';
@@ -21,6 +23,8 @@ const GEOHASH_PRECISION = 9;
 export class ReportIncidentWizard {
   private readonly imageUploadService = inject(ImageUploadService);
   private readonly incidentReportService = inject(IncidentReportService);
+  private readonly toastService = inject(ToastService);
+  private readonly router = inject(Router);
 
   formValues = signal<ReportIncidentFormValues >({title: '', description: '', category: 'OTHER'});
   isFormValid = signal<boolean>(false);
@@ -32,7 +36,6 @@ export class ReportIncidentWizard {
 
   isSubmitting = signal<boolean>(false);
   submitError = signal<string | null>(null);
-  submitSuccess = signal<string | null>(null);
 
   canSubmit = computed(()=>{
     return  this.isFormValid()    &&
@@ -69,7 +72,6 @@ export class ReportIncidentWizard {
 
     this.isSubmitting.set(true);
     this.submitError.set(null);
-    this.submitSuccess.set(null);
 
     const files = this.selectedFiles();
 
@@ -85,7 +87,8 @@ export class ReportIncidentWizard {
       )
       .subscribe({
         next: () => {
-          this.submitSuccess.set('Incident reported successfully.');
+          this.toastService.showSuccess('Incident reported successfully.');
+          void this.router.navigateByUrl('/dashboard');
         },
         error: () => {
           this.submitError.set('Could not submit the incident. Please try again.');
