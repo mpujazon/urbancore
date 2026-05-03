@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, OnInit, computed, effect, inject, signal } from '@angular/core';
 import { NavUserAvatar } from "../nav-user-avatar/nav-user-avatar";
 import { NavLink } from "../nav-link/nav-link";
 import { NAV_LINKS } from '../../../config/nav-links';
@@ -11,9 +11,13 @@ import { AuthService } from '../../../../services/auth-service';
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class.scrolled]': 'isScrolled()',
+  },
 })
-export class Navbar {
+export class Navbar implements OnInit {
   isMenuOpen = signal(false);
+  isScrolled = signal(false);
 
   private auth = inject(AuthService);
   private document = inject(DOCUMENT);
@@ -32,6 +36,20 @@ export class Navbar {
   );
   isUserLogged = computed(()=> this.auth.user());
   isSigningIn = signal(false);
+
+  ngOnInit() {
+    this.updateScrolledState();
+  }
+
+  @HostListener('window:scroll')
+  onWindowScroll() {
+    this.updateScrolledState();
+  }
+
+  private updateScrolledState() {
+    const scrollTop = this.document.defaultView?.scrollY ?? 0;
+    this.isScrolled.set(scrollTop > 6);
+  }
 
   onOpenMenuClick(){
     this.isMenuOpen.set(true);

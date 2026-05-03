@@ -152,6 +152,11 @@ button,
   }
 
   .media-grid {
-    grid-template-columns: 1fr;
+    gap: $space-sm;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .section-title {
+    margin-bottom: $space-md;
   }
 }
