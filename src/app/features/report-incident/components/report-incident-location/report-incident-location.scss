@@ -216,13 +216,24 @@ input {
 
 @media (max-width: ($bp-lg - 1px)) {
   .map-card {
-    aspect-ratio: 16 / 10;
-    height: auto;
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: auto;
+    height: 20rem;
+  }
+
+  .locate-button {
+    max-width: calc(100% - ($space-md * 2));
+    white-space: nowrap;
   }
 }
 
 @media (max-width: ($bp-md - 1px)) {
   .panel {
     padding: $space-lg;
+  }
+
+  .map-card {
+    height: 22rem;
   }
 }
