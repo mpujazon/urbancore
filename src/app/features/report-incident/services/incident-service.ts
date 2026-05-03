@@ -8,14 +8,14 @@ import type { CreateIncidentRequest } from '../models/incident-report.models';
 @Injectable({
   providedIn: 'root',
 })
-export class IncidentReportService {
+export class IncidentService {
   private readonly http = inject(HttpClient);
-
-  getSignedInCitizenIncidents(): Observable<IncidentDto[]> {
-    return this.http.get<IncidentDto[]>(`${environment.API_BASE_URL}/incidents/me`);
-  }
 
   createIncident(request: CreateIncidentRequest): Observable<IncidentDto> {
     return this.http.post<IncidentDto>(`${environment.API_BASE_URL}/incidents`, request);
   }
+  getSignedInCitizenIncidents(): Observable<IncidentDto[]> {
+    return this.http.get<IncidentDto[]>(`${environment.API_BASE_URL}/incidents/me`);
+  }
+
 }
