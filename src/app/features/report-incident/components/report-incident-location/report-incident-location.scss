@@ -74,6 +74,7 @@ input {
 
 .map-card {
   position: relative;
+  z-index: 1;
   flex: 1 1 auto;
   height: 25rem;
   overflow: hidden;
@@ -127,7 +128,7 @@ input {
   position: absolute;
   bottom: $space-md;
   left: $space-md;
-  z-index: 1000;
+  z-index: 6;
   pointer-events: auto;
   display: inline-flex;
   align-items: center;
@@ -161,7 +162,7 @@ input {
   position: absolute;
   top: $space-md;
   left: $space-md;
-  z-index: 500;
+  z-index: 5;
   border-radius: $radius-lg;
   background: rgba($surface-container-lowest, 0.86);
   box-shadow: $shadow-lift;
@@ -170,6 +171,10 @@ input {
   font-weight: 800;
   padding: $space-xs $space-sm;
   pointer-events: none;
+}
+
+.map-card :is(.leaflet-pane, .leaflet-control, .leaflet-top, .leaflet-bottom) {
+  z-index: 4;
 }
 
 .location-message {

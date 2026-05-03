@@ -1,4 +1,17 @@
 @use 'styles/variables' as *;
+
+:host {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: block;
+  transition: box-shadow 220ms ease;
+}
+
+:host.scrolled {
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+}
+
 #desktop-navigation, #mobile-navigation{
   z-index: 10;
 }
@@ -6,7 +19,6 @@
 #desktop-navigation{
   width: 100%;
   display: flex;
-  position: sticky;
   padding: $space-md $space-xl;
   justify-content: space-between;
   align-items: center;
