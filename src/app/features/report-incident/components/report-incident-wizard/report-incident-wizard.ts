@@ -1,10 +1,17 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { forkJoin } from 'rxjs';
-import { IncidentImageDto } from '../../models/upload.models';
+import { Router } from '@angular/router';
+import { encode } from 'ngeohash';
+import { finalize, forkJoin, Observable, of, switchMap, tap } from 'rxjs';
+import { ToastService } from '../../../../core/services/toast-service';
+import type { CreateIncidentRequest } from '../../models/incident-report.models';
+import type { IncidentImageDto } from '../../models/upload.models';
 import { ImageUploadService } from '../../services/image-upload-service';
+import { IncidentReportService } from '../../services/incident-report-service';
 import { ReportIncidentForm, ReportIncidentFormValues } from '../report-incident-form/report-incident-form';
 import {IncidentCoordinates, ReportIncidentLocation} from '../report-incident-location/report-incident-location';
 import { ReportIncidentMedia } from '../report-incident-media/report-incident-media';
+
+const GEOHASH_PRECISION = 9;
 
 @Component({
   selector: 'app-report-incident-wizard',
@@ -15,6 +22,9 @@ import { ReportIncidentMedia } from '../report-incident-media/report-incident-me
 })
 export class ReportIncidentWizard {
   private readonly imageUploadService = inject(ImageUploadService);
+  private readonly incidentReportService = inject(IncidentReportService);
+  private readonly toastService = inject(ToastService);
+  private readonly router = inject(Router);
 
   formValues = signal<ReportIncidentFormValues >({title: '', description: '', category: 'OTHER'});
   isFormValid = signal<boolean>(false);
@@ -26,12 +36,12 @@ export class ReportIncidentWizard {
 
   isSubmitting = signal<boolean>(false);
   submitError = signal<string | null>(null);
-  submitSuccess = signal<string | null>(null);
 
   canSubmit = computed(()=>{
     return  this.isFormValid()    &&
             !this.isSubmitting()  &&
-            this.selectedCoordinates() !== null
+            this.selectedCoordinates() !== null &&
+            this.selectedFiles().length > 0
   });
 
   updateFormValues(values: ReportIncidentFormValues): void{
@@ -54,33 +64,62 @@ export class ReportIncidentWizard {
       return;
     }
 
-    this.isSubmitting.set(true);
-    this.submitError.set(null);
-    this.submitSuccess.set(null);
-
+    const coordinates = this.selectedCoordinates();
     const files = this.selectedFiles();
 
-    if (files.length === 0) {
-      this.uploadedImages.set([]);
-      this.submitSuccess.set('Report is valid. Ready to connect with backend submit.');
-      this.isSubmitting.set(false);
+    if (!coordinates) {
+      this.submitError.set('Please select an incident location.');
       return;
     }
 
-    const uploads = files.map((file) => this.imageUploadService.uploadImage(file));
+    if (files.length === 0) {
+      this.submitError.set('Please upload at least one image.');
+      return;
+    }
 
-    forkJoin(uploads).subscribe({
-      next: (uploadedImages) => {
-        this.uploadedImages.set(uploadedImages);
-        this.submitSuccess.set(
-          `Report is valid and ${uploadedImages.length} image(s) uploaded. Ready to send final payload.`
-        );
-        this.isSubmitting.set(false);
+    this.isSubmitting.set(true);
+    this.submitError.set(null);
+
+    this.uploadImages(files)
+      .pipe(
+        tap((uploadedImages) => this.uploadedImages.set(uploadedImages)),
+        switchMap((uploadedImages) =>
+          this.incidentReportService.createIncident(
+            this.buildCreateIncidentRequest(coordinates, uploadedImages)
+          )
+        ),
+        finalize(() => this.isSubmitting.set(false))
+      )
+      .subscribe({
+        next: () => {
+          this.toastService.showSuccess('Incident reported successfully.');
+          void this.router.navigateByUrl('/dashboard');
+        },
+        error: () => {
+          this.submitError.set('Could not submit the incident. Please try again.');
+        },
+      });
+  }
+
+  private uploadImages(files: File[]): Observable<IncidentImageDto[]> {
+    if (files.length === 0) {
+      return of<IncidentImageDto[]>([]);
+    }
+
+    return forkJoin(files.map((file) => this.imageUploadService.uploadImage(file)));
+  }
+
+  private buildCreateIncidentRequest(
+    coordinates: IncidentCoordinates,
+    images: IncidentImageDto[]
+  ): CreateIncidentRequest {
+    return {
+      ...this.formValues(),
+      location: {
+        ...coordinates,
+        geohash: encode(coordinates.lat, coordinates.lng, GEOHASH_PRECISION),
       },
-      error: () => {
-        this.submitError.set('Could not upload one or more images. Please try again.');
-        this.isSubmitting.set(false);
-      },
-    });
+      images,
+    };
   }
 }

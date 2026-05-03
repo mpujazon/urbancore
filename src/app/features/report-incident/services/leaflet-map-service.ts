@@ -3,7 +3,13 @@ import * as L from 'leaflet';
 
 @Injectable({ providedIn: 'root' })
 export class LeafletMapService {
-  private readonly mapMarkers = new WeakMap<L.Map, L.CircleMarker>();
+  private readonly mapMarkers = new WeakMap<L.Map, L.Marker>();
+  private readonly selectedLocationIcon = L.divIcon({
+    className: 'incident-selection-marker',
+    html: '<span class="incident-selection-marker__pin"><span class="incident-selection-marker__center"></span></span>',
+    iconSize: [28, 28],
+    iconAnchor: [14, 28],
+  });
 
   createMap(container: HTMLElement, center: L.LatLngTuple, zoom: number): L.Map {
     const map = L.map(container, {
@@ -39,12 +45,9 @@ export class LeafletMapService {
       return;
     }
 
-    const marker = L.circleMarker(location, {
-      radius: 8,
-      color: '#ffffff',
-      weight: 2,
-      fillColor: '#0455bf',
-      fillOpacity: 1,
+    const marker = L.marker(location, {
+      icon: this.selectedLocationIcon,
+      keyboard: false,
     }).addTo(map);
 
     this.mapMarkers.set(map, marker);
