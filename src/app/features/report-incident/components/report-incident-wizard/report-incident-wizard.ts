@@ -40,7 +40,8 @@ export class ReportIncidentWizard {
   canSubmit = computed(()=>{
     return  this.isFormValid()    &&
             !this.isSubmitting()  &&
-            this.selectedCoordinates() !== null
+            this.selectedCoordinates() !== null &&
+            this.selectedFiles().length > 0
   });
 
   updateFormValues(values: ReportIncidentFormValues): void{
@@ -64,16 +65,20 @@ export class ReportIncidentWizard {
     }
 
     const coordinates = this.selectedCoordinates();
+    const files = this.selectedFiles();
 
     if (!coordinates) {
       this.submitError.set('Please select an incident location.');
       return;
     }
 
+    if (files.length === 0) {
+      this.submitError.set('Please upload at least one image.');
+      return;
+    }
+
     this.isSubmitting.set(true);
     this.submitError.set(null);
-
-    const files = this.selectedFiles();
 
     this.uploadImages(files)
       .pipe(
