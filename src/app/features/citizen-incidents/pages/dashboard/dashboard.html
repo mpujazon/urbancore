@@ -42,9 +42,27 @@
   <section class="reports">
     <div class="reports-controls">
       <div class="report-tabs">
-        <button class="active" type="button">All Reports</button>
-        <button type="button">Requires Action</button>
-        <button type="button">Resolved</button>
+        <button
+          type="button"
+          [class.active]="activeFilter() === 'ALL'"
+          (click)="setFilter('ALL')"
+        >
+          All Reports
+        </button>
+        <button
+          type="button"
+          [class.active]="activeFilter() === 'UNRESOLVED'"
+          (click)="setFilter('UNRESOLVED')"
+        >
+          To be solved
+        </button>
+        <button
+          type="button"
+          [class.active]="activeFilter() === 'RESOLVED'"
+          (click)="setFilter('RESOLVED')"
+        >
+          Resolved
+        </button>
       </div>
       <button class="filter-button" type="button">
         <i class="fa-solid fa-filter" aria-hidden="true"></i>
@@ -52,10 +70,10 @@
       </button>
     </div>
     <div class="report-grid">
-      @for (incident of incidents(); track incident.id) {
+      @for (incident of filteredIncidentsVm(); track incident.id) {
         <app-incident-card [incident]="incident"/>
       }
-      @if (!incidents().length) {
+      @if (!filteredIncidents().length) {
       <article class="incident-card empty-state-card">
         <div class="incident-content">
           <h3>No incidents yet</h3>

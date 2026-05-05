@@ -1,14 +1,18 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { map, type Observable } from 'rxjs';
-import type {
-  IncidentCardVm,
-  IncidentDto
-} from '../../../../shared/models/IncidentInterface';
+import type {IncidentDto, IncidentStatus} from '../../../../shared/models/IncidentInterface';
 import { IncidentService } from '../../../report-incident/services/incident-service';
-import {IncidentCard} from '../../../../shared/components/incident-card/incident-card';
-import {mapIncidentToCard} from '../../../../shared/mappers/incident.mapper';
+import { IncidentCard } from '../../../../shared/components/incident-card/incident-card';
+import { mapIncidentToCard } from '../../../../shared/mappers/incident.mapper';
+
+type DashboardFilter = "ALL"|"UNRESOLVED"|"RESOLVED";
+const UNRESOLVED_STATUSES: readonly IncidentStatus[] = [
+  'NEW',
+  'UNDER_REVIEW',
+  'PLANNED',
+  'IN_PROGRESS',
+];
 
 @Component({
   selector: 'app-dashboard',
@@ -19,15 +23,37 @@ import {mapIncidentToCard} from '../../../../shared/mappers/incident.mapper';
 })
 export class Dashboard {
   private readonly incidentService = inject(IncidentService);
-  private readonly myIncidents$: Observable<IncidentCardVm[]> = this.incidentService
-    .getSignedInCitizenIncidents()
-    .pipe(map((incidents: IncidentDto[]) => incidents.map((incident: IncidentDto) => mapIncidentToCard(incident))));
 
-  private readonly incidentsResponse = toSignal(this.myIncidents$, { initialValue: [] as IncidentCardVm[] });
-  protected readonly incidents = computed((): IncidentCardVm[] => this.incidentsResponse() ?? []);
+  private readonly incidentsResponse = toSignal(this.incidentService.getSignedInCitizenIncidents(), {initialValue: []});
 
-  protected readonly totalReported = computed(() => this.incidents().length);
-  protected readonly totalResolved = computed(() => this.incidents().filter((incident: IncidentCardVm) => incident.status === 'RESOLVED').length);
+  protected readonly activeFilter = signal<DashboardFilter>("ALL");
+  protected readonly filteredIncidents = computed(() => {
+    const filter = this.activeFilter();
 
+    return this.incidentsResponse().filter((incident)=>
+      this.matchesFilter(incident, filter)
+    );
+  });
 
+  protected  readonly filteredIncidentsVm = computed(()=>{
+    return this.filteredIncidents().map(incident => mapIncidentToCard(incident));
+  });
+
+  protected readonly totalReported = computed(() => this.incidentsResponse().length);
+  protected readonly totalResolved = computed(() => this.incidentsResponse().filter((incident: IncidentDto) => incident.status === 'RESOLVED').length);
+
+  setFilter(filter: DashboardFilter){
+    this.activeFilter.set(filter);
+  }
+  private matchesFilter(incident: IncidentDto, filter: DashboardFilter): boolean {
+    if (filter === 'RESOLVED') {
+      return incident.status === 'RESOLVED';
+    }
+
+    if (filter === 'UNRESOLVED') {
+      return UNRESOLVED_STATUSES.includes(incident.status);
+    }
+
+    return true;
+  }
 }
