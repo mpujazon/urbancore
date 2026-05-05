@@ -1,0 +1,71 @@
+<section class="page">
+  <main class="layout">
+    <section class="panel" aria-label="Active incidents list">
+      <div class="panel-header">
+        <h1>Active Incidents</h1>
+        <button type="button" class="ghost-btn">
+          <fa-icon [icon]="faSliders" aria-hidden="true"></fa-icon>
+          Filter
+        </button>
+      </div>
+
+      <div class="category-row" aria-label="Incident categories">
+        @for (category of categories; track category) {
+          <button
+            type="button"
+            [class]="selectedCategory() === category ? 'chip chip-active' : 'chip'"
+            (click)="selectCategory(category)"
+          >
+            {{ category }}
+          </button>
+        }
+      </div>
+
+      <div class="incident-list">
+        @for (incident of filteredIncidents(); track incident.title) {
+          <article class="incident-card">
+            <img
+              [ngSrc]="incident.image"
+              [alt]="incident.imageAlt"
+              width="96"
+              height="96"
+              loading="lazy"
+            />
+            <div class="content">
+              <div class="title-row">
+                <h2>{{ incident.title }}</h2>
+                <span class="severity" [class]="'severity ' + severityClass(incident.severity)">
+                  {{ severityLabel(incident.severity) }}
+                </span>
+              </div>
+              <p>{{ incident.location }}</p>
+              <small>{{ incident.time }} · {{ incident.category }}</small>
+            </div>
+          </article>
+        }
+      </div>
+    </section>
+
+    <aside class="map-panel" aria-label="Map preview">
+      <img
+        ngSrc="https://lh3.googleusercontent.com/aida-public/AB6AXuBwCCzt5AtFDlkH7IRQHEV910aLcg9IDpYse-0Q5ZVlfU6AWhRwHWaLuGmyUuNISm7KaX9m-_WIP7eRsFrssM1dfkAX5m8H0syIUzaCLljoOjy7aMP_pADkx2B42UEwSTPinOZ8faj4TYtBnxx4TbFCvhbsbNEzCtrKF5WHt88bBjH3Gdbi5wHSkBpLaoeO5kCGD31LMiHevF6mwyOEloAq8TC1VUU4-ko8Hn9q-0XWmsijGWcr1cGAHaWvFuTyyYe807p_IFwKzaU"
+        alt="Aerial city map"
+        width="1200"
+        height="900"
+        priority
+      />
+      <div class="map-card">
+        <h3>Zone Alpha Status</h3>
+        <p>Live telemetry across 12 sectors.</p>
+        <div class="metric">
+          <span>Active Critical</span>
+          <strong>03</strong>
+        </div>
+        <div class="metric">
+          <span>Response Time</span>
+          <strong>4.2m</strong>
+        </div>
+      </div>
+    </aside>
+  </main>
+</section>
