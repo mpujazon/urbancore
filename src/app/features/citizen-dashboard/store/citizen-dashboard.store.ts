@@ -22,7 +22,7 @@ export class CitizenDashboardStore {
     error: null
   });
 
-  protected readonly activeFilter = signal<DashboardFilter>("ALL");
+  readonly activeFilter = signal<DashboardFilter>("ALL");
 
   readonly incidents = computed(()=> this.incidentsState().data);
   readonly status = computed(()=> this.incidentsState().status);
@@ -43,8 +43,8 @@ export class CitizenDashboardStore {
     this.filteredIncidents().map(mapIncidentToCard)
   );
 
-  protected readonly totalReported = computed(() => this.incidents().length);
-  protected readonly totalResolved = computed(() =>
+  readonly totalReported = computed(() => this.incidents().length);
+  readonly totalResolved = computed(() =>
     this.incidents().filter((incident: IncidentDto) => incident.status === 'RESOLVED').length
   );
 
