@@ -11,6 +11,10 @@ import type { CreateIncidentRequest } from '../models/incident-report.models';
 export class IncidentService {
   private readonly http = inject(HttpClient);
 
+  getAllIncidents(): Observable<IncidentDto[]> {
+    return this.http.get<IncidentDto[]>(`${environment.API_BASE_URL}/incidents`);
+  }
+
   createIncident(request: CreateIncidentRequest): Observable<IncidentDto> {
     return this.http.post<IncidentDto>(`${environment.API_BASE_URL}/incidents`, request);
   }
