@@ -12,9 +12,7 @@ const UNRESOLVED_STATUSES: readonly IncidentStatus[] = [
   'IN_PROGRESS',
 ];
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class CitizenDashboardStore {
   private readonly incidentService = inject(IncidentService);
 
