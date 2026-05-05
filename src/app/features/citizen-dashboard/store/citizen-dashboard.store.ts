@@ -66,30 +66,14 @@ export class CitizenDashboardStore {
   );
 
   loadIncidents(): void{
-    this.incidentsState.update((state)=> ({
-      ...state,
-      status: 'loading',
-      error: null
-    }));
+    this.setLoading();
 
     this.incidentService
       .getSignedInCitizenIncidents()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (incidents) => {
-          this.incidentsState.set({
-            data: incidents,
-            status: 'success',
-            error: null
-          });
-        },
-        error: () => {
-          this.incidentsState.update((state) => ({
-            ...state,
-            status: 'error',
-            error: 'Could not load your incidents. Please try again.'
-          }));
-        },
+        next: (incidents) => this.setSuccess(incidents),
+        error: () => this.setError('Could not load your incidents. Please try again.')
       });
   }
 
@@ -99,6 +83,30 @@ export class CitizenDashboardStore {
 
   setFilter(filter: DashboardFilter){
     this.activeFilter.set(filter);
+  }
+
+  private setLoading(): void{
+    this.incidentsState.update((state)=> ({
+      ...state,
+      status: 'loading',
+      error: null
+    }));
+  }
+
+  private setSuccess(incidents: IncidentDto[]): void{
+    this.incidentsState.set({
+      data: incidents,
+      status:'success',
+      error: null
+    });
+  }
+
+  private setError(message: string){
+    this.incidentsState.update((state)=> ({
+      ...state,
+      status:'error',
+      error: message
+    }))
   }
 
   private matchesDashboardFilter(incident: IncidentDto, filter: DashboardFilter): boolean {
