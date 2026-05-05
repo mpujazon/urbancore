@@ -19,6 +19,18 @@ export interface IncidentDto{
   updatedAt: string;
 }
 
+export interface IncidentCardVm {
+  id: string;
+  category: string;
+  categoryIconClass: string;
+  date: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  status: string;
+  statusStyleClass: string;
+}
+
 export type IncidentCategory =
   | 'POTHOLE'
   | 'LIGHTING'
@@ -28,7 +40,7 @@ export type IncidentCategory =
   | 'GRAFFITI'
   | 'OTHER';
 
-type IncidentStatus =
+export type IncidentStatus =
   | 'NEW'
   | 'UNDER_REVIEW'
   | 'PLANNED'
