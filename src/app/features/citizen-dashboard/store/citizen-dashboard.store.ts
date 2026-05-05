@@ -55,6 +55,10 @@ export class CitizenDashboardStore {
     this.isLoading() && !this.hasIncidents()
   );
 
+  readonly showEmptyState = computed(()=>
+    this.isSuccess() && !this.hasIncidents()
+  );
+
   readonly showNoFilterResults = computed(()=>
     this.isSuccess() && this.hasIncidents() && !this.hasFilteredIncidents()
   );
