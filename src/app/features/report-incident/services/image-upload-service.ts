@@ -59,7 +59,7 @@ export class ImageUploadService {
   private buildThumbnailUrl(url: string): string {
     return url.replace(
       '/upload/',
-      '/upload/w_320,h_240,c_fill,q_auto,f_auto/'
+      '/upload/w_640,h_480,c_fill,q_auto,f_auto/'
     );
   }
 }
