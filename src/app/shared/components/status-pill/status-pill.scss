@@ -1,0 +1,58 @@
+@use 'styles/variables' as *;
+
+.incident-status {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 999px;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.status-dot {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 999px;
+  background: currentcolor;
+}
+
+.is-resolved {
+  color: $status-resolved-text;
+  border-color: $status-resolved-border;
+  background: $status-resolved-bg;
+}
+
+.is-scheduled {
+  color: $status-scheduled-text;
+  border-color: $status-scheduled-border;
+  background: $status-scheduled-bg;
+}
+
+.is-review {
+  color: $status-review-text;
+  border-color: $status-review-border;
+  background: $status-review-bg;
+}
+
+.is-progress {
+  color: $status-progress-text;
+  border-color: $status-progress-border;
+  background: $status-progress-bg;
+}
+
+.is-rejected {
+  color: $status-rejected-text;
+  border-color: $status-rejected-border;
+  background: $status-rejected-bg;
+}
+
+.is-new {
+  color: $status-new-text;
+  border-color: $status-new-border;
+  background: $status-new-bg;
+}
