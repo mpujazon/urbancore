@@ -51,7 +51,6 @@ export class CitizenDashboardStore {
   );
 
   readonly hasIncidents = computed(()=> this.incidents().length > 0);
-  readonly hasFilteredIncidents = computed(() => this.filteredIncidents().length > 0);
 
   readonly showInitialLoading = computed(()=>
     this.isLoading() && !this.hasIncidents()
@@ -59,10 +58,6 @@ export class CitizenDashboardStore {
 
   readonly showEmptyState = computed(()=>
     this.isSuccess() && !this.hasIncidents()
-  );
-
-  readonly showNoFilterResults = computed(()=>
-    this.isSuccess() && this.hasIncidents() && !this.hasFilteredIncidents()
   );
 
   loadIncidents(): void{
