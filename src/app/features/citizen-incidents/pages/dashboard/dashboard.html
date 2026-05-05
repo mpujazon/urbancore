@@ -53,22 +53,7 @@
     </div>
     <div class="report-grid">
       @for (incident of incidents(); track incident.id) {
-      <article class="incident-card">
-        <div class="incident-media">
-          <img [src]="incident.imageUrl" [alt]="incident.title"/>
-          <div class="incident-status" [class.is-resolved]="incident.status === 'Resolved'" [class.is-scheduled]="incident.status === 'Scheduled'" [class.is-review]="incident.status === 'Under Review'" [class.is-progress]="incident.status === 'In Progress'" [class.is-rejected]="incident.status === 'Rejected'" [class.is-new]="incident.status === 'New'">
-            <span class="status-dot"></span> {{ incident.status }}
-          </div>
-        </div>
-        <div class="incident-content">
-          <div class="incident-meta">
-            <span><i [class]="'fa-solid ' + incident.icon" aria-hidden="true"></i> {{ incident.category }}</span>
-            <span>{{ incident.date }}</span>
-          </div>
-          <h3>{{ incident.title }}</h3>
-          <p>{{ incident.description }}</p>
-        </div>
-      </article>
+        <app-incident-card [incident]="incident"/>
       }
       @if (!incidents().length) {
       <article class="incident-card empty-state-card">
