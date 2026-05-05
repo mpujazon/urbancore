@@ -15,13 +15,13 @@ const UNRESOLVED_STATUSES: readonly IncidentStatus[] = [
 ];
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-citizen-dashboard',
   imports: [RouterLink, IncidentCard],
-  templateUrl: './dashboard.html',
-  styleUrl: './dashboard.scss',
+  templateUrl: './citizen-dashboard.html',
+  styleUrl: './citizen-dashboard.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Dashboard {
+export class CitizenDashboard {
   private readonly incidentService = inject(IncidentService);
 
   private readonly incidentsResponse = toSignal(this.incidentService.getSignedInCitizenIncidents(), {initialValue: []});
