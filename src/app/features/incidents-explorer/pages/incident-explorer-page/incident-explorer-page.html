@@ -3,45 +3,10 @@
     <section class="panel" aria-label="Active incidents list">
       <div class="panel-header">
         <h1>Active Incidents</h1>
-        <button type="button" class="ghost-btn">
-          <fa-icon [icon]="faSliders" aria-hidden="true"></fa-icon>
-          Filter
-        </button>
       </div>
-
-      <div class="category-row" aria-label="Incident categories">
-        @for (category of categories; track category) {
-          <button
-            type="button"
-            [class]="selectedCategory() === category ? 'chip chip-active' : 'chip'"
-            (click)="selectCategory(category)"
-          >
-            {{ category }}
-          </button>
-        }
-      </div>
-
       <div class="incident-list">
-        @for (incident of filteredIncidents(); track incident.title) {
-          <article class="incident-card">
-            <img
-              [ngSrc]="incident.image"
-              [alt]="incident.imageAlt"
-              width="96"
-              height="96"
-              loading="lazy"
-            />
-            <div class="content">
-              <div class="title-row">
-                <h2>{{ incident.title }}</h2>
-                <span class="severity" [class]="'severity ' + severityClass(incident.severity)">
-                  {{ severityLabel(incident.severity) }}
-                </span>
-              </div>
-              <p>{{ incident.location }}</p>
-              <small>{{ incident.time }} · {{ incident.category }}</small>
-            </div>
-          </article>
+        @for (incident of incidents(); track incident.title) {
+
         }
       </div>
     </section>
