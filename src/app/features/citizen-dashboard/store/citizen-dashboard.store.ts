@@ -4,7 +4,7 @@ import {IncidentService} from '../../report-incident/services/incident-service';
 import {ResourceState} from '../../../shared/models/resource-state.model';
 import {mapIncidentToCard} from '../../../shared/mappers/incident.mapper';
 
-type DashboardFilter = "ALL"|"UNRESOLVED"|"RESOLVED";
+export type DashboardFilter = "ALL"|"UNRESOLVED"|"RESOLVED";
 const UNRESOLVED_STATUSES: readonly IncidentStatus[] = [
   'NEW',
   'UNDER_REVIEW',
