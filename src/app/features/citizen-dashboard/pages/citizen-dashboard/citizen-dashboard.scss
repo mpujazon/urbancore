@@ -26,6 +26,55 @@
   margin: 0 auto;
 }
 
+.loading-state {
+  max-width: 80rem;
+  margin: 2rem auto 0;
+  padding: 1.25rem 3rem 2rem;
+}
+
+.loading-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.loading-header p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 1.25rem;
+}
+
+.loading-dot {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 999px;
+  background: var(--secondary);
+  box-shadow: 0 0 0 0 rgb(4 83 205 / 0.35);
+  animation: dashboard-loading-dot 1.6s ease-out infinite;
+}
+
+@keyframes dashboard-loading-dot {
+  0% {
+    box-shadow: 0 0 0 0 rgb(4 83 205 / 0.35);
+  }
+
+  70% {
+    box-shadow: 0 0 0 0.45rem rgb(4 83 205 / 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgb(4 83 205 / 0);
+  }
+}
+
 .hero {
   position: relative;
   overflow: hidden;
@@ -305,9 +354,56 @@
 }
 
 .empty-state-card {
+  max-width: 80rem;
+  margin: 2rem auto 0;
+  min-height: 22rem;
+  padding: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.empty-state-card .new-incident-card {
+  width: min(100%, 34rem);
+  min-height: 16rem;
+}
+
+.error-state {
+  max-width: 80rem;
+  margin: 2rem auto 0;
+  padding: 2rem 3rem;
+  border: 1px solid rgb(196 198 208 / 0.35);
+  border-radius: 1.5rem;
+  background: #fff7f7;
+  box-shadow: 0 12px 32px -20px rgb(25 27 34 / 0.2);
+}
+
+.error-state h2 {
+  margin: 0;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 1.5rem;
+  color: #a52323;
+}
+
+.error-state p {
+  margin: 0.75rem 0 1.5rem;
+  max-width: 52rem;
+  color: #5f2323;
+}
+
+.error-state button {
+  border: 0;
+  border-radius: 0.75rem;
+  padding: 0.7rem 1.1rem;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: linear-gradient(145deg, #b83232, #8f1f1f);
+  box-shadow: 0 10px 24px -14px rgb(143 31 31 / 0.7);
+}
+
+.error-state button:hover {
+  transform: translateY(-1px);
 }
 
 .empty-state-card .incident-content {
@@ -318,6 +414,7 @@
 .new-incident-card:hover {
   border-color: rgb(0 20 48 / 0.35);
   background: var(--surface-high);
+  cursor: pointer;
 }
 
 .add-icon-wrap {
@@ -341,6 +438,8 @@
 }
 
 @media (width <= 64rem) {
+  .loading-state,
+  .error-state,
   .hero,
   .stats-wrap,
   .reports {
@@ -386,10 +485,36 @@
 }
 
 @media (width <= 48rem) {
+  .loading-state,
   .hero,
   .reports {
     padding-top: 2rem;
     padding-bottom: 2rem;
+  }
+
+  .loading-state {
+    margin-top: 1rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .loading-header p {
+    font-size: 0.98rem;
+  }
+
+
+  .error-state {
+    margin-top: 1rem;
+    padding-block: 1.25rem;
+    border-radius: 1rem;
+  }
+
+  .error-state h2 {
+    font-size: 1.2rem;
+  }
+
+  .error-state p {
+    margin-bottom: 1rem;
+    font-size: 0.92rem;
   }
 
   .hero h1 {
@@ -463,10 +588,21 @@
 }
 
 @media (width <= 36rem) {
+  .loading-state,
+  .error-state,
   .hero,
   .stats-wrap,
   .reports {
     padding-inline: 0.75rem;
+  }
+
+  .empty-state-card {
+    min-height: auto;
+    padding: 1.25rem;
+  }
+
+  .empty-state-card .new-incident-card {
+    min-height: 14rem;
   }
 
   .hero {
