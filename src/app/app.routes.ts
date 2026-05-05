@@ -18,7 +18,7 @@ export const routes: Routes = [
     path: 'dashboard',
     component: CitizenDashboard,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ROUTE_ROLES.dashboard },
+    data: { roles: ROUTE_ROLES.citizenDashboard },
   },
   {
     path: 'report-incident',

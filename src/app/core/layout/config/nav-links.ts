@@ -9,8 +9,8 @@ export const NAV_LINKS: Link[] = [
       iconClasses: 'fa-solid fa-house'
     },
     {
-      label: 'My citizen-dashboard',
-      roles: ROUTE_ROLES.dashboard,
+      label: 'My dashboard',
+      roles: ROUTE_ROLES.citizenDashboard,
       url: '/dashboard',
       iconClasses: 'fa-solid fa-chalkboard-user'
     },
