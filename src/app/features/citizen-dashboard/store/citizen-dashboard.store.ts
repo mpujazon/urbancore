@@ -1,8 +1,9 @@
-import {computed, inject, Injectable, signal} from '@angular/core';
+import {computed, DestroyRef, inject, Injectable, signal} from '@angular/core';
 import {IncidentDto, IncidentStatus} from '../../../shared/models/IncidentInterface';
 import {IncidentService} from '../../report-incident/services/incident-service';
 import {ResourceState} from '../../../shared/models/resource-state.model';
 import {mapIncidentToCard} from '../../../shared/mappers/incident.mapper';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 export type DashboardFilter = "ALL"|"UNRESOLVED"|"RESOLVED";
 const UNRESOLVED_STATUSES: readonly IncidentStatus[] = [
@@ -15,6 +16,7 @@ const UNRESOLVED_STATUSES: readonly IncidentStatus[] = [
 @Injectable()
 export class CitizenDashboardStore {
   private readonly incidentService = inject(IncidentService);
+  private readonly destroyRef = inject(DestroyRef);
 
   private readonly incidentsState = signal<ResourceState<IncidentDto[]>>({
     data: [],
@@ -72,6 +74,7 @@ export class CitizenDashboardStore {
 
     this.incidentService
       .getSignedInCitizenIncidents()
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (incidents) => {
           this.incidentsState.set({
