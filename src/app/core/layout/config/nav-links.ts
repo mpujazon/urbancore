@@ -27,7 +27,7 @@ export const NAV_LINKS: Link[] = [
       iconClasses: 'fa-solid fa-list'
     },
     {
-      label: 'Incidents Explorer',
+      label: 'Incidents explorer',
       roles: ROUTE_ROLES.incidents,
       url: '/incidents',
       iconClasses: 'fa-solid fa-magnifying-glass-location'
