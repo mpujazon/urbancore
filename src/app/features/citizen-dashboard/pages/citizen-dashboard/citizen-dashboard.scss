@@ -1,4 +1,6 @@
 :host {
+  --content-max-width: 80rem;
+  --font-heading: 'Public Sans', sans-serif;
   --primary: #001430;
   --primary-container: #002855;
   --secondary: #0453cd;
@@ -22,12 +24,12 @@
 .hero,
 .stats-wrap,
 .reports {
-  max-width: 80rem;
+  max-width: var(--content-max-width);
   margin: 0 auto;
 }
 
 .loading-state {
-  max-width: 80rem;
+  max-width: var(--content-max-width);
   margin: 2rem auto 0;
   padding: 1.25rem 3rem 2rem;
 }
@@ -78,8 +80,7 @@
 .hero {
   position: relative;
   overflow: hidden;
-  border-bottom-right-radius: 4rem;
-  border-bottom-left-radius: 4rem;
+  border-radius: 0 0 4rem 4rem;
   padding: 4rem 3rem 5rem;
   background: var(--surface-low);
 }
@@ -117,7 +118,7 @@
 
 .hero h1 {
   margin: 0;
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-heading);
   color: var(--primary);
   font-size: clamp(2rem, 4vw, 3rem);
 }
@@ -210,7 +211,7 @@
 
 .stats-card h2 {
   margin: 0;
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-heading);
   font-size: 1.5rem;
 }
 
@@ -226,7 +227,7 @@
 
 .value {
   margin: 0;
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-heading);
   font-size: 2.75rem;
   font-weight: 900;
 }
@@ -331,7 +332,7 @@
 
 .incident-content h3 {
   margin: 0.5rem 0 0;
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-heading);
   font-size: 1.375rem;
   color: var(--primary);
 }
@@ -354,7 +355,7 @@
 }
 
 .empty-state-card {
-  max-width: 80rem;
+  max-width: var(--content-max-width);
   margin: 2rem auto 0;
   min-height: 22rem;
   padding: 2rem;
@@ -369,7 +370,7 @@
 }
 
 .error-state {
-  max-width: 80rem;
+  max-width: var(--content-max-width);
   margin: 2rem auto 0;
   padding: 2rem 3rem;
   border: 1px solid rgb(196 198 208 / 0.35);
@@ -380,7 +381,7 @@
 
 .error-state h2 {
   margin: 0;
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-heading);
   font-size: 1.5rem;
   color: #a52323;
 }
@@ -428,7 +429,7 @@
 
 .new-incident-card h3 {
   margin: 0;
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-heading);
 }
 
 .new-incident-card p {
@@ -449,8 +450,7 @@
   .hero {
     padding-top: 2.75rem;
     padding-bottom: 4rem;
-    border-bottom-right-radius: 2rem;
-    border-bottom-left-radius: 2rem;
+    border-radius: 0 0 2rem 2rem;
   }
 
   .hero-content,
@@ -500,7 +500,6 @@
   .loading-header p {
     font-size: 0.98rem;
   }
-
 
   .error-state {
     margin-top: 1rem;
@@ -606,8 +605,7 @@
   }
 
   .hero {
-    border-bottom-right-radius: 1.25rem;
-    border-bottom-left-radius: 1.25rem;
+    border-radius: 0 0 1.25rem 1.25rem;
   }
 
   .hero-tag {
