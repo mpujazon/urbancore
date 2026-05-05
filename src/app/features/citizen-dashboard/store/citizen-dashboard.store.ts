@@ -1,8 +1,5 @@
-import {Component, computed, inject, Injectable, signal} from '@angular/core';
-import {RouterLink} from '@angular/router';
-import {IncidentCard} from '../../../shared/components/incident-card/incident-card';
+import {computed, inject, Injectable, signal} from '@angular/core';
 import {IncidentDto, IncidentStatus} from '../../../shared/models/IncidentInterface';
-import {toSignal} from '@angular/core/rxjs-interop';
 import {IncidentService} from '../../report-incident/services/incident-service';
 import {ResourceState} from '../../../shared/models/resource-state.model';
 import {mapIncidentToCard} from '../../../shared/mappers/incident.mapper';
