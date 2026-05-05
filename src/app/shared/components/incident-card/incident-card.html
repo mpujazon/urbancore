@@ -1,0 +1,17 @@
+<article class="incident-card">
+  <div class="incident-media">
+    <img [src]="incident().imageUrl" [alt]="incident().title"/>
+    <app-status-pill
+      [statusName]="incident().status"
+      [classStyle]="incident().statusStyleClass"
+    />
+  </div>
+  <div class="incident-content">
+    <div class="incident-meta">
+      <span><i [class]="`fa-solid ${incident().categoryIconClass}`" aria-hidden="true"></i> {{ incident().category }}</span>
+      <span>{{ incident().date }}</span>
+    </div>
+    <h3>{{ incident().title }}</h3>
+    <p>{{ incident().description }}</p>
+  </div>
+</article>
