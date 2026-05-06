@@ -14,7 +14,25 @@
       </div>
     </section>
 
-    <aside #mapContainer class="map-panel" aria-label="Map preview">
+    <aside
+      #mapContainer
+      class="map-panel"
+      [class.mobile-open]="isMobileMapOpen()"
+      aria-label="Map preview"
+    >
+      <button class="close-map-btn" type="button" (click)="closeMobileMap()" aria-label="Close map">
+        Close
+      </button>
     </aside>
   </main>
+
+  <button
+    class="open-map-btn"
+    [class.is-hidden]="isMobileMapOpen()"
+    type="button"
+    (click)="openMobileMap()"
+    aria-label="Open map"
+  >
+    View map
+  </button>
 </section>
