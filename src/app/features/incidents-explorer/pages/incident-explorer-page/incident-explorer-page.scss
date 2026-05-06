@@ -4,8 +4,8 @@
   --line: #dfe3ef;
 
   display: block;
-  height: 100dvh;
-  max-height: 100dvh;
+  height: 100%;
+  max-height: 100%;
   overflow: hidden;
   color: var(--text);
   background: radial-gradient(circle at 10% -10%, #eef2ff, var(--bg) 45%);
