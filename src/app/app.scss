@@ -1,9 +1,19 @@
 :host {
+  --navbar-height: 72px;
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
 }
 
 main {
-  flex: 1;
+  flex: 0 0 auto;
+  height: calc(100dvh - var(--navbar-height));
+  max-height: calc(100dvh - var(--navbar-height));
+  overflow: hidden;
+}
+
+@media (min-width: 992px) {
+  :host {
+    --navbar-height: 73.6px;
+  }
 }
