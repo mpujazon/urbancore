@@ -7,6 +7,7 @@
       <div class="incident-list">
         @for (incident of incidents(); track incident.title) {
           <app-incident-card
+            variant="COMPACT"
             [incident]="incident"
           />
         }

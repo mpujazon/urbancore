@@ -90,7 +90,7 @@
       </div>
       <div class="report-grid">
         @for (incident of store.filteredIncidentsVm(); track incident.id) {
-          <app-incident-card [incident]="incident"/>
+          <app-incident-card variant="DETAILED" [incident]="incident"/>
         }
         @if(store.showEmptyState()){
           <button class="new-incident-card" type="button" routerLink="/report-incident">
