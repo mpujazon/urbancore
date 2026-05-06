@@ -4,7 +4,6 @@ import { IncidentCard } from '../../../../shared/components/incident-card/incide
 import {CitizenDashboardStore, DashboardFilter} from '../../store/citizen-dashboard.store';
 import {IncidentSkeleton} from '../../components/incident-skeleton/incident-skeleton';
 
-
 @Component({
   selector: 'app-citizen-dashboard',
   imports: [RouterLink, IncidentCard, IncidentSkeleton],
