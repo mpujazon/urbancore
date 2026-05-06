@@ -1,10 +1,13 @@
 <article class="incident-card">
   <div class="incident-media">
     <img [src]="incident().imageUrl" [alt]="incident().title"/>
-    <app-status-pill
-      [statusName]="incident().status"
-      [classStyle]="incident().statusStyleClass"
-    />
+    @if (variant() === 'DETAILED') {
+      <app-status-pill
+        class="status-pill--overlay"
+        [statusName]="incident().status"
+        [classStyle]="incident().statusStyleClass"
+      />
+    }
   </div>
   <div class="incident-content">
     <div class="incident-meta">
@@ -13,5 +16,12 @@
     </div>
     <h3>{{ incident().title }}</h3>
     <p>{{ incident().description }}</p>
+    @if (variant() === 'COMPACT') {
+      <app-status-pill
+        class="status-pill--inline status-pill--compact"
+        [statusName]="incident().status"
+        [classStyle]="incident().statusStyleClass"
+      />
+    }
   </div>
 </article>
