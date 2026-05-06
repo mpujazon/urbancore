@@ -4,7 +4,9 @@
   --line: #dfe3ef;
 
   display: block;
-  min-height: 100dvh;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
   color: var(--text);
   background: radial-gradient(circle at 10% -10%, #eef2ff, var(--bg) 45%);
 }
@@ -14,12 +16,13 @@
 }
 
 .page {
-  min-height: 100dvh;
+  height: 100%;
 }
 
 .layout {
   display: grid;
   grid-template-columns: 1fr;
+  height: 100%;
 }
 
 .panel {
@@ -64,7 +67,6 @@
 @media (min-width: 992px) {
   .layout {
     grid-template-columns: minmax(360px, 480px) 1fr;
-    min-height: 100dvh;
   }
 
   .panel {
