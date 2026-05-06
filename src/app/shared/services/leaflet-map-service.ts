@@ -33,6 +33,7 @@ export class LeafletMapService {
   setView(map: L.Map, center: L.LatLngTuple, zoom: number): void {
     map.setView(center, zoom);
   }
+
   createMarker(map: L.Map, location: L.LatLngTuple, options?: L.MarkerOptions): L.Marker{
     return L.marker(location, {
       icon: this.selectedLocationIcon,
@@ -40,7 +41,6 @@ export class LeafletMapService {
       ...options
     }).addTo(map);
   }
-
 
   removeMarker(marker: L.Marker): void{
     marker.remove();

@@ -47,6 +47,13 @@ export class ReportIncidentMapFacade {
 
   destroy(): void {
     this.clearMarker();
+
+    const map = this.mapInstance();
+    if(!map){
+      return;
+    }
+
+    this.leafletMapService.destroyMap(map);
     this.mapInstance.set(null);
   }
 }
