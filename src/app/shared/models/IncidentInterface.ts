@@ -79,3 +79,6 @@ export interface IncidentCoordinates{
   lat: number;
   lng: number;
 }
+
+export type IncidentCardVariant = 'DETAILED' | 'COMPACT';
+
