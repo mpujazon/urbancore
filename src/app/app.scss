@@ -9,7 +9,7 @@ main {
   flex: 0 0 auto;
   height: calc(100dvh - var(--navbar-height));
   max-height: calc(100dvh - var(--navbar-height));
-  overflow: hidden;
+  overflow: auto;
 }
 
 @media (min-width: 992px) {
