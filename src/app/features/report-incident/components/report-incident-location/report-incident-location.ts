@@ -9,7 +9,7 @@ import {
   signal, output,
 } from '@angular/core';
 import * as L from 'leaflet';
-import { LeafletMapService } from '../../services/leaflet-map-service';
+import { LeafletMapService } from '../../../../shared/services/leaflet-map-service';
 
 export interface IncidentCoordinates{
   lat: number;
