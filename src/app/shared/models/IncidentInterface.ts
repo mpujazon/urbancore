@@ -74,3 +74,8 @@ interface IncidentStatusHistoryDto {
   reason?: string;
   changedAt: string;
 }
+
+export interface IncidentCoordinates{
+  lat: number;
+  lng: number;
+}
