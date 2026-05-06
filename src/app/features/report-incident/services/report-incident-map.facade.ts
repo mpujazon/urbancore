@@ -7,7 +7,7 @@ export class ReportIncidentMapFacade {
   private selectedMarker = signal<L.Marker | null>(null);
   private readonly mapInstance = signal<L.Map | null>(null);
 
-  readonly hasMarker = computed(() => this.selectedMarker() !== null);
+  readonly map = computed(()=> this.mapInstance())
 
   private readonly leafletMapService = inject(LeafletMapService);
 
@@ -15,19 +15,26 @@ export class ReportIncidentMapFacade {
     this.mapInstance.set(map);
   }
 
-  setMarker(location: L.LatLngTuple): void {
+  setMarker(location: L.LatLngTuple, recenter = false): void {
     const marker = this.selectedMarker();
-    if (marker) {
-      marker.setLatLng(location)
-      return;
-    }
-
     const map = this.mapInstance();
+
     if(!map){
       return;
     }
 
+    if (marker) {
+      marker.setLatLng(location);
+      if (recenter) {
+        map.panTo(location);
+      }
+      return;
+    }
+
     this.selectedMarker.set(this.leafletMapService.createMarker(map, location));
+    if (recenter) {
+      map.panTo(location);
+    }
   }
 
   clearMarker(): void {

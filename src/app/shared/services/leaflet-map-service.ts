@@ -30,7 +30,7 @@ export class LeafletMapService {
     return map;
   }
 
-  setView(map: L.Map, center: L.LatLngTuple, zoom: number): void {
+  setView(map: L.Map, center: L.LatLngTuple, zoom: number = 17): void {
     map.setView(center, zoom);
   }
 
