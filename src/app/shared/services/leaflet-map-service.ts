@@ -3,7 +3,6 @@ import * as L from 'leaflet';
 
 @Injectable({ providedIn: 'root' })
 export class LeafletMapService {
-  private readonly mapMarkers = new WeakMap<L.Map, L.Marker>();
   private readonly selectedLocationIcon = L.divIcon({
     className: 'incident-selection-marker',
     html: '<span class="incident-selection-marker__pin"><span class="incident-selection-marker__center"></span></span>',
@@ -28,33 +27,34 @@ export class LeafletMapService {
       attribution: '&copy; OpenStreetMap contributors',
     }).addTo(map);
 
-    this.setMarker(map, center);
-
     return map;
   }
 
   setView(map: L.Map, center: L.LatLngTuple, zoom: number): void {
     map.setView(center, zoom);
   }
-
-  setMarker(map: L.Map, location: L.LatLngTuple): void {
-    const existingMarker = this.mapMarkers.get(map);
-
-    if (existingMarker) {
-      existingMarker.setLatLng(location);
-      return;
-    }
-
-    const marker = L.marker(location, {
+  createMarker(map: L.Map, location: L.LatLngTuple, options?: L.MarkerOptions): L.Marker{
+    return L.marker(location, {
       icon: this.selectedLocationIcon,
       keyboard: false,
+      ...options
     }).addTo(map);
+  }
 
-    this.mapMarkers.set(map, marker);
+
+  removeMarker(marker: L.Marker): void{
+    marker.remove();
+  }
+
+  fitBounds(map: L.Map, bounds: L.LatLngBoundsExpression, options?: L.FitBoundsOptions): void{
+    map.fitBounds(bounds, {
+      animate: true,
+      padding: [24, 24],
+      ...options
+    });
   }
 
   destroyMap(map: L.Map): void {
-    this.mapMarkers.delete(map);
     map.remove();
   }
 }
