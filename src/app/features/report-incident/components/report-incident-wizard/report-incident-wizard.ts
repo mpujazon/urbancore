@@ -8,8 +8,9 @@ import type { IncidentImageDto } from '../../models/upload.models';
 import { ImageUploadService } from '../../services/image-upload-service';
 import { IncidentService } from '../../services/incident-service';
 import { ReportIncidentForm, ReportIncidentFormValues } from '../report-incident-form/report-incident-form';
-import {IncidentCoordinates, ReportIncidentLocation} from '../report-incident-location/report-incident-location';
+import { ReportIncidentLocation } from '../report-incident-location/report-incident-location';
 import { ReportIncidentMedia } from '../report-incident-media/report-incident-media';
+import { IncidentCoordinates } from '../../../../shared/models/IncidentInterface';
 
 const GEOHASH_PRECISION = 9;
 
