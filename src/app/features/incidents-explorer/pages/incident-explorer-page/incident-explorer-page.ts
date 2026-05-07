@@ -2,7 +2,6 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  computed,
   ElementRef,
   HostListener,
   inject,
@@ -10,12 +9,8 @@ import {
   signal,
   ViewChild
 } from '@angular/core';
-import {IncidentService} from '../../../report-incident/services/incident-service';
-import {toSignal} from '@angular/core/rxjs-interop';
+import {IncidentsApiService} from '../../../../shared/services/incidents-api-service';
 import {IncidentCard} from '../../../../shared/components/incident-card/incident-card';
-import {map, Observable} from 'rxjs';
-import type {IncidentCardVm, IncidentDto} from '../../../../shared/models/IncidentInterface';
-import {mapIncidentToCard} from '../../../../shared/mappers/incident.mapper';
 import {IncidentExplorerMapFacade} from '../../services/incident-explorer-map-facade';
 import {LeafletMapService} from '../../../../shared/services/leaflet-map-service';
 import * as L from 'leaflet';
@@ -31,7 +26,7 @@ import * as L from 'leaflet';
   providers: [ IncidentExplorerMapFacade ]
 })
 export class IncidentExplorerPage implements AfterViewInit, OnDestroy{
-  private readonly incidentService = inject(IncidentService);
+  private readonly incidentService = inject(IncidentsApiService);
   private readonly leafletMapService = inject(LeafletMapService);
   private readonly mapFacade = inject(IncidentExplorerMapFacade);
 
@@ -67,7 +62,6 @@ export class IncidentExplorerPage implements AfterViewInit, OnDestroy{
     if(!this.mapFacade.map()){
       return;
     }
-
     this.mapFacade.destroy();
   }
 
@@ -94,17 +88,4 @@ export class IncidentExplorerPage implements AfterViewInit, OnDestroy{
       this.mapFacade.map()?.invalidateSize();
     }
   }
-
-  private readonly myIncidents$: Observable<IncidentCardVm[]> = this.incidentService
-    .getAllIncidents()
-    .pipe(map((incidents: IncidentDto[]) => incidents.map((incident: IncidentDto) => mapIncidentToCard(incident))));
-
-  private readonly incidentsResponse = toSignal(this.myIncidents$, { initialValue: [] as IncidentCardVm[] });
-  protected readonly incidents = computed((): IncidentCardVm[] => this.incidentsResponse() ?? []);
-
-
-
-
-
-
 }

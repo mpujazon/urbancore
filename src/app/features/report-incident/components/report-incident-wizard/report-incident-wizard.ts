@@ -6,7 +6,7 @@ import { ToastService } from '../../../../core/services/toast-service';
 import type { CreateIncidentRequest } from '../../models/incident-report.models';
 import type { IncidentImageDto } from '../../models/upload.models';
 import { ImageUploadService } from '../../services/image-upload-service';
-import { IncidentService } from '../../services/incident-service';
+import { IncidentsApiService } from '../../../../shared/services/incidents-api-service';
 import { ReportIncidentForm, ReportIncidentFormValues } from '../report-incident-form/report-incident-form';
 import { ReportIncidentLocation } from '../report-incident-location/report-incident-location';
 import { ReportIncidentMedia } from '../report-incident-media/report-incident-media';
@@ -23,7 +23,7 @@ const GEOHASH_PRECISION = 9;
 })
 export class ReportIncidentWizard {
   private readonly imageUploadService = inject(ImageUploadService);
-  private readonly incidentService = inject(IncidentService);
+  private readonly incidentService = inject(IncidentsApiService);
   private readonly toastService = inject(ToastService);
   private readonly router = inject(Router);
 
