@@ -1,29 +1,39 @@
 import {computed, inject, Injectable, signal} from '@angular/core';
+import {toObservable} from '@angular/core/rxjs-interop';
 import {LeafletMapService} from '../../../shared/services/leaflet-map-service';
-import {IncidentDto} from '../../../shared/models/incident-dto.model';
+import {IncidentListItemDto} from '../../../shared/models/incident-dto.model';
+import {IncidentsExplorerStore} from '../store/incidents-explorer.store';
+import {Subscription} from 'rxjs';
 import * as L from 'leaflet';
 
 @Injectable()
 export class IncidentExplorerMapFacade {
   private readonly incidentMarkers = signal<Map<string, L.Marker>>(new Map());
-  private readonly filteredIncidents = signal<IncidentDto[]>([]);
+  private readonly filteredIncidents = signal<IncidentListItemDto[]>([]);
 
   private readonly mapInstance = signal<L.Map | null>(null);
   readonly map = computed(()=> this.mapInstance())
 
   private readonly leafletMapService = inject(LeafletMapService);
+  private readonly store = inject(IncidentsExplorerStore);
+  private readonly syncSub: Subscription;
+
+  constructor() {
+    this.syncSub = toObservable(this.store.incidents)
+      .subscribe((incidents) => this.setFilteredIncidents(incidents));
+  }
 
   setMap(map: L.Map): void {
     this.mapInstance.set(map);
     this.syncMarkers(this.filteredIncidents());
   }
 
-  setFilteredIncidents(incidents: IncidentDto[]): void {
+  setFilteredIncidents(incidents: IncidentListItemDto[]): void {
     this.filteredIncidents.set(incidents);
     this.syncMarkers(incidents);
   }
 
-  private syncMarkers(incidents: IncidentDto[]): void {
+  private syncMarkers(incidents: IncidentListItemDto[]): void {
     const map = this.mapInstance();
 
     if (!map) {
@@ -92,6 +102,7 @@ export class IncidentExplorerMapFacade {
   }
 
   destroy(): void {
+    this.syncSub.unsubscribe();
     this.clearMarkers();
 
     const map = this.mapInstance();
