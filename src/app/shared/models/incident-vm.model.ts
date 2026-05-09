@@ -6,8 +6,9 @@ export interface IncidentCardVm {
   categoryIconClass: string;
   date: string;
   title: string;
-  description: string;
   imageUrl: string;
+  addressLabel: string;
+  city: string;
   status: string;
   statusStyleClass: string;
 }

@@ -84,10 +84,51 @@
 
 .incident-content p {
   margin: 0.46rem 0 0;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   line-height: 1.45;
   color: var(--text-muted);
   text-wrap: pretty;
+}
+
+.incident-location {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  align-items: center;
+}
+
+.incident-location > i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  color: var(--primary);
+  opacity: 0.9;
+}
+
+.incident-location__text {
+  min-width: 0;
+}
+
+.incident-location__line {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.35;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transform: translateY(-3px);
+}
+
+.incident-location__address {
+  font-weight: 600;
+  color: var(--text-primary, rgb(25 27 34));
+}
+
+.incident-location__city {
+  color: var(--text-muted);
 }
 
 :host(:not(.incident-card--compact)) app-status-pill {
@@ -127,6 +168,10 @@
   min-width: 0;
 }
 
+:host(.incident-card--compact) .incident-location__line {
+  transform: translateY(-1px);
+}
+
 :host(.incident-card--compact) .incident-meta {
   font-size: 0.62rem;
   letter-spacing: 0.06em;
@@ -159,6 +204,27 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   text-wrap: balance;
+}
+
+:host(.incident-card--compact) .incident-location {
+  gap: 0.4rem;
+  margin-top: 0.18rem;
+}
+
+:host(.incident-card--compact) .incident-location > i {
+  font-size: 0.82rem;
+}
+
+:host(.incident-card--compact) .incident-location__address {
+  font-size: 0.8rem;
+}
+
+:host(.incident-card--compact) .incident-location__line {
+  font-size: 0.8rem;
+}
+
+:host(.incident-card--compact) .incident-location__city {
+  font-size: 0.8rem;
 }
 
 :host(.incident-card--compact) app-status-pill {

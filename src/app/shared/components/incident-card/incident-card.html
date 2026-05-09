@@ -15,7 +15,24 @@
       <span>{{ incident().date }}</span>
     </div>
     <h3>{{ incident().title }}</h3>
-    <p>{{ incident().description }}</p>
+    @if (incident().addressLabel || incident().city) {
+      <div class="incident-location">
+        <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+        <div class="incident-location__text">
+          <p class="incident-location__line">
+            @if (incident().addressLabel) {
+              <span class="incident-location__address">{{ incident().addressLabel }}</span>
+            }
+            @if (incident().addressLabel && incident().city) {
+              <span class="incident-location__separator">, </span>
+            }
+            @if (incident().city) {
+              <span class="incident-location__city">{{ incident().city }}</span>
+            }
+          </p>
+        </div>
+      </div>
+    }
     @if (variant() === 'COMPACT') {
       <app-status-pill
         class="status-pill--inline status-pill--compact"
