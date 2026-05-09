@@ -1,8 +1,8 @@
 import {computed, DestroyRef, inject, Injectable, signal} from '@angular/core';
-import {IncidentDto, IncidentStatus} from '../../../shared/models/incident-dto.model';
+import {type IncidentListItemDto, IncidentStatus} from '../../../shared/models/incident-dto.model';
 import {IncidentsApiService} from '../../../shared/services/incidents-api-service';
 import {ResourceState} from '../../../shared/models/resource-state.model';
-import {mapIncidentToCard} from '../../../shared/mappers/incident.mapper';
+import {mapIncidentListItemToCard} from '../../../shared/mappers/incident.mapper';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 export type DashboardFilter = "ALL"|"UNRESOLVED"|"RESOLVED";
@@ -18,7 +18,7 @@ export class CitizenDashboardStore {
   private readonly incidentService = inject(IncidentsApiService);
   private readonly destroyRef = inject(DestroyRef);
 
-  private readonly incidentsState = signal<ResourceState<IncidentDto[]>>({
+  private readonly incidentsState = signal<ResourceState<IncidentListItemDto[]>>({
     data: [],
     status: 'idle',
     error: null
@@ -42,12 +42,12 @@ export class CitizenDashboardStore {
   });
 
   readonly filteredIncidentsVm = computed(()=>
-    this.filteredIncidents().map(mapIncidentToCard)
+    this.filteredIncidents().map(mapIncidentListItemToCard)
   );
 
   readonly totalReported = computed(() => this.incidents().length);
   readonly totalResolved = computed(() =>
-    this.incidents().filter((incident: IncidentDto) => incident.status === 'RESOLVED').length
+    this.incidents().filter((incident: IncidentListItemDto) => incident.status === 'RESOLVED').length
   );
 
   readonly hasIncidents = computed(()=> this.incidents().length > 0);
@@ -88,7 +88,7 @@ export class CitizenDashboardStore {
     }));
   }
 
-  private setSuccess(incidents: IncidentDto[]): void{
+  private setSuccess(incidents: IncidentListItemDto[]): void{
     this.incidentsState.set({
       data: incidents,
       status:'success',
@@ -104,7 +104,7 @@ export class CitizenDashboardStore {
     }))
   }
 
-  private matchesDashboardFilter(incident: IncidentDto, filter: DashboardFilter): boolean {
+  private matchesDashboardFilter(incident: IncidentListItemDto, filter: DashboardFilter): boolean {
     if (filter === 'RESOLVED') {
       return incident.status === 'RESOLVED';
     }
