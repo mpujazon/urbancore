@@ -1,6 +1,6 @@
-import { IncidentImageDto } from '../../features/report-incident/models/upload.models';
-import { PlannedActionDto } from './PlannedActionInterface';
-import { UserRole } from './UserInterface';
+import type { IncidentImageDto } from '../../features/report-incident/models/upload.models';
+import type { PlannedActionDto } from './planned-action.model';
+import type { UserRole } from './user-dto.model';
 
 export interface IncidentDto{
   id: string;
@@ -8,7 +8,7 @@ export interface IncidentDto{
   description: string;
   category: IncidentCategory;
   status: IncidentStatus;
-  priority?: IncidentPriorityDto;
+  priority?: IncidentPriority;
   cityId?: string;
   reporter?: IncidentReporterDto;
   location: IncidentLocationDto;
@@ -17,18 +17,6 @@ export interface IncidentDto{
   statusHistory: IncidentStatusHistoryDto[];
   createdAt: string;
   updatedAt: string;
-}
-
-export interface IncidentCardVm {
-  id: string;
-  category: string;
-  categoryIconClass: string;
-  date: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-  status: string;
-  statusStyleClass: string;
 }
 
 export type IncidentCategory =
@@ -49,9 +37,9 @@ export type IncidentStatus =
   | 'REJECTED'
   | 'CANCELLED';
 
-type IncidentPriorityDto = 'UNDEFINED' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+export type IncidentPriority = 'UNDEFINED' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 
-interface IncidentLocationDto {
+export interface IncidentLocationDto {
   lat: number;
   lng: number;
   addressLabel?: string;
@@ -60,13 +48,13 @@ interface IncidentLocationDto {
   geohash: string;
 }
 
-interface IncidentReporterDto {
+export interface IncidentReporterDto {
   id: string;
   displayName: string;
   role: UserRole;
 }
 
-interface IncidentStatusHistoryDto {
+export interface IncidentStatusHistoryDto {
   id: string;
   fromStatus: IncidentStatus;
   toStatus: IncidentStatus;
@@ -80,5 +68,28 @@ export interface IncidentCoordinates{
   lng: number;
 }
 
-export type IncidentCardVariant = 'DETAILED' | 'COMPACT';
+export interface IncidentListItemDto {
+  id: string;
+  title: string;
+  category: IncidentCategory;
+  status: IncidentStatus;
+  priority: IncidentPriority;
+  cityId?: string;
+  thumbnailUrl?: string;
+  location: IncidentLocationDto;
+  createdAt: string;
+  updatedAt: string;
+}
 
+export interface IncidentExplorerQuery {
+  q?: string;
+  status?: IncidentStatus;
+  category?: IncidentCategory;
+  priority?: IncidentPriority;
+  cityId?: string;
+  from?: string;
+  to?: string;
+  page: number;
+  size: number;
+  sort: string;
+}
