@@ -54,7 +54,13 @@
       } @else {
         <div class="incident-list">
           @for (incident of incidentCards(); track incident.id) {
-            <app-incident-card variant="COMPACT" [incident]="incident" />
+            <div
+              class="incident-list-card"
+              [class.incident-list-card--active]="mapFacade.selectedIncidentId() === incident.id"
+              (click)="onIncidentCardClick(incident.id)"
+            >
+              <app-incident-card variant="COMPACT" [incident]="incident" />
+            </div>
           }
         </div>
 
@@ -84,7 +90,7 @@
         (click)="closeMobileMap()"
         aria-label="Close map"
       >
-        Close
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
       </button>
     </aside>
   </main>
@@ -96,6 +102,6 @@
     (click)="openMobileMap()"
     aria-label="Open map"
   >
-    View map
+    <i class="fa-solid fa-map" aria-hidden="true"></i>
   </button>
 </section>

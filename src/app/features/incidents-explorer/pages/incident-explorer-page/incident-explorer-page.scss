@@ -109,6 +109,25 @@
   gap: 0.75rem;
 }
 
+.incident-list-card {
+  cursor: pointer;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 24px 56px -22px rgba(25, 27, 34, 0.30);
+  }
+
+  &--active {
+    transform: translateY(-2px);
+    box-shadow:
+      0 24px 56px -22px rgba(25, 27, 34, 0.35),
+      inset 0 0 0 2px var(--color-primary, #0066cc);
+  }
+}
+
 .state-message {
   display: flex;
   flex-direction: column;
@@ -167,12 +186,29 @@
   right: $space-md;
   bottom: $space-md;
   z-index: 1200;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
   border: 1px solid var(--line);
   border-radius: 999px;
   background: #ffffff;
   color: var(--text);
-  padding: 0.6rem 1rem;
-  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transition: $transition-hover;
+
+  &:hover {
+    background: $surface-container;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.16);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 }
 
 .open-map-btn.is-hidden {
@@ -184,12 +220,30 @@
   top: 0.75rem;
   left: 0.75rem;
   z-index: 1201;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
   color: var(--text);
-  padding: 0.45rem 0.8rem;
-  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transition: $transition-hover;
+
+  &:hover {
+    background: #ffffff;
+    transform: scale(1.08);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.16);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
 }
 
 @media (max-width: 991.98px) {

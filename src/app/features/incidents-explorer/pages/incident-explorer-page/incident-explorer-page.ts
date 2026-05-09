@@ -36,7 +36,7 @@ import * as L from 'leaflet';
 })
 export class IncidentExplorerPage implements AfterViewInit, OnDestroy {
   private readonly leafletMapService = inject(LeafletMapService);
-  private readonly mapFacade = inject(IncidentExplorerMapFacade);
+  protected readonly mapFacade = inject(IncidentExplorerMapFacade);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
@@ -61,6 +61,15 @@ export class IncidentExplorerPage implements AfterViewInit, OnDestroy {
   constructor() {
     this.hydrateFromUrl();
     this.syncUrl();
+  }
+
+  protected onIncidentCardClick(incidentId: string): void {
+    this.mapFacade.selectedIncidentId.set(incidentId);
+    this.mapFacade.flyToIncident(incidentId);
+
+    if (window.innerWidth < 992) {
+      this.openMobileMap();
+    }
   }
 
   private hydrateFromUrl(): void {
