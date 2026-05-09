@@ -94,3 +94,372 @@ h6 {
   border-radius: 50%;
   background: #ffffff;
 }
+
+/* ── Leaflet Popup: Incident Marker ─────────────────────────────── */
+
+.incident-marker-popup .leaflet-popup-content-wrapper {
+  padding: 0;
+  border: none;
+  border-radius: 1.25rem;
+  background: $surface-container-lowest;
+  box-shadow:
+    0 24px 64px rgba($on-surface, 0.14),
+    0 8px 24px rgba($on-surface, 0.08);
+  overflow: hidden;
+}
+
+.incident-marker-popup .leaflet-popup-content {
+  margin: 0;
+  font-family: $font-body;
+  font-size: $body-sm;
+  line-height: 1.5;
+  color: $on-surface;
+}
+
+.incident-marker-popup .leaflet-popup-tip {
+  width: 14px;
+  height: 14px;
+  margin: -8px auto 0;
+  background: $surface-container-lowest;
+  box-shadow:
+    0 8px 24px rgba($on-surface, 0.10);
+}
+
+.incident-marker-popup .leaflet-popup-close-button {
+  top: 0.6rem;
+  right: 0.6rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-full;
+  background: rgba($surface-container-lowest, 0.85);
+  backdrop-filter: $glass-blur;
+  color: $on-surface;
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1;
+  transition: $transition-hover;
+  z-index: 10;
+}
+
+.incident-marker-popup .leaflet-popup-close-button:hover {
+  background: $surface-container-lowest;
+  color: $primary;
+  transform: scale(1.08);
+}
+
+/* Card */
+.marker-popup-card {
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Media */
+.marker-popup-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: linear-gradient(145deg, $surface-container, rgb(236 240 248));
+}
+
+.marker-popup-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba($on-surface, 0.35), rgba($on-surface, 0));
+  pointer-events: none;
+  z-index: 1;
+}
+
+.marker-popup-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.marker-popup-card:hover .marker-popup-img {
+  transform: scale(1.04);
+}
+
+/* Fallback */
+.marker-popup-media--fallback .marker-popup-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.marker-popup-fallback i {
+  font-size: 2.25rem;
+  color: $neutral-variant;
+  opacity: 0.55;
+}
+
+/* Status badge (overlay) */
+.marker-popup-status-badge {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.28rem 0.65rem;
+  border-radius: $radius-full;
+  border: 1px solid;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  backdrop-filter: $glass-blur;
+  box-shadow: 0 4px 14px rgba($on-surface, 0.12);
+}
+
+.marker-popup-status-dot {
+  width: 0.33rem;
+  height: 0.33rem;
+  border-radius: $radius-full;
+  background: currentcolor;
+  flex-shrink: 0;
+}
+
+/* Status colours */
+.marker-popup-status-badge.is-resolved {
+  color: $status-resolved-text;
+  border-color: $status-resolved-border;
+  background: rgba($status-resolved-bg, 0.92);
+}
+
+.marker-popup-status-badge.is-scheduled {
+  color: $status-scheduled-text;
+  border-color: $status-scheduled-border;
+  background: rgba($status-scheduled-bg, 0.92);
+}
+
+.marker-popup-status-badge.is-review {
+  color: $status-review-text;
+  border-color: $status-review-border;
+  background: rgba($status-review-bg, 0.92);
+}
+
+.marker-popup-status-badge.is-progress {
+  color: $status-progress-text;
+  border-color: $status-progress-border;
+  background: rgba($status-progress-bg, 0.92);
+}
+
+.marker-popup-status-badge.is-rejected {
+  color: $status-rejected-text;
+  border-color: $status-rejected-border;
+  background: rgba($status-rejected-bg, 0.92);
+}
+
+.marker-popup-status-badge.is-new {
+  color: $status-new-text;
+  border-color: $status-new-border;
+  background: rgba($status-new-bg, 0.92);
+}
+
+.marker-popup-status-badge.is-cancelled {
+  color: $status-resolved-text;
+  border-color: $status-resolved-border;
+  background: rgba($status-resolved-bg, 0.92);
+}
+
+/* Body */
+.marker-popup-body {
+  padding: 0.85rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+/* Header / Category */
+.marker-popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.marker-popup-category {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: $radius-full;
+  background: $secondary-fixed;
+  color: $secondary;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  width: fit-content;
+}
+
+/* Title */
+.marker-popup-title {
+  margin: 0;
+  font-family: $font-display;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: $primary;
+  letter-spacing: -0.01em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Location */
+.marker-popup-location {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: $neutral-variant;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.marker-popup-location i {
+  font-size: 0.82rem;
+  color: $secondary;
+  opacity: 0.85;
+  flex-shrink: 0;
+}
+
+.marker-popup-location span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Date */
+.marker-popup-date {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: $neutral;
+  opacity: 0.75;
+  letter-spacing: 0.02em;
+}
+
+/* Footer / CTA */
+.marker-popup-footer {
+  margin-top: 0.35rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid $surface-container;
+}
+
+.marker-popup-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0.55rem 0.9rem;
+  border-radius: 0.65rem;
+  background: $gradient-primary-cta;
+  color: #ffffff !important;
+  font-family: $font-display;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  line-height: 1;
+  transition: $transition-hover;
+  box-shadow: 0 4px 14px rgba($primary, 0.28);
+  cursor: pointer;
+}
+
+.marker-popup-cta i {
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.marker-popup-cta:hover {
+  box-shadow: 0 6px 20px rgba($primary, 0.38);
+  transform: translateY(-1px);
+}
+
+.marker-popup-cta:hover i {
+  transform: translateX(2px);
+}
+
+.marker-popup-cta:focus-visible {
+  outline: 2px solid $secondary;
+  outline-offset: 2px;
+}
+
+/* ── Leaflet Popup: Mobile adjustments ──────────────────────────── */
+
+@media (max-width: 480px) {
+  .incident-marker-popup .leaflet-popup-content-wrapper {
+    border-radius: 1rem;
+  }
+
+  .marker-popup-card {
+    width: 210px;
+  }
+
+  .marker-popup-media {
+    aspect-ratio: 16 / 9;
+  }
+
+  .marker-popup-status-badge {
+    top: 0.4rem;
+    right: 0.4rem;
+    padding: 0.2rem 0.45rem;
+    font-size: 0.6rem;
+  }
+
+  .marker-popup-body {
+    padding: 0.6rem 0.75rem 0.75rem;
+    gap: 0.25rem;
+  }
+
+  .marker-popup-category {
+    padding: 0.15rem 0.45rem;
+    font-size: 0.6rem;
+  }
+
+  .marker-popup-title {
+    font-size: 0.85rem;
+    line-height: 1.25;
+  }
+
+  .marker-popup-location {
+    font-size: 0.72rem;
+  }
+
+  .marker-popup-location i {
+    font-size: 0.75rem;
+  }
+
+  .marker-popup-date {
+    font-size: 0.65rem;
+  }
+
+  .marker-popup-footer {
+    margin-top: 0.2rem;
+    padding-top: 0.5rem;
+  }
+
+  .marker-popup-cta {
+    padding: 0.45rem 0.7rem;
+    font-size: 0.75rem;
+  }
+
+  .marker-popup-cta i {
+    font-size: 0.7rem;
+  }
+}

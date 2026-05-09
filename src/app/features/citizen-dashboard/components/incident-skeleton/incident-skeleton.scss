@@ -1,0 +1,58 @@
+.skeleton-card {
+  overflow: hidden;
+  border: 1px solid rgb(196 198 208 / 0.28);
+  border-radius: 1.5rem;
+  background: var(--surface-lowest);
+}
+
+.skeleton-body {
+  padding: 1rem;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #edf0f7 25%, #f8f9fc 45%, #edf0f7 65%);
+  background-size: 220% 100%;
+  animation: dashboard-skeleton-shimmer 1.35s ease-in-out infinite;
+}
+
+.skeleton-media {
+  height: 9.25rem;
+}
+
+.skeleton-title {
+  height: 1.25rem;
+  width: 70%;
+  border-radius: 0.45rem;
+}
+
+.skeleton-line {
+  height: 0.8rem;
+  margin-top: 0.75rem;
+  border-radius: 0.35rem;
+}
+
+.skeleton-line.short {
+  width: 60%;
+}
+
+@keyframes dashboard-skeleton-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (width <= 48rem) {
+  .skeleton-media {
+    height: 7.5rem;
+  }
+}
+
+@media (width <= 36rem) {
+  .skeleton-grid {
+    grid-template-columns: 1fr;
+  }
+}

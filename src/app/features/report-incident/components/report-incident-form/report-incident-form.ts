@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { INCIDENT_CATEGORIES } from '../../config/incident-categories';
 import { IncidentCategoryLabelPipe } from '../../pipes/incident-category-label.pipe';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import type { IncidentCategory } from '../../../../shared/models/IncidentInterface';
+import type { IncidentCategory } from '../../../../shared/models/incident-dto.model';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs';
 
 type ReportIncidentFormGroup = FormGroup<{

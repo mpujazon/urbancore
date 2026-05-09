@@ -1,5 +1,5 @@
 <nav id="desktop-navigation">
-  <div class="company-logo">
+  <div class="company-logo" (click)="onLogoClick()">
     <img src="/icons/logo.svg" alt="UrbanCore Logo">
     <p>URBAN CORE</p>
   </div>
@@ -44,7 +44,7 @@
   [class.visible]="isMenuOpen()"
 >
   <header>
-    <div class="company-logo">
+    <div class="company-logo" (click)="onLogoClick()">
       <img src="/icons/logo.svg" alt="UrbanCore Logo">
       <p>URBAN CORE</p>
     </div>
@@ -64,6 +64,7 @@
     @for (link of links(); track $index) {
       <app-nav-link
         [link]="link"
+        (clicked)="onCloseMenuClick()"
       />
     }
   </ul>

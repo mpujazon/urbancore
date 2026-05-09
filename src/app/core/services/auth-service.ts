@@ -4,7 +4,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { Auth, authState, getIdToken, GoogleAuthProvider, signInWithPopup, signOut, User } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { Observable, switchMap, catchError, of, shareReplay, firstValueFrom, filter, take } from 'rxjs';
-import { UserDto } from '../../shared/models/UserInterface';
+import { UserDto } from '../../shared/models/user-dto.model';
 import { environment } from '../../../environments/environment';
 import { ToastService } from './toast-service';
 

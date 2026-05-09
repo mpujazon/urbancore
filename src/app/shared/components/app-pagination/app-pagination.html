@@ -1,0 +1,49 @@
+<nav class="pagination" aria-label="Incident list pagination">
+  <div class="pagination-info">
+    @if (totalElements() > 0) {
+      <span class="pagination-summary">
+        Page {{ page() + 1 }} of {{ totalPages() }} &middot; {{ totalElements() }} result{{ totalElements() !== 1 ? 's' : '' }}
+      </span>
+    } @else {
+      <span class="pagination-summary">No results</span>
+    }
+  </div>
+
+  <div class="pagination-controls">
+    <div class="pagination-size">
+      <label for="pagination-size" class="pagination-size-label">Per page:</label>
+      <select
+        id="pagination-size"
+        class="pagination-size-select"
+        [ngModel]="size()"
+        (ngModelChange)="onSizeChange($event)"
+        [disabled]="loading()"
+      >
+        @for (opt of pageSizeOptions; track opt) {
+          <option [value]="opt">{{ opt }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="pagination-buttons">
+      <button
+        type="button"
+        class="pagination-btn"
+        [disabled]="first() || loading()"
+        (click)="onPrevious()"
+        aria-label="Previous page"
+      >
+        Prev
+      </button>
+      <button
+        type="button"
+        class="pagination-btn"
+        [disabled]="last() || loading() || totalElements() === 0"
+        (click)="onNext()"
+        aria-label="Next page"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</nav>

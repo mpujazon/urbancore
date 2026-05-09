@@ -3,4 +3,6 @@
   <router-outlet/>
 </main>
 <app-toast/>
-<app-footer/>
+@if (!router.url.startsWith('/incidents')) {
+  <app-footer/>
+}

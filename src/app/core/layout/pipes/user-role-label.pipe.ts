@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import type { UserRole } from '../../../shared/models/UserInterface';
+import type { UserRole } from '../../../shared/models/user-dto.model';
 
 @Pipe({
   name: 'userRoleLabel',
