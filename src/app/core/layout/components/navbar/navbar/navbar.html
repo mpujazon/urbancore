@@ -64,6 +64,7 @@
     @for (link of links(); track $index) {
       <app-nav-link
         [link]="link"
+        (clicked)="onCloseMenuClick()"
       />
     }
   </ul>

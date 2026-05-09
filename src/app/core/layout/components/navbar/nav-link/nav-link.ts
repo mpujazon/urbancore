@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { Link } from '../../../models/link.model';
 import { RouterLink, RouterLinkActive } from "@angular/router";
 
@@ -11,4 +11,9 @@ import { RouterLink, RouterLinkActive } from "@angular/router";
 })
 export class NavLink {
   link = input.required<Link>();
+  clicked = output<void>();
+
+  onLinkClick() {
+    this.clicked.emit();
+  }
 }
