@@ -1,17 +1,75 @@
 <section class="page">
   <main class="layout">
-    <section class="panel" aria-label="Active incidents list">
+    <section #incidentsContainer class="panel" aria-label="Incidents list">
       <div class="panel-header">
-        <h1>Active Incidents</h1>
+        <h1>Incidents explorer</h1>
+        <button
+          type="button"
+          class="filter-toggle"
+          [attr.aria-expanded]="showFilters()"
+          (click)="showFilters.set(!showFilters())"
+        >
+          <i class="fa-solid fa-filter" aria-hidden="true"></i>
+          Filters
+          @if (store.activeFilterCount() > 0) {
+            <span class="filter-toggle-badge">{{ store.activeFilterCount() }}</span>
+          }
+        </button>
       </div>
-      <div class="incident-list">
-        @for (incident of incidents(); track incident.title) {
-          <app-incident-card
-            variant="COMPACT"
-            [incident]="incident"
-          />
+
+      <div class="filter-collapse" [class.filter-collapse--open]="showFilters()">
+        <app-explorer-filter-bar
+          [filters]="store.filters()"
+          [loading]="store.isLoading()"
+          [activeFilterCount]="store.activeFilterCount()"
+          (filtersChange)="store.setFilters($event)"
+          (clear)="store.clearFilters()"
+        />
+      </div>
+
+      <div class="results-count" aria-live="polite">
+        @if (store.isRefreshing()) {
+          <span class="results-count-label">Refreshing...</span>
+        } @else if (store.totalElements() > 0) {
+          <span class="results-count-label">{{ store.totalElements() }} result{{ store.totalElements() !== 1 ? 's' : '' }}</span>
         }
       </div>
+
+      @if (store.isLoading() && !store.isRefreshing()) {
+        <div class="state-message" role="status">
+          <p>Loading incidents...</p>
+        </div>
+      } @else if (store.error()) {
+        <div class="state-message state-message--error" role="alert">
+          <p>{{ store.error() }}</p>
+          <button type="button" class="retry-btn" (click)="store.reload()">Try again</button>
+        </div>
+      } @else if (store.hasNoResults()) {
+        <div class="state-message" role="status">
+          <p>No incidents found matching your filters.</p>
+          @if (store.activeFilterCount() > 0) {
+            <button type="button" class="retry-btn" (click)="store.clearFilters()">Clear filters</button>
+          }
+        </div>
+      } @else {
+        <div class="incident-list">
+          @for (incident of incidentCards(); track incident.id) {
+            <app-incident-card variant="COMPACT" [incident]="incident" />
+          }
+        </div>
+
+        <app-pagination
+          [page]="store.page()"
+          [size]="store.size()"
+          [totalPages]="store.totalPages()"
+          [totalElements]="store.totalElements()"
+          [first]="store.first()"
+          [last]="store.last()"
+          [loading]="store.isLoading()"
+          (pageChange)="store.setPage($event)"
+          (sizeChange)="store.setSize($event)"
+        />
+      }
     </section>
 
     <aside
@@ -20,7 +78,12 @@
       [class.mobile-open]="isMobileMapOpen()"
       aria-label="Map preview"
     >
-      <button class="close-map-btn" type="button" (click)="closeMobileMap()" aria-label="Close map">
+      <button
+        class="close-map-btn"
+        type="button"
+        (click)="closeMobileMap()"
+        aria-label="Close map"
+      >
         Close
       </button>
     </aside>
