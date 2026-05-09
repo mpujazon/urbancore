@@ -1,4 +1,4 @@
-import { Link } from '../../../shared/models/LinkInterface';
+import { Link } from '../models/link.model';
 import { ROUTE_ROLES } from '../../routing/route-roles';
 
 export const NAV_LINKS: Link[] = [

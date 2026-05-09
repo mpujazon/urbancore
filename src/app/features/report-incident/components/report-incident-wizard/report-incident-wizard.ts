@@ -10,7 +10,7 @@ import { IncidentsApiService } from '../../../../shared/services/incidents-api-s
 import { ReportIncidentForm, ReportIncidentFormValues } from '../report-incident-form/report-incident-form';
 import { ReportIncidentLocation } from '../report-incident-location/report-incident-location';
 import { ReportIncidentMedia } from '../report-incident-media/report-incident-media';
-import { IncidentCoordinates } from '../../../../shared/models/IncidentInterface';
+import { IncidentCoordinates } from '../../../../shared/models/incident-dto.model';
 
 const GEOHASH_PRECISION = 9;
 

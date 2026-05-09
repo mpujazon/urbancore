@@ -1,5 +1,5 @@
 import {computed, DestroyRef, inject, Injectable, signal} from '@angular/core';
-import {IncidentDto, IncidentStatus} from '../../../shared/models/IncidentInterface';
+import {IncidentDto, IncidentStatus} from '../../../shared/models/incident-dto.model';
 import {IncidentsApiService} from '../../../shared/services/incidents-api-service';
 import {ResourceState} from '../../../shared/models/resource-state.model';
 import {mapIncidentToCard} from '../../../shared/mappers/incident.mapper';

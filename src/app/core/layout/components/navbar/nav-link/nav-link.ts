@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { Link } from '../../../../../shared/models/LinkInterface';
+import { Link } from '../../../models/link.model';
 import { RouterLink, RouterLinkActive } from "@angular/router";
 
 @Component({

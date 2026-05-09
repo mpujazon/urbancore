@@ -1,6 +1,6 @@
 import {computed, inject, Injectable, signal} from '@angular/core';
 import {LeafletMapService} from '../../../shared/services/leaflet-map-service';
-import {IncidentDto} from '../../../shared/models/IncidentInterface';
+import {IncidentDto} from '../../../shared/models/incident-dto.model';
 import * as L from 'leaflet';
 
 @Injectable()

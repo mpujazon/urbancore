@@ -11,7 +11,7 @@ import {
 import * as L from 'leaflet';
 import { LeafletMapService } from '../../../../shared/services/leaflet-map-service';
 import { ReportIncidentMapFacade } from '../../services/report-incident-map.facade';
-import { IncidentCoordinates } from '../../../../shared/models/IncidentInterface';
+import { IncidentCoordinates } from '../../../../shared/models/incident-dto.model';
 
 @Component({
   selector: 'app-report-incident-location',

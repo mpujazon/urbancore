@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, input} from '@angular/core';
-import {IncidentCardVariant, IncidentCardVm} from '../../models/IncidentInterface';
+import { IncidentCardVariant, IncidentCardVm } from '../../models/incident-vm.model';
 import {StatusPill} from '../status-pill/status-pill';
 
 @Component({
