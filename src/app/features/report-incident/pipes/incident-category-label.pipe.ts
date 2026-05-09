@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import type { IncidentCategory } from '../../../shared/models/IncidentInterface';
+import type { IncidentCategory } from '../../../shared/models/incident-dto.model';
 
 @Pipe({
   name: 'incidentCategoryLabel',

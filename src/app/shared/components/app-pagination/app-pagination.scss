@@ -1,0 +1,90 @@
+@use 'styles/variables' as *;
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-sm-md;
+  padding: $space-sm-md $space-md;
+  border-top: 1px solid $outline-variant;
+}
+
+.pagination-summary {
+  font-size: $body-sm;
+  color: $neutral-variant;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: $space-sm-md;
+}
+
+.pagination-size {
+  display: flex;
+  align-items: center;
+  gap: $space-xs;
+}
+
+.pagination-size-label {
+  font-size: $body-sm;
+  color: $neutral-variant;
+}
+
+.pagination-size-select {
+  padding: $space-xs $space-sm;
+  border: 1px solid $outline-variant;
+  border-radius: $radius-md;
+  font-size: $body-sm;
+  font-family: $font-body;
+  color: $on-surface;
+  background: $surface-container-lowest;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.pagination-buttons {
+  display: flex;
+  gap: $space-xs;
+}
+
+.pagination-btn {
+  padding: $space-xs $space-sm-md;
+  border: 1px solid $outline-variant;
+  border-radius: $radius-md;
+  background: $surface-container-lowest;
+  color: $on-surface;
+  font-size: $body-sm;
+  font-family: $font-body;
+  cursor: pointer;
+  transition: $transition-hover;
+
+  &:hover:not(:disabled) {
+    background: $surface-container;
+    border-color: $neutral-variant;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+@media (max-width: #{$bp-sm - 1px}) {
+  .pagination {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pagination-info {
+    text-align: center;
+  }
+
+  .pagination-controls {
+    justify-content: center;
+  }
+}

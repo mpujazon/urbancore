@@ -1,4 +1,4 @@
-import { UserRole } from "./UserInterface";
+import { UserRole } from "../../../shared/models/user-dto.model";
 
 export interface Link{
   label: string;

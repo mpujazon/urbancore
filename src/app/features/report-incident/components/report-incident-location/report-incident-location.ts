@@ -9,21 +9,20 @@ import {
   signal, output,
 } from '@angular/core';
 import * as L from 'leaflet';
-import { LeafletMapService } from '../../services/leaflet-map-service';
-
-export interface IncidentCoordinates{
-  lat: number;
-  lng: number;
-};
+import { LeafletMapService } from '../../../../shared/services/leaflet-map-service';
+import { ReportIncidentMapFacade } from '../../services/report-incident-map.facade';
+import { IncidentCoordinates } from '../../../../shared/models/incident-dto.model';
 
 @Component({
   selector: 'app-report-incident-location',
   templateUrl: './report-incident-location.html',
   styleUrl: './report-incident-location.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [ReportIncidentMapFacade]
 })
 export class ReportIncidentLocation implements AfterViewInit, OnDestroy {
   private readonly leafletMapService = inject(LeafletMapService);
+  private readonly reportIncidentMapFacade = inject(ReportIncidentMapFacade);
 
   @ViewChild('mapContainer', { static: true })
   private mapContainer?: ElementRef<HTMLElement>;
@@ -33,7 +32,6 @@ export class ReportIncidentLocation implements AfterViewInit, OnDestroy {
   protected readonly isLocating = signal(false);
   protected readonly locationMessage = signal<string | null>(null);
 
-  private map?: L.Map;
   private readonly defaultCenter: L.LatLngTuple = [41.3874, 2.1686];
   private readonly defaultZoom = 13;
 
@@ -42,43 +40,40 @@ export class ReportIncidentLocation implements AfterViewInit, OnDestroy {
       return;
     }
 
-    this.map = this.leafletMapService.createMap(
+    this.reportIncidentMapFacade.setMap(this.leafletMapService.createMap(
       this.mapContainer.nativeElement,
       this.defaultCenter,
       this.defaultZoom
-    );
+    ));
 
-    this.map.on('click', (event: L.LeafletMouseEvent) => {
-      this.updateSelectedLocation([event.latlng.lat, event.latlng.lng], 'Location selected.');
+
+    this.reportIncidentMapFacade.map()?.on('click', (event: L.LeafletMouseEvent) => {
+      this.updateSelectedLocation([event.latlng.lat, event.latlng.lng], 'Location selected.', true);
     });
 
     requestAnimationFrame(() => {
-      this.map?.invalidateSize();
+      this.reportIncidentMapFacade.map()?.invalidateSize();
     });
 
     setTimeout(() => {
-      this.map?.invalidateSize();
+      this.reportIncidentMapFacade.map()?.invalidateSize();
     }, 200);
   }
 
   ngOnDestroy(): void {
-    if (!this.map) {
+    if (!this.reportIncidentMapFacade.map()) {
       return;
     }
-
-    this.leafletMapService.destroyMap(this.map);
-    this.map = undefined;
+    this.reportIncidentMapFacade.destroy();
   }
 
   protected locateMe(event?: Event): void {
     event?.preventDefault();
     event?.stopPropagation();
 
-    const map = this.map;
-
     this.locationMessage.set(null);
 
-    if (!map) {
+    if (!this.reportIncidentMapFacade.map()) {
       this.locationMessage.set('The map is still loading. Please try again in a moment.');
       return;
     }
@@ -94,9 +89,14 @@ export class ReportIncidentLocation implements AfterViewInit, OnDestroy {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const userLocation: L.LatLngTuple = [position.coords.latitude, position.coords.longitude];
+        const map = this.reportIncidentMapFacade.map();
+        if(!map){
+          this.isLocating.set(false);
+          return;
+        }
 
-        this.leafletMapService.setView(map, userLocation, 17);
         this.updateSelectedLocation(userLocation, 'Location updated.');
+        this.leafletMapService.setView(map, userLocation);
         this.isLocating.set(false);
       },
       (error) => {
@@ -127,12 +127,11 @@ export class ReportIncidentLocation implements AfterViewInit, OnDestroy {
     return 'Could not get your current location. Please try again.';
   }
 
-  private updateSelectedLocation(location: L.LatLngTuple, message: string): void {
-    if (!this.map) {
+  private updateSelectedLocation(location: L.LatLngTuple, message: string, recenter = false): void {
+    if (!this.reportIncidentMapFacade.map()) {
       return;
     }
-
-    this.leafletMapService.setMarker(this.map, location);
+    this.reportIncidentMapFacade.setMarker(location, recenter);
     this.coordinates.set(`${location[0].toFixed(5)}, ${location[1].toFixed(5)}`);
     this.coordinatesChanged.emit({lat: location[0], lng: location[1]});
     this.locationMessage.set(message);

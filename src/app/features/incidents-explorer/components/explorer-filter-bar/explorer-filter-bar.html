@@ -1,0 +1,97 @@
+<fieldset class="filter-bar" [class.filter-bar--loading]="loading()">
+  <legend class="sr-only">Filter incidents</legend>
+
+  <div class="filter-group">
+    <label for="explorer-search" class="filter-label">Search</label>
+    <input
+      id="explorer-search"
+      type="search"
+      class="filter-input"
+      placeholder="Search incidents..."
+      [ngModel]="searchText"
+      (ngModelChange)="onSearchChange($event)"
+    />
+  </div>
+
+  <div class="filter-group">
+    <label for="explorer-status" class="filter-label">Status</label>
+    <select
+      id="explorer-status"
+      class="filter-select"
+      [ngModel]="selectedStatus"
+      (ngModelChange)="onStatusChange($event)"
+    >
+      @for (opt of statusOptions; track opt.value) {
+        <option [value]="opt.value">{{ opt.label }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label for="explorer-category" class="filter-label">Category</label>
+    <select
+      id="explorer-category"
+      class="filter-select"
+      [ngModel]="selectedCategory"
+      (ngModelChange)="onCategoryChange($event)"
+    >
+      @for (opt of categoryOptions; track opt.value) {
+        <option [value]="opt.value">{{ opt.label }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label for="explorer-priority" class="filter-label">Priority</label>
+    <select
+      id="explorer-priority"
+      class="filter-select"
+      [ngModel]="selectedPriority"
+      (ngModelChange)="onPriorityChange($event)"
+    >
+      @for (opt of priorityOptions; track opt.value) {
+        <option [value]="opt.value">{{ opt.label }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label for="explorer-from" class="filter-label">From</label>
+    <input
+      id="explorer-from"
+      type="date"
+      class="filter-input filter-input--date"
+      [ngModel]="fromDate"
+      (ngModelChange)="onFromDateChange($event)"
+    />
+  </div>
+
+  <div class="filter-group">
+    <label for="explorer-to" class="filter-label">To</label>
+    <input
+      id="explorer-to"
+      type="date"
+      class="filter-input filter-input--date"
+      [ngModel]="toDate"
+      (ngModelChange)="onToDateChange($event)"
+    />
+  </div>
+
+  <div class="filter-actions">
+    <button
+      type="button"
+      class="filter-btn-clear"
+      [disabled]="activeFilterCount() === 0"
+      (click)="onClear()"
+    >
+      Clear filters
+      @if (activeFilterCount() > 0) {
+        <span class="filter-badge">{{ activeFilterCount() }}</span>
+      }
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="filter-bar-overlay" aria-hidden="true"></div>
+  }
+</fieldset>

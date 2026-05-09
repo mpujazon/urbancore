@@ -39,6 +39,31 @@ $badge-critical-text:      $on-error-container;
 $badge-planned-bg:         $secondary-fixed;
 $badge-planned-text:       $secondary;
 
+// Colors: Status Pills
+$status-resolved-text:     $on-tertiary-container;
+$status-resolved-border:   rgba($on-tertiary-container, 0.25);
+$status-resolved-bg:       $tertiary-container;
+
+$status-scheduled-text:    $secondary;
+$status-scheduled-border:  rgba($secondary, 0.25);
+$status-scheduled-bg:      $secondary-fixed;
+
+$status-review-text:       $on-error-container;
+$status-review-border:     rgba($on-error-container, 0.25);
+$status-review-bg:         $error-container;
+
+$status-progress-text:     #5b3a00;
+$status-progress-border:   rgb(170 112 0 / 0.3);
+$status-progress-bg:       #ffedc2;
+
+$status-rejected-text:     $on-error-container;
+$status-rejected-border:   rgba($on-error-container, 0.25);
+$status-rejected-bg:       $error-container;
+
+$status-new-text:          #153b7a;
+$status-new-border:        rgba($secondary, 0.25);
+$status-new-bg:            $secondary-fixed;
+
 // Gradient
 $gradient-primary-cta:     linear-gradient(135deg, $primary 0%, $primary-container 100%);
 

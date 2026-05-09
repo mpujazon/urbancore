@@ -1,4 +1,4 @@
-import type { IncidentCategory } from '../../../shared/models/IncidentInterface';
+import type { IncidentCategory } from '../../../shared/models/incident-dto.model';
 
 export const INCIDENT_CATEGORIES: readonly IncidentCategory[] = [
   'POTHOLE',

@@ -1,0 +1,104 @@
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <div>
+        <span class="hero-tag">Citizen Portal</span>
+        <h1>My Impact Dashboard</h1>
+        <p>
+          Monitor the status of your reported issues and see how your contributions are improving the civic environment.
+        </p>
+      </div>
+      <button class="cta-button" type="button" routerLink="/report-incident">
+        <i class="fa-solid fa-circle-plus" aria-hidden="true"></i>
+        Report an Issue
+        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+      </button>
+    </div>
+  </section>
+  @if (store.showInitialLoading()){
+    <section class="loading-state" aria-label="Loading incidents">
+      <div class="loading-header">
+        <span class="loading-dot" aria-hidden="true"></span>
+        <p>Loading your incidents...</p>
+      </div>
+      <div class="skeleton-grid" aria-hidden="true">
+        @for (_ of skeletonItems; track $index) { <app-incident-skeleton/> }
+      </div>
+    </section>
+  }@else if (store.isError()){
+    <section class="error-state">
+      <h2>Something went wrong</h2>
+      <p>{{ store.error() }}</p>
+      <button type="button" (click)="retry()">
+        Try again
+      </button>
+    </section>
+  }@else{
+    <div class="stats-wrap">
+      <div class="stats-card">
+        <div class="stats-glow"></div>
+        <div class="stats-title-wrap">
+          <div class="stats-icon">
+            <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+          </div>
+          <div>
+            <h2>Total Contributions</h2>
+            <p>Your civic engagement history over the time.</p>
+          </div>
+        </div>
+        <div class="stats-values">
+          <div>
+            <p class="value">{{ store.totalReported() }}</p>
+            <p class="label">Reported</p>
+          </div>
+          <div>
+            <p class="value value-positive">{{ store.totalResolved() }}</p>
+            <p class="label label-positive">Resolved</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section class="reports">
+      <div class="reports-controls">
+        <div class="report-tabs">
+          <button
+            type="button"
+            [class.active]="store.activeFilter() === 'ALL'"
+            (click)="setFilter('ALL')"
+          >
+            All Reports
+          </button>
+          <button
+            type="button"
+            [class.active]="store.activeFilter() === 'UNRESOLVED'"
+            (click)="setFilter('UNRESOLVED')"
+          >
+            To be solved
+          </button>
+          <button
+            type="button"
+            [class.active]="store.activeFilter() === 'RESOLVED'"
+            (click)="setFilter('RESOLVED')"
+          >
+            Resolved
+          </button>
+        </div>
+      </div>
+      <div class="report-grid">
+        @for (incident of store.filteredIncidentsVm(); track incident.id) {
+          <app-incident-card variant="DETAILED" [incident]="incident"/>
+        }
+        @if(store.showEmptyState()){
+          <button class="new-incident-card" type="button" routerLink="/report-incident">
+            <div class="add-icon-wrap">
+              <i class="fa-solid fa-plus" aria-hidden="true"></i>
+            </div>
+            <div>
+              <h3>Log New Incident</h3>
+              <p>Help keep your community safe and clean.</p>
+            </div>
+          </button>
+        }
+      </div>
+    </section>
+  }
