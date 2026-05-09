@@ -1,19 +1,19 @@
-import {IncidentCardVm, IncidentCategory, IncidentDto, IncidentStatus} from '../models/IncidentInterface';
+import { IncidentCategory, IncidentDto, IncidentListItemDto, IncidentStatus } from '../models/incident-dto.model';
+import { IncidentCardVm } from '../models/incident-vm.model';
 
-export const mapIncidentToCard = (incident: IncidentDto): IncidentCardVm => ({
-  id: incident.id,
-  category: formatCategory(incident.category),
-  categoryIconClass: getCategoryIcon(incident.category),
-  date: formatDate(incident.createdAt),
-  title: incident.title,
-  description: incident.description,
+export const mapIncidentListItemToCard = (dto: IncidentListItemDto): IncidentCardVm => ({
+  id: dto.id,
+  category: formatCategory(dto.category),
+  categoryIconClass: getCategoryIcon(dto.category),
+  date: formatDate(dto.createdAt),
+  title: dto.title,
   imageUrl:
-    incident.images[0]?.thumbnailUrl ||
-    incident.images[0]?.url ||
+    dto.thumbnailUrl ||
     'https://placehold.co/600x400?text=Incident',
-  status: formatStatus(incident.status),
-  statusStyleClass: getStatusStyleClass(incident.status),
-
+  addressLabel: dto.location?.addressLabel || '',
+  city: dto.location?.city || '',
+  status: formatStatus(dto.status),
+  statusStyleClass: getStatusStyleClass(dto.status),
 });
 
 export const formatCategory = (category: IncidentCategory): string =>
