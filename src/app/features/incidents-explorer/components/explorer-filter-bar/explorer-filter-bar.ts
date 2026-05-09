@@ -24,7 +24,7 @@ function isoToDate(iso?: string): string {
   styleUrl: './explorer-filter-bar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ExplorerFilterBarComponent {
+export class ExplorerFilterBar {
   readonly filters = input.required<IncidentExplorerFilters>();
   readonly loading = input.required<boolean>();
   readonly activeFilterCount = input.required<number>();

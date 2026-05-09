@@ -16,7 +16,7 @@ import { IncidentCard } from '../../../../shared/components/incident-card/incide
 import { IncidentExplorerMapFacade } from '../../services/incident-explorer-map-facade';
 import { LeafletMapService } from '../../../../shared/services/leaflet-map-service';
 import { IncidentsExplorerStore } from '../../store/incidents-explorer.store';
-import { ExplorerFilterBarComponent } from '../../components/explorer-filter-bar/explorer-filter-bar';
+import { ExplorerFilterBar } from '../../components/explorer-filter-bar/explorer-filter-bar';
 import { AppPagination } from '../../../../shared/components/app-pagination/app-pagination';
 import { mapIncidentListItemToCard } from '../../../../shared/mappers/incident.mapper';
 import { IncidentCardVm } from '../../../../shared/models/incident-vm.model';
@@ -26,7 +26,7 @@ import * as L from 'leaflet';
   selector: 'app-incident-explorer-page',
   imports: [
     IncidentCard,
-    ExplorerFilterBarComponent,
+    ExplorerFilterBar,
     AppPagination,
   ],
   templateUrl: './incident-explorer-page.html',
