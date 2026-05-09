@@ -126,28 +126,11 @@ h6 {
 }
 
 .incident-marker-popup .leaflet-popup-close-button {
-  top: 0.6rem;
-  right: 0.6rem;
-  width: 1.75rem;
-  height: 1.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: $radius-full;
-  background: rgba($surface-container-lowest, 0.85);
-  backdrop-filter: $glass-blur;
-  color: $on-surface;
-  font-size: 1.1rem;
-  font-weight: 500;
-  line-height: 1;
-  transition: $transition-hover;
-  z-index: 10;
+  display: none;
 }
 
 .incident-marker-popup .leaflet-popup-close-button:hover {
-  background: $surface-container-lowest;
-  color: $primary;
-  transform: scale(1.08);
+  display: none;
 }
 
 /* Card */
@@ -207,7 +190,7 @@ h6 {
 .marker-popup-status-badge {
   position: absolute;
   top: 0.65rem;
-  right: 0.65rem;
+  left: 0.65rem;
   z-index: 3;
   display: inline-flex;
   align-items: center;
@@ -417,7 +400,7 @@ h6 {
 
   .marker-popup-status-badge {
     top: 0.4rem;
-    right: 0.4rem;
+    left: 0.4rem;
     padding: 0.2rem 0.45rem;
     font-size: 0.6rem;
   }
