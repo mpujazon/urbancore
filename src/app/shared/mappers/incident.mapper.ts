@@ -1,5 +1,12 @@
-import { IncidentCategory, IncidentDto, IncidentListItemDto, IncidentStatus } from '../models/incident-dto.model';
-import { IncidentCardVm } from '../models/incident-vm.model';
+import {
+  IncidentCategory,
+  IncidentDto,
+  IncidentListItemDto,
+  IncidentPriority,
+  IncidentStatus,
+} from '../models/incident-dto.model';
+import { PlannedActionDto } from '../models/planned-action.model';
+import { IncidentCardVm, IncidentDetailPlannedActionVm, IncidentDetailVm } from '../models/incident-vm.model';
 
 export const mapIncidentListItemToCard = (dto: IncidentListItemDto): IncidentCardVm => ({
   id: dto.id,
@@ -83,3 +90,102 @@ export const formatStatus = (status: IncidentStatus): string =>
     .split('_')
     .map((part) => part[0].toUpperCase() + part.slice(1))
     .join(' ');
+
+export const mapIncidentToDetailVm = (dto: IncidentDto): IncidentDetailVm => {
+  const statusLabel = formatStatus(dto.status);
+  const statusTone = getStatusStyleClass(dto.status);
+  const createdAtLabel = formatDate(dto.createdAt);
+  const updatedAtLabel = dto.updatedAt && dto.updatedAt !== dto.createdAt ? formatDate(dto.updatedAt) : undefined;
+  const categoryLabel = formatCategory(dto.category);
+
+  return {
+    id: dto.id,
+    header: {
+      title: dto.title,
+      categoryLabel,
+      statusLabel,
+      statusTone,
+      createdAtLabel,
+      updatedAtLabel,
+    },
+    summary: {
+      categoryLabel,
+      statusLabel,
+      statusTone,
+      priorityLabel: formatPriority(dto.priority),
+      cityLabel: dto.location?.city,
+      areaLabel: dto.location?.area,
+      createdAtLabel,
+      updatedAtLabel,
+    },
+    description: dto.description,
+    location: {
+      lat: dto.location.lat,
+      lng: dto.location.lng,
+      coordinatesLabel: formatCoordinates(dto.location.lat, dto.location.lng),
+      addressLabel: dto.location.addressLabel,
+      area: dto.location.area,
+      city: dto.location.city,
+    },
+    images: (dto.images ?? []).map((image, index) => ({
+      id: image.publicId || `${dto.id}-image-${index}`,
+      url: image.url,
+      thumbnailUrl: image.thumbnailUrl,
+      alt: `Public evidence image ${index + 1} for ${dto.title}`,
+    })),
+    statusHistory: (dto.statusHistory ?? []).map((item) => ({
+      id: item.id,
+      fromStatusLabel: item.fromStatus ? formatStatus(item.fromStatus) : undefined,
+      toStatusLabel: formatStatus(item.toStatus),
+      statusTone: getStatusStyleClass(item.toStatus),
+      changedAtLabel: formatDate(item.changedAt),
+      reason: item.reason,
+    })),
+    plannedActions: (dto.plannedActions ?? []).map(mapPlannedActionToVm),
+  };
+};
+
+const formatPriority = (priority?: IncidentPriority): string | undefined => {
+  if (!priority || priority === 'UNDEFINED') {
+    return undefined;
+  }
+
+  return priority
+    .toLowerCase()
+    .split('_')
+    .map((part) => part[0].toUpperCase() + part.slice(1))
+    .join(' ');
+};
+
+const formatCoordinates = (lat: number, lng: number): string => `${lat.toFixed(4)}° N, ${Math.abs(lng).toFixed(4)}° ${lng < 0 ? 'W' : 'E'}`;
+
+const mapPlannedActionToVm = (dto: PlannedActionDto): IncidentDetailPlannedActionVm => ({
+  id: dto.id,
+  title: dto.title,
+  description: dto.description,
+  statusLabel: formatPlannedActionStatus(dto.status),
+  statusTone: getPlannedActionTone(dto.status),
+  scheduledStartLabel: formatDate(dto.scheduledStart),
+  scheduledEndLabel: dto.scheduledEnd ? formatDate(dto.scheduledEnd) : undefined,
+});
+
+const formatPlannedActionStatus = (status: PlannedActionDto['status']): string =>
+  status
+    .toLowerCase()
+    .split('_')
+    .map((part) => part[0].toUpperCase() + part.slice(1))
+    .join(' ');
+
+const getPlannedActionTone = (status: PlannedActionDto['status']): string => {
+  switch (status) {
+    case 'DONE':
+      return 'is-resolved';
+    case 'CONFIRMED':
+      return 'is-progress';
+    case 'CANCELLED':
+      return 'is-rejected';
+    case 'PLANNED':
+    default:
+      return 'is-scheduled';
+  }
+};
