@@ -1,0 +1,32 @@
+<section class="incident-detail-history" aria-labelledby="incident-history-title">
+  <h2 id="incident-history-title">Incident lifecycle</h2>
+
+  @if (history().length > 0) {
+    <ol class="incident-detail-history__timeline">
+      @for (item of history(); track item.id) {
+        <li class="incident-detail-history__item">
+          <div class="incident-detail-history__dot" aria-hidden="true">
+            <i class="fa-solid fa-check"></i>
+          </div>
+          <div class="incident-detail-history__content">
+            <time>{{ item.changedAtLabel }}</time>
+            <h3>{{ item.toStatusLabel }}</h3>
+            @if (item.fromStatusLabel) {
+              <p class="incident-detail-history__transition">Changed from {{ item.fromStatusLabel }} to {{ item.toStatusLabel }}</p>
+            }
+            @if (item.reason) {
+              <p>{{ item.reason }}</p>
+            }
+            <app-status-pill
+              class="status-pill--inline status-pill--compact"
+              [statusName]="item.toStatusLabel"
+              [classStyle]="item.statusTone"
+            />
+          </div>
+        </li>
+      }
+    </ol>
+  } @else {
+    <p class="incident-detail-history__empty">No public lifecycle updates are available yet.</p>
+  }
+</section>
