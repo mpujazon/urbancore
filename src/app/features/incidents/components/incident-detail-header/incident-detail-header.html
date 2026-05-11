@@ -1,0 +1,29 @@
+<header class="incident-detail-header">
+  <button type="button" class="incident-detail-header__back" (click)="back.emit()">
+    <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+    Back to explorer
+  </button>
+
+  <div class="incident-detail-header__content">
+    <div class="incident-detail-header__copy">
+      <div class="incident-detail-header__eyebrow" aria-label="Incident metadata">
+        <span class="incident-detail-header__id">Incident #{{ incidentId() }}</span>
+        <app-status-pill
+          class="status-pill--inline status-pill--compact"
+          [statusName]="header().statusLabel"
+          [classStyle]="header().statusTone"
+        />
+      </div>
+
+      <h1>{{ header().title }}</h1>
+      <p>{{ header().categoryLabel }}</p>
+
+      <div class="incident-detail-header__dates" aria-label="Publication dates">
+        <span>Reported {{ header().createdAtLabel }}</span>
+        @if (header().updatedAtLabel) {
+          <span>Updated {{ header().updatedAtLabel }}</span>
+        }
+      </div>
+    </div>
+  </div>
+</header>
