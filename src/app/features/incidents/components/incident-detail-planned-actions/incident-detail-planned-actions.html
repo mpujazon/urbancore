@@ -1,0 +1,34 @@
+<section class="incident-detail-planned-actions" aria-labelledby="incident-planned-actions-title">
+  <h2 id="incident-planned-actions-title">Planned corrective actions</h2>
+
+  @if (plannedActions().length > 0) {
+    <ul class="incident-detail-planned-actions__list">
+      @for (action of plannedActions(); track action.id) {
+        <li class="incident-detail-planned-actions__item">
+          <div class="incident-detail-planned-actions__icon" aria-hidden="true">
+            <i class="fa-solid fa-screwdriver-wrench"></i>
+          </div>
+          <div class="incident-detail-planned-actions__content">
+            <h3>{{ action.title }}</h3>
+            <p class="incident-detail-planned-actions__date">
+              Scheduled: {{ action.scheduledStartLabel }}
+              @if (action.scheduledEndLabel) {
+                - {{ action.scheduledEndLabel }}
+              }
+            </p>
+            @if (action.description) {
+              <p>{{ action.description }}</p>
+            }
+          </div>
+          <app-status-pill
+            class="status-pill--inline status-pill--compact"
+            [statusName]="action.statusLabel"
+            [classStyle]="action.statusTone || 'is-scheduled'"
+          />
+        </li>
+      }
+    </ul>
+  } @else {
+    <p class="incident-detail-planned-actions__empty">No public planned actions have been published yet.</p>
+  }
+</section>
