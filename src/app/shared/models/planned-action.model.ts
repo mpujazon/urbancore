@@ -9,4 +9,4 @@ export interface PlannedActionDto {
   assignedToUserId?: string;
 }
 
-type PlannedActionStatus = 'PLANNED' | 'CONFIRMED' | 'DONE' | 'CANCELLED';
+export type PlannedActionStatus = 'PLANNED' | 'CONFIRMED' | 'DONE' | 'CANCELLED';
