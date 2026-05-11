@@ -1,0 +1,54 @@
+@use 'styles/variables' as *;
+
+:host { display: block; }
+
+.incident-detail-summary {
+  padding: 1.25rem;
+  border: 1px solid rgba($primary, 0.08);
+  border-radius: 1rem;
+  background: $surface-container-lowest;
+  box-shadow: 0 16px 42px rgba($on-surface, 0.06);
+}
+
+h2 {
+  margin: 0 0 1rem;
+  color: $primary;
+  font-family: $font-display;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+}
+
+.incident-detail-summary__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.incident-detail-summary__item {
+  min-width: 0;
+  padding: 0.85rem;
+  border: 1px solid rgba($primary, 0.06);
+  border-radius: 0.8rem;
+  background: linear-gradient(180deg, $surface-container-low, rgba($surface-container-low, 0.58));
+}
+
+.incident-detail-summary__item--status {
+  grid-column: 1 / -1;
+}
+
+dt {
+  margin-bottom: 0.4rem;
+  color: $neutral-variant;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+dd {
+  margin: 0;
+  color: $primary;
+  font-size: 0.9rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
