@@ -1,6 +1,6 @@
 <section class="page">
   <main class="layout">
-    <section #incidentsContainer class="panel" aria-label="Incidents list">
+    <section class="panel" aria-label="Incidents list">
       <div class="panel-header">
         <h1>Incidents explorer</h1>
         <button
@@ -52,7 +52,7 @@
           }
         </div>
       } @else {
-        <div class="incident-list">
+        <div #incidentsContainer class="incident-list">
           @for (incident of incidentCards(); track incident.id) {
             <div
               class="incident-list-card"

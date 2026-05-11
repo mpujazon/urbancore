@@ -6,7 +6,7 @@
   --line: #dfe3ef;
 
   display: block;
-  min-height: 100%;
+  min-height: 100dvh;
   overflow: visible;
   color: var(--text);
   background: radial-gradient(circle at 10% -10%, #eef2ff, var(--bg) 45%);
@@ -17,13 +17,13 @@
 }
 
 .page {
-  min-height: 100%;
+  min-height: 100dvh;
 }
 
 .layout {
   display: grid;
   grid-template-columns: 1fr;
-  min-height: 100%;
+  min-height: 100dvh;
 }
 
 .panel {
@@ -105,11 +105,13 @@
 }
 
 .incident-list {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 0.75rem;
 }
 
 .incident-list-card {
+  flex: 0 0 auto;
   cursor: pointer;
   border-radius: 1.5rem;
   overflow: hidden;
@@ -249,7 +251,8 @@
 @media (max-width: 991.98px) {
   .map-panel {
     position: fixed;
-    inset: var(--navbar-height) 0 0;
+    inset: var(--navbar-height, 72px) 0 0 0;
+    height: auto;
     z-index: 1100;
     border-top: 0;
     transform: translateY(105%);
@@ -264,6 +267,7 @@
 
   .panel {
     padding: $space-sm-md;
+    padding-bottom: calc(#{$space-sm-md} + 5rem + env(safe-area-inset-bottom, 0px));
   }
 }
 
@@ -274,29 +278,61 @@
   }
 
   :host {
-    min-height: calc(100dvh - var(--navbar-height, 72px));
+    min-height: 0;
     height: calc(100dvh - var(--navbar-height, 72px));
     max-height: calc(100dvh - var(--navbar-height, 72px));
     overflow: hidden;
   }
 
-  .page,
-  .layout {
+  .page {
     height: 100%;
+    min-height: 0;
+    overflow: hidden;
   }
 
   .layout {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
     grid-template-columns: minmax(360px, 520px) 1fr;
   }
 
   .panel {
+    min-height: 0;
     border-right: 1px solid var(--line);
-    max-height: 100%;
-    overflow: auto;
+    overflow: hidden;
     padding: $space-lg;
   }
 
+  .panel-header,
+  .filter-collapse,
+  .results-count,
+  app-pagination {
+    flex: 0 0 auto;
+  }
+
+  .incident-list {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .state-message {
+    flex: 1 1 auto;
+    min-height: 0;
+    justify-content: center;
+  }
+
+  app-pagination {
+    display: block;
+  }
+
   .map-panel {
+    height: 100%;
+    min-height: 0;
     border-top: 0;
+    overflow: hidden;
   }
 }
