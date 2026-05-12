@@ -1,0 +1,47 @@
+<section class="incident-detail-summary" aria-labelledby="incident-summary-title">
+  <h2 id="incident-summary-title">Public summary</h2>
+
+  <dl class="incident-detail-summary__grid">
+    <div class="incident-detail-summary__item incident-detail-summary__item--status">
+      <dt>Status</dt>
+      <dd>
+        <app-status-pill
+          class="status-pill--inline status-pill--compact"
+          [statusName]="summary().statusLabel"
+          [classStyle]="summary().statusTone"
+        />
+      </dd>
+    </div>
+
+    <div class="incident-detail-summary__item">
+      <dt>Category</dt>
+      <dd>{{ summary().categoryLabel }}</dd>
+    </div>
+
+    @if (summary().priorityLabel) {
+      <div class="incident-detail-summary__item">
+        <dt>Priority</dt>
+        <dd>{{ summary().priorityLabel }}</dd>
+      </div>
+    }
+
+    @if (summary().cityLabel || summary().areaLabel) {
+      <div class="incident-detail-summary__item">
+        <dt>Area</dt>
+        <dd>{{ summary().areaLabel || summary().cityLabel }}</dd>
+      </div>
+    }
+
+    <div class="incident-detail-summary__item">
+      <dt>Reported</dt>
+      <dd>{{ summary().createdAtLabel }}</dd>
+    </div>
+
+    @if (summary().updatedAtLabel) {
+      <div class="incident-detail-summary__item">
+        <dt>Updated</dt>
+        <dd>{{ summary().updatedAtLabel }}</dd>
+      </div>
+    }
+  </dl>
+</section>

@@ -40,5 +40,14 @@
         [classStyle]="incident().statusStyleClass"
       />
     }
+    <a
+      class="incident-detail-link"
+      [routerLink]="['/incidents', incident().id]"
+      (click)="$event.stopPropagation()"
+      [attr.aria-label]="'View details for ' + incident().title"
+    >
+      View details
+      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+    </a>
   </div>
 </article>

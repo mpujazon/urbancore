@@ -1,0 +1,115 @@
+@use 'styles/variables' as *;
+
+:host { display: block; }
+
+.incident-detail-gallery {
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  border: 1px solid rgba($primary, 0.08);
+  border-radius: 1rem;
+  background: linear-gradient(180deg, $surface-container-high, rgba($surface-container-high, 0.62));
+  box-shadow: 0 18px 48px rgba($on-surface, 0.05);
+}
+
+.incident-detail-gallery__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.1rem;
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.75rem;
+    padding: 0.25rem 0.65rem;
+    border-radius: $radius-full;
+    color: $secondary;
+    background: rgba($secondary-fixed, 0.72);
+    font-size: 0.8rem;
+    font-weight: 800;
+  }
+}
+
+h2 {
+  margin: 0;
+  color: $primary;
+  font-family: $font-display;
+  font-size: clamp(1.2rem, 2.3vw, 1.55rem);
+  letter-spacing: -0.025em;
+}
+
+.incident-detail-gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.incident-detail-gallery__item {
+  position: relative;
+  grid-column: span 2;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid rgba($primary, 0.08);
+  border-radius: 0.85rem;
+  background: #d9d9e3;
+  box-shadow: 0 10px 24px rgba($on-surface, 0.07);
+
+  &:first-child:nth-last-child(1) {
+    grid-column: 1 / -1;
+    aspect-ratio: 16 / 8;
+  }
+
+  &:first-child:nth-last-child(n + 2) {
+    grid-column: span 4;
+    grid-row: span 2;
+    aspect-ratio: 16 / 10;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 500ms ease;
+  }
+
+  figcaption {
+    position: absolute;
+    inset: auto 0 0;
+    padding: 2.5rem 1rem 1rem;
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 800;
+    background: linear-gradient(to top, rgba($primary, 0.72), rgba($primary, 0));
+    opacity: 1;
+    transition: opacity 200ms ease;
+  }
+
+  &:hover img { transform: scale(1.08); }
+  &:hover figcaption { opacity: 1; }
+}
+
+.incident-detail-gallery__empty {
+  display: grid;
+  place-items: center;
+  gap: 0.75rem;
+  min-height: 12rem;
+  border: 1px dashed $outline-variant;
+  border-radius: 0.85rem;
+  background: rgba($surface-container-lowest, 0.5);
+  color: $neutral-variant;
+  text-align: center;
+
+  i { font-size: 2rem; }
+  p { margin: 0; }
+}
+
+@media (max-width: 767px) {
+  .incident-detail-gallery__header { align-items: flex-start; flex-direction: column; }
+  .incident-detail-gallery__grid { grid-template-columns: 1fr; }
+  .incident-detail-gallery__item,
+  .incident-detail-gallery__item:first-child:nth-last-child(n + 2),
+  .incident-detail-gallery__item:first-child:nth-last-child(1) {
+    grid-column: auto;
+    aspect-ratio: 16 / 10;
+  }
+}

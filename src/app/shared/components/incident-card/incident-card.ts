@@ -1,10 +1,12 @@
 import {ChangeDetectionStrategy, Component, input} from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { IncidentCardVariant, IncidentCardVm } from '../../models/incident-vm.model';
 import {StatusPill} from '../status-pill/status-pill';
 
 @Component({
   selector: 'app-incident-card',
   imports: [
+    RouterLink,
     StatusPill
   ],
   templateUrl: './incident-card.html',

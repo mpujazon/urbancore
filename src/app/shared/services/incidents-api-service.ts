@@ -36,6 +36,10 @@ export class IncidentsApiService {
     );
   }
 
+  getPublicIncidentById(id: string): Observable<IncidentDto> {
+    return this.http.get<IncidentDto>(`${environment.API_BASE_URL}/incidents/${id}`);
+  }
+
   private buildHttpParams(paramsObject: Record<string, unknown>): HttpParams {
     let params = new HttpParams();
 

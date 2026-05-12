@@ -1,0 +1,23 @@
+<section class="incident-detail-page">
+  @if (resolvedIncident(); as incident) {
+    <app-incident-detail-header
+      [incidentId]="incident.id"
+      [header]="incident.header"
+      (back)="onBackToExplorer()"
+    />
+
+    <main class="incident-detail-page__layout">
+      <section class="incident-detail-page__main" aria-label="Incident details">
+        <app-incident-detail-description [description]="incident.description" />
+        <app-incident-detail-gallery [images]="incident.images" />
+        <app-incident-detail-status-history [history]="incident.statusHistory" />
+      </section>
+
+      <aside class="incident-detail-page__aside" aria-label="Incident metadata and timeline">
+        <app-incident-detail-location [location]="incident.location" />
+        <app-incident-detail-summary [summary]="incident.summary" />
+        <app-incident-detail-planned-actions [plannedActions]="incident.plannedActions" />
+      </aside>
+    </main>
+  }
+</section>

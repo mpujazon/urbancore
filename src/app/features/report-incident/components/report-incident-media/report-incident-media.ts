@@ -9,6 +9,7 @@ type MediaPreview = {
 };
 
 const MAX_FILES = 5;
+const FALLBACK_IMAGE_URL = 'https://placehold.co/400x400?text=Unavailable preview';
 
 @Component({
   selector: 'app-report-incident-media',
@@ -95,6 +96,17 @@ export class ReportIncidentMedia {
     }
 
     this.emitSelectedFiles();
+  }
+
+  protected onPreviewImageError(event: Event): void {
+    const image = event.target as HTMLImageElement | null;
+    const fallbackUrl = FALLBACK_IMAGE_URL;
+
+    if (!image || image.src === fallbackUrl) {
+      return;
+    }
+
+    image.src = fallbackUrl;
   }
 
   private emitSelectedFiles(): void {

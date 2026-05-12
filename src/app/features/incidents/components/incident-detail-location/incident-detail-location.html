@@ -1,0 +1,26 @@
+<section class="incident-detail-location" aria-labelledby="incident-location-title">
+  <div class="incident-detail-location__map" role="img" [attr.aria-label]="'Map preview near ' + (location().addressLabel || location().coordinatesLabel)">
+    <div class="incident-detail-location__grid" aria-hidden="true"></div>
+    <div class="incident-detail-location__marker" aria-hidden="true">
+      <i class="fa-solid fa-location-dot"></i>
+    </div>
+    <div class="incident-detail-location__coordinates">
+      <i class="fa-solid fa-compass" aria-hidden="true"></i>
+      <div>
+        <span>Exact coordinates</span>
+        <strong>{{ location().coordinatesLabel }}</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="incident-detail-location__body">
+    <h2 id="incident-location-title">{{ location().addressLabel || 'Public incident location' }}</h2>
+    <p>
+      @if (location().area || location().city) {
+        {{ location().area || location().city }}
+      } @else {
+        Location is available through public coordinates.
+      }
+    </p>
+  </div>
+</section>

@@ -1,0 +1,22 @@
+<section class="incident-detail-gallery" aria-labelledby="incident-gallery-title">
+  <div class="incident-detail-gallery__header">
+    <h2 id="incident-gallery-title">Evidence & documentation</h2>
+    <span>{{ images().length }} public media item{{ images().length === 1 ? '' : 's' }}</span>
+  </div>
+
+  @if (images().length > 0) {
+    <div class="incident-detail-gallery__grid">
+      @for (image of images(); track image.id) {
+        <figure class="incident-detail-gallery__item">
+          <img [src]="image.thumbnailUrl || image.url" [alt]="image.alt" loading="lazy" />
+          <figcaption>{{ image.alt }}</figcaption>
+        </figure>
+      }
+    </div>
+  } @else {
+    <div class="incident-detail-gallery__empty" role="status">
+      <i class="fa-regular fa-image" aria-hidden="true"></i>
+      <p>No public media has been attached to this incident.</p>
+    </div>
+  }
+</section>

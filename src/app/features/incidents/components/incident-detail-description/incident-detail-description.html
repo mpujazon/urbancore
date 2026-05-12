@@ -1,0 +1,8 @@
+<section class="incident-detail-description" aria-labelledby="incident-description-title">
+  <h2 id="incident-description-title">Situation overview</h2>
+  @if (description()) {
+    <p>{{ description() }}</p>
+  } @else {
+    <p class="incident-detail-description__empty">No public description is available for this incident.</p>
+  }
+</section>
