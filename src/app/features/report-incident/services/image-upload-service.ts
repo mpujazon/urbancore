@@ -35,6 +35,7 @@ export class ImageUploadService {
     formData.append('api_key', signature.apiKey);
     formData.append('timestamp', signature.timestamp.toString());
     formData.append('folder', signature.folder);
+    formData.append('format', 'webp');
     formData.append('signature', signature.signature);
 
     return this.http.post<CloudinaryUploadResponse>(
@@ -51,7 +52,7 @@ export class ImageUploadService {
       url: response.secure_url,
       thumbnailUrl: this.buildThumbnailUrl(response.secure_url),
       publicId: response.public_id,
-      mimeType: file.type,
+      mimeType: `image/${response.format}`,
       sizeKb: Math.round(response.bytes / 1024),
     };
   }
