@@ -51,7 +51,6 @@ export interface IncidentDetailSummaryVm {
   statusTone: string;
   priorityLabel?: string;
   cityLabel?: string;
-  areaLabel?: string;
   createdAtLabel: string;
   updatedAtLabel?: string;
 }
@@ -68,7 +67,6 @@ export interface IncidentDetailLocationVm {
   lng: number;
   coordinatesLabel: string;
   addressLabel?: string;
-  area?: string;
   city?: string;
 }
 

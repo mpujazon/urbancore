@@ -114,7 +114,6 @@ export const mapIncidentToDetailVm = (dto: IncidentDto): IncidentDetailVm => {
       statusTone,
       priorityLabel: formatPriority(dto.priority),
       cityLabel: dto.location?.city,
-      areaLabel: dto.location?.area,
       createdAtLabel,
       updatedAtLabel,
     },
@@ -124,7 +123,6 @@ export const mapIncidentToDetailVm = (dto: IncidentDto): IncidentDetailVm => {
       lng: dto.location.lng,
       coordinatesLabel: formatCoordinates(dto.location.lat, dto.location.lng),
       addressLabel: dto.location.addressLabel,
-      area: dto.location.area,
       city: dto.location.city,
     },
     images: (dto.images ?? []).map((image, index) => ({
