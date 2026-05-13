@@ -8,8 +8,8 @@ import { ROUTE_ROLES } from './core/routing/route-roles';
 import { Unauthorized } from './features/auth/pages/unauthorized/unauthorized';
 import { ReportIncidentPage } from './features/report-incident/pages/report-incident-page/report-incident-page';
 import { IncidentExplorerPage } from './features/incidents-explorer/pages/incident-explorer-page/incident-explorer-page';
-import { IncidentDetailPageComponent } from './features/incidents/pages/incident-detail-page/incident-detail-page';
-import { publicIncidentDetailResolver } from './features/incidents/resolvers/public-incident-detail.resolver';
+import { IncidentDetailPageComponent } from './features/incident-detail/pages/incident-detail-page/incident-detail-page';
+import { publicIncidentDetailResolver } from './features/incident-detail/resolvers/public-incident-detail.resolver';
 
 export const routes: Routes = [
   {
