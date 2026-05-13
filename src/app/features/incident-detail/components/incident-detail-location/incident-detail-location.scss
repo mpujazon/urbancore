@@ -1,0 +1,24 @@
+@use 'styles/variables' as *;
+
+:host { display: block; }
+
+.incident-detail-location {
+  overflow: hidden;
+  border: 1px solid rgba($primary, 0.08);
+  border-radius: 1rem;
+  background: $surface-container-lowest;
+  box-shadow: 0 16px 42px rgba($on-surface, 0.06);
+}
+
+.incident-detail-location__map {
+  position: relative;
+  min-height: 13.5rem;
+  overflow: hidden;
+}
+
+.incident-detail-location__body {
+  padding: 1.15rem 1.25rem 1.25rem;
+
+  h2 { margin: 0 0 0.45rem; color: $primary; font-size: 1rem; line-height: 1.3; }
+  p { margin: 0; color: $neutral-variant; font-size: 0.875rem; line-height: 1.6; }
+}
