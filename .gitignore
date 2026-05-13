@@ -39,7 +39,7 @@ testem.log
 /typings
 __screenshots__/
 /src/environments/environment.development.ts
-
+/seed/
 # System files
 .DS_Store
 Thumbs.db
