@@ -10,17 +10,21 @@ export class LeafletMapService {
     iconAnchor: [14, 28],
   });
 
-  createMap(container: HTMLElement, center: L.LatLngTuple, zoom: number): L.Map {
+  createMap(container: HTMLElement, center: L.LatLngTuple, zoom: number, readonly: boolean = false): L.Map {
     const map = L.map(container, {
       zoomControl: false,
-      attributionControl: true,
+      attributionControl: true
     }).setView(center, zoom);
 
-    L.control
-      .zoom({
-        position: 'topright',
-      })
-      .addTo(map);
+    if(readonly){
+      this.disableMapInteractions(map);
+    }else{
+      L.control
+        .zoom({
+          position: 'topright',
+        })
+        .addTo(map);
+    }
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -28,6 +32,19 @@ export class LeafletMapService {
     }).addTo(map);
 
     return map;
+  }
+
+  disableMapInteractions(map: L.Map): void {
+    map.dragging.disable();
+    map.scrollWheelZoom.disable();
+    map.doubleClickZoom.disable();
+    map.touchZoom.disable();
+    map.keyboard.disable();
+    map.boxZoom.disable();
+
+    if (map.tapHold) {
+      map.tapHold.disable();
+    }
   }
 
   setView(map: L.Map, center: L.LatLngTuple, zoom: number = 17): void {
