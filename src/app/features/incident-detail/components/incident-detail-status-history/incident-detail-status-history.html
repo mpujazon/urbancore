@@ -11,7 +11,9 @@
           <div class="incident-detail-history__content">
             <time>{{ item.changedAtLabel }}</time>
             <h3>{{ item.toStatusLabel }}</h3>
-            @if (item.fromStatusLabel) {
+            @if (item.fromStatusLabel === undefined) {
+              <p class="incident-detail-history__transition">Incident reported</p>
+            } @else {
               <p class="incident-detail-history__transition">Changed from {{ item.fromStatusLabel }} to {{ item.toStatusLabel }}</p>
             }
             @if (item.reason) {
