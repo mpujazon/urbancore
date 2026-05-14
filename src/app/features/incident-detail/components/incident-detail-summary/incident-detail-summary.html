@@ -23,12 +23,15 @@
       <dd>{{ summary().categoryLabel }}</dd>
     </div>
 
-    @if (summary().priorityLabel) {
-      <div class="incident-detail-summary__item">
-        <dt>Priority</dt>
+
+    <div class="incident-detail-summary__item">
+      <dt>Priority</dt>
+      @if (summary().priorityLabel) {
         <dd>{{ summary().priorityLabel }}</dd>
-      </div>
-    }
+      }@else{
+        <dd>To be assigned</dd>
+      }
+    </div>
 
     @if (summary().updatedAtLabel) {
       <div class="incident-detail-summary__item incident-detail-summary__item--update-date">
