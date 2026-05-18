@@ -151,6 +151,14 @@ export class IncidentDetailPageComponent {
       })
       .pipe(
         switchMap(() => {
+          return this.incidentsApi.updateIncidentStatus(incidentId, 'PLANNED').pipe(
+            catchError(() => {
+              this.toast.showError('Planned action was created, but incident status could not be changed to Planned.');
+              return of(null);
+            }),
+          );
+        }),
+        switchMap(() => {
           this.toast.showSuccess('Planned action created successfully.');
           return this.incidentsApi.getPublicIncidentById(incidentId).pipe(
             catchError(() => {
