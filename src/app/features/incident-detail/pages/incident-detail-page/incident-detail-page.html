@@ -4,7 +4,7 @@
       [incidentId]="incident.id"
       [header]="incident.header"
       (back)="onBackToExplorer()"
-    />
+    />N
 
     <main class="incident-detail-page__layout">
       <section class="incident-detail-page__main" aria-label="Incident details">
@@ -19,5 +19,16 @@
         <app-incident-detail-planned-actions [plannedActions]="incident.plannedActions" />
       </aside>
     </main>
+
+    @if (canManageIncident() || canDeleteIncident()) {
+      <app-incident-detail-controls
+        [canManage]="canManageIncident()"
+        [canDelete]="canDeleteIncident()"
+        (incidentDelete)="onDeleteIncident()"
+        (statusUpdate)="onUpdateIncidentStatus($event)"
+        (priorityUpdate)="onUpdateIncidentPriority($event)"
+        (plannedActionCreate)="onCreatePlannedAction($event)"
+      />
+    }
   }
 </section>
