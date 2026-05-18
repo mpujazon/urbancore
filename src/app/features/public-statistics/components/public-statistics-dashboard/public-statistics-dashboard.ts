@@ -18,99 +18,19 @@ import type {
   PublicStatisticsDashboardData,
 } from '../../models/public-statistics-dashboard.model';
 import {
-  CATEGORY_TONES,
   CHART_COLORS,
   DEFAULT_DASHBOARD_STATE,
   EMPTY_INCIDENT_SUMMARY,
-  FALLBACK_STATUS_COLOR,
   INCIDENT_SUMMARY_ENDPOINT,
-  STATUS_COLORS,
-} from '../../models/public-statistics-dashboard.config';
+} from '../../config/public-statistics-dashboard.config';
+import {
+  formatPublicStatisticsDate,
+  formatPublicStatisticsLabel,
+  getPublicStatisticsStatusColor,
+  mapIncidentSummaryToDashboardData,
+} from '../../mappers/public-statistics-dashboard.mapper';
 
 Chart.register(...registerables);
-
-function formatNumber(value: number): string {
-  return new Intl.NumberFormat('en-US').format(value);
-}
-
-function formatLabel(value: string): string {
-  return value
-    .toLowerCase()
-    .split('_')
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ');
-}
-
-function formatDate(value: string): string {
-  return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(new Date(value));
-}
-
-function buildDashboardData(summary: IncidentSummaryResponse): PublicStatisticsDashboardData {
-  const resolvedRate = summary.totalIncidents
-    ? Math.round((summary.resolvedIncidents / summary.totalIncidents) * 100)
-    : 0;
-  const openRate = summary.totalIncidents
-    ? Math.round((summary.openIncidents / summary.totalIncidents) * 100)
-    : 0;
-
-  return {
-    kpis: [
-      {
-        id: 'total-reports',
-        label: 'Total Reports',
-        value: formatNumber(summary.totalIncidents),
-        badge: `${summary.trend.length} days tracked`,
-        icon: 'fa-chart-line',
-        tone: 'positive',
-      },
-      {
-        id: 'issues-resolved',
-        label: 'Issues Resolved',
-        value: formatNumber(summary.resolvedIncidents),
-        badge: `${resolvedRate}% · ${summary.averageResolutionDays}d avg`,
-        icon: 'fa-circle-check',
-        tone: 'positive',
-      },
-      {
-        id: 'open-incidents',
-        label: 'Open Incidents',
-        value: formatNumber(summary.openIncidents),
-        badge: `${openRate}% Open`,
-        icon: 'fa-triangle-exclamation',
-        tone: 'warning',
-      },
-      {
-        id: 'active-planning',
-        label: 'Active Planning',
-        value: formatNumber(summary.plannedIncidents),
-        badge: 'Projects',
-        tone: 'neutral',
-      },
-    ],
-    statusMetrics: summary.byStatus.map((status) => ({
-      id: status.status.toLowerCase(),
-      label: formatLabel(status.status),
-      value: summary.totalIncidents ? Math.round((status.count / summary.totalIncidents) * 100) : 0,
-      count: status.count,
-      color: STATUS_COLORS[status.status] ?? FALLBACK_STATUS_COLOR,
-    })),
-    categoryMetrics: summary.byCategory
-      .slice()
-      .sort((a, b) => b.count - a.count)
-      .map((category) => ({
-        id: category.category.toLowerCase(),
-        label: formatLabel(category.category),
-        total: formatNumber(category.count),
-        tone: CATEGORY_TONES[category.category] ?? 'neutral',
-      })),
-    areaMetrics: summary.byArea.map((area) => ({
-      id: area.area.toLowerCase().replaceAll(' ', '-'),
-      label: area.area,
-      total: formatNumber(area.count),
-    })),
-    summary,
-  };
-}
 
 @Component({
   selector: 'app-public-statistics-dashboard',
@@ -128,7 +48,7 @@ export class PublicStatisticsDashboard {
 
   protected readonly dashboardState = signal(DEFAULT_DASHBOARD_STATE);
 
-  protected readonly dashboardData = computed(() => buildDashboardData(this.dashboardState().data));
+  protected readonly dashboardData = computed(() => mapIncidentSummaryToDashboardData(this.dashboardState().data));
   protected readonly isLoading = computed(() => this.dashboardState().status === 'loading');
   protected readonly isError = computed(() => this.dashboardState().status === 'error');
   protected readonly errorMessage = computed(
@@ -190,7 +110,7 @@ export class PublicStatisticsDashboard {
     this.trendChart = this.upsertChart(this.trendChart, trendCanvas, {
       type: 'line',
       data: {
-        labels: summary.trend.map((point) => formatDate(point.date)),
+        labels: summary.trend.map((point) => formatPublicStatisticsDate(point.date)),
         datasets: [
           {
             label: 'Reports',
@@ -212,11 +132,11 @@ export class PublicStatisticsDashboard {
     this.statusChart = this.upsertChart(this.statusChart, statusCanvas, {
       type: 'doughnut',
       data: {
-        labels: summary.byStatus.map((status) => formatLabel(status.status)),
+        labels: summary.byStatus.map((status) => formatPublicStatisticsLabel(status.status)),
         datasets: [
           {
             data: summary.byStatus.map((status) => status.count),
-            backgroundColor: summary.byStatus.map((status) => STATUS_COLORS[status.status] ?? FALLBACK_STATUS_COLOR),
+            backgroundColor: summary.byStatus.map((status) => getPublicStatisticsStatusColor(status.status)),
             borderColor: CHART_COLORS.statusBorder,
             borderWidth: 5,
             hoverOffset: 10,
@@ -232,7 +152,7 @@ export class PublicStatisticsDashboard {
     this.categoryChart = this.upsertChart(this.categoryChart, categoryCanvas, {
       type: 'bar',
       data: {
-        labels: summary.byCategory.map((category) => formatLabel(category.category)),
+        labels: summary.byCategory.map((category) => formatPublicStatisticsLabel(category.category)),
         datasets: [
           {
             label: 'Reports',

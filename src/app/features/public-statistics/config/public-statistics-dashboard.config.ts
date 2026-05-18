@@ -1,5 +1,5 @@
 import type { ResourceState } from '../../../shared/models/resource-state.model';
-import type { CategoryTone, IncidentSummaryResponse } from './public-statistics-dashboard.model';
+import type { CategoryTone, IncidentSummaryResponse } from '../models/public-statistics-dashboard.model';
 
 export const INCIDENT_SUMMARY_ENDPOINT = '/stats/incidents/summary';
 
