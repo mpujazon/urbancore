@@ -46,6 +46,13 @@ export const routes: Routes = [
     },
   },
   {
+    path:'stats',
+    loadComponent: () =>
+      import('./features/public-statistics/components/public-statistics-dashboard/public-statistics-dashboard').then(
+        (component) => component.PublicStatisticsDashboard
+      ),
+  },
+  {
     path: 'unauthorized',
     component: Unauthorized,
   },

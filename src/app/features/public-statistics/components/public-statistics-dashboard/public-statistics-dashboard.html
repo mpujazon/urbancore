@@ -1,0 +1,150 @@
+<main class="public-statistics" aria-labelledby="public-statistics-title">
+  <div class="public-statistics__shell">
+    <section class="public-statistics__hero" aria-label="Public statistics summary">
+      <div class="public-statistics__heading">
+        <span class="public-statistics__eyebrow">UrbanCore Metrics</span>
+        <h1 id="public-statistics-title">Public Statistics Dashboard</h1>
+        <p>Real-time transparency metrics for city operations.</p>
+      </div>
+
+    </section>
+
+    @if (isLoading()) {
+      <section class="dashboard-state dashboard-state--loading" aria-label="Loading public statistics">
+        <div class="dashboard-state__header">
+          <span class="dashboard-state__pulse" aria-hidden="true"></span>
+          <div>
+            <h2>Loading public statistics</h2>
+            <p>Preparing the latest city operations snapshot.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-skeleton" aria-hidden="true">
+          @for (_ of dashboardData().kpis; track $index) {
+            <span class="dashboard-skeleton__card"></span>
+          }
+          <span class="dashboard-skeleton__chart"></span>
+          <span class="dashboard-skeleton__stack"></span>
+        </div>
+      </section>
+    } @else if (isError()) {
+      <section class="dashboard-state dashboard-state--error" aria-live="polite">
+        <div class="dashboard-state__icon" aria-hidden="true">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <div>
+          <h2>Statistics unavailable</h2>
+          <p>{{ errorMessage() }}</p>
+        </div>
+        <button class="dashboard-state__button" type="button" (click)="retry()">Try again</button>
+      </section>
+    } @else {
+      <section class="kpi-grid" aria-label="Key performance indicators">
+      @for (kpi of dashboardData().kpis; track kpi.id) {
+        <article class="kpi-card" [class]="'kpi-card kpi-card--' + kpi.tone">
+          <h2>{{ kpi.label }}</h2>
+          <div class="kpi-card__value-row">
+            <p class="kpi-card__value">
+              {{ kpi.value }}
+            </p>
+            <span class="kpi-card__badge">
+              @if (kpi.icon) {
+                <i class="fa-solid" [class]="'fa-solid ' + kpi.icon" aria-hidden="true"></i>
+              }
+              {{ kpi.badge }}
+            </span>
+          </div>
+        </article>
+      }
+      </section>
+
+      <section class="analytics-grid" aria-label="Statistics charts and rankings">
+        <article class="status-panel" aria-labelledby="status-title">
+          <div class="status-panel__copy">
+            <span class="panel-header__label">Operational mix</span>
+            <h2 id="status-title">Status Distribution</h2>
+            <p>
+              A live read of where every report sits in the civic workflow, from first review to
+              planned action and resolution.
+            </p>
+          </div>
+
+          <div class="status-panel__chart">
+            <canvas #statusChart aria-label="Incident status distribution" role="img"></canvas>
+          </div>
+
+          <div class="status-list">
+            @for (status of dashboardData().statusMetrics; track status.id) {
+              <div class="status-list__item">
+                <div class="status-list__row">
+                  <span>{{ status.label }}</span>
+                  <strong>{{ status.count }} · {{ status.value }}%</strong>
+                </div>
+                <div class="status-list__track" [attr.aria-label]="status.label + ' ' + status.value + '%'">
+                  <span
+                    class="status-list__bar"
+                    [style.background-color]="status.color"
+                    [style.width.%]="status.value"
+                  ></span>
+                </div>
+              </div>
+            }
+          </div>
+        </article>
+
+        <article class="report-chart" aria-labelledby="reports-chart-title">
+          <header class="panel-header">
+            <div>
+              <span class="panel-header__label">Volume trend</span>
+              <h2 id="reports-chart-title">Reports over Time</h2>
+            </div>
+          </header>
+
+          <div class="report-chart__canvas">
+            <canvas #trendChart aria-label="Incidents reported over time" role="img"></canvas>
+          </div>
+
+          <p class="sr-only">Line chart showing daily incident report volume from the incidents summary endpoint.</p>
+        </article>
+
+        <article class="category-panel" aria-labelledby="category-title">
+          <header class="panel-header panel-header--compact">
+            <div>
+              <span class="panel-header__label">Most reported</span>
+              <h2 id="category-title">Category Load</h2>
+            </div>
+          </header>
+
+          <div class="category-panel__chart">
+            <canvas #categoryChart aria-label="Incidents by category" role="img"></canvas>
+          </div>
+
+          <ul class="category-list" aria-label="Top incident categories">
+            @for (category of dashboardData().categoryMetrics; track category.id) {
+              <li class="category-list__item">
+                <span class="category-list__name">
+                  <span
+                    class="category-list__dot"
+                    [class]="'category-list__dot category-list__dot--' + category.tone"
+                    aria-hidden="true"
+                  ></span>
+                  {{ category.label }}
+                </span>
+                <strong>{{ category.total }}</strong>
+              </li>
+            }
+          </ul>
+
+          <ul class="area-list" aria-label="Incidents by area">
+            @for (area of dashboardData().areaMetrics; track area.id) {
+              <li class="area-list__item">
+                <span>{{ area.label }}</span>
+                <strong>{{ area.total }}</strong>
+              </li>
+            }
+          </ul>
+        </article>
+      </section>
+    }
+  </div>
+</main>
