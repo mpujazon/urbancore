@@ -10,3 +10,12 @@ export interface PlannedActionDto {
 }
 
 export type PlannedActionStatus = 'PLANNED' | 'CONFIRMED' | 'DONE' | 'CANCELLED';
+
+export interface CreatePlannedActionRequest {
+  incidentId: string;
+  title: string;
+  description?: string;
+  scheduledStart: string;
+  scheduledEnd?: string;
+  assignedToUserId?: number;
+}

@@ -27,6 +27,9 @@ export interface IncidentExplorerFilters {
 
 export interface IncidentDetailVm {
   id: string;
+  rawId: string;
+  status: IncidentStatus;
+  reporterId?: string;
   header: IncidentDetailHeaderVm;
   summary: IncidentDetailSummaryVm;
   description: string;
@@ -51,7 +54,6 @@ export interface IncidentDetailSummaryVm {
   statusTone: string;
   priorityLabel?: string;
   cityLabel?: string;
-  areaLabel?: string;
   createdAtLabel: string;
   updatedAtLabel?: string;
 }
@@ -68,7 +70,6 @@ export interface IncidentDetailLocationVm {
   lng: number;
   coordinatesLabel: string;
   addressLabel?: string;
-  area?: string;
   city?: string;
 }
 

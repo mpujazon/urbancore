@@ -43,7 +43,6 @@ export interface IncidentLocationDto {
   lat: number;
   lng: number;
   addressLabel?: string;
-  area?: string;
   city?: string;
   geohash: string;
 }

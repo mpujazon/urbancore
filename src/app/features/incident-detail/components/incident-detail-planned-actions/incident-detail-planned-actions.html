@@ -12,9 +12,6 @@
             <h3>{{ action.title }}</h3>
             <p class="incident-detail-planned-actions__date">
               Scheduled: {{ action.scheduledStartLabel }}
-              @if (action.scheduledEndLabel) {
-                - {{ action.scheduledEndLabel }}
-              }
             </p>
             @if (action.description) {
               <p>{{ action.description }}</p>

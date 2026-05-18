@@ -99,7 +99,10 @@ export const mapIncidentToDetailVm = (dto: IncidentDto): IncidentDetailVm => {
   const categoryLabel = formatCategory(dto.category);
 
   return {
-    id: dto.id,
+    id: `INC-${dto.id}`,
+    rawId: dto.id,
+    status: dto.status,
+    reporterId: dto.reporter?.id,
     header: {
       title: dto.title,
       categoryLabel,
@@ -114,7 +117,6 @@ export const mapIncidentToDetailVm = (dto: IncidentDto): IncidentDetailVm => {
       statusTone,
       priorityLabel: formatPriority(dto.priority),
       cityLabel: dto.location?.city,
-      areaLabel: dto.location?.area,
       createdAtLabel,
       updatedAtLabel,
     },
@@ -124,7 +126,6 @@ export const mapIncidentToDetailVm = (dto: IncidentDto): IncidentDetailVm => {
       lng: dto.location.lng,
       coordinatesLabel: formatCoordinates(dto.location.lat, dto.location.lng),
       addressLabel: dto.location.addressLabel,
-      area: dto.location.area,
       city: dto.location.city,
     },
     images: (dto.images ?? []).map((image, index) => ({

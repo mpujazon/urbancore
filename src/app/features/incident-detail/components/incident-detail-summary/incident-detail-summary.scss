@@ -32,10 +32,9 @@ h2 {
   background: linear-gradient(180deg, $surface-container-low, rgba($surface-container-low, 0.58));
 }
 
-.incident-detail-summary__item--status {
+.incident-detail-summary__item--update-date {
   grid-column: 1 / -1;
 }
-
 dt {
   margin-bottom: 0.4rem;
   color: $neutral-variant;

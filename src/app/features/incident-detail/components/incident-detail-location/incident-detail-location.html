@@ -1,0 +1,12 @@
+<section class="incident-detail-location" aria-labelledby="incident-location-title">
+  <div #mapContainer class="incident-detail-location__map" [attr.aria-label]="'Map preview near ' + (location().addressLabel || location().coordinatesLabel)">
+  </div>
+
+  <div class="incident-detail-location__body">
+    <h2 id="incident-location-title">{{ location().addressLabel || 'Public incident location' }}</h2>
+    <p>
+      @if (location().city) {
+        {{location().city }}
+      }
+  </div>
+</section>

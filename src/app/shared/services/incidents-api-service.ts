@@ -6,9 +6,13 @@ import type {
   IncidentDto,
   IncidentExplorerQuery,
   IncidentListItemDto,
+  IncidentPriority,
+  IncidentStatus,
 } from '../models/incident-dto.model';
 import type { PagedResponseDto } from '../models/paged-response.model';
 import type { CreateIncidentRequest } from '../../features/report-incident/models/incident-report.models';
+import {CreatePlannedActionRequest} from '../models/planned-action.model';
+
 
 @Injectable({
   providedIn: 'root',
@@ -38,6 +42,22 @@ export class IncidentsApiService {
 
   getPublicIncidentById(id: string): Observable<IncidentDto> {
     return this.http.get<IncidentDto>(`${environment.API_BASE_URL}/incidents/${id}`);
+  }
+
+  updateIncidentStatus(id: string, status: IncidentStatus): Observable<IncidentDto> {
+    return this.http.patch<IncidentDto>(`${environment.API_BASE_URL}/incidents/${id}/status`, { status });
+  }
+
+  updateIncidentPriority(id: string, priority: IncidentPriority): Observable<IncidentDto> {
+    return this.http.patch<IncidentDto>(`${environment.API_BASE_URL}/incidents/${id}/priority`, { priority });
+  }
+
+  createPlannedAction(request: CreatePlannedActionRequest): Observable<IncidentDto> {
+    return this.http.post<IncidentDto>(`${environment.API_BASE_URL}/planned-actions`, request);
+  }
+
+  deleteIncident(id: string): Observable<void> {
+    return this.http.delete<void>(`${environment.API_BASE_URL}/incidents/${id}`);
   }
 
   private buildHttpParams(paramsObject: Record<string, unknown>): HttpParams {
