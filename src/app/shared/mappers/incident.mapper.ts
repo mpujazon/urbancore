@@ -99,7 +99,7 @@ export const mapIncidentToDetailVm = (dto: IncidentDto): IncidentDetailVm => {
   const categoryLabel = formatCategory(dto.category);
 
   return {
-    id: `INC-${dto.id.slice(-4)}`,
+    id: `INC-${dto.id}`,
     header: {
       title: dto.title,
       categoryLabel,
