@@ -25,7 +25,13 @@
 
     @for (preview of previews(); track preview.id) {
       <div class="preview-card">
-        <img [src]="preview.url" [alt]="preview.file.name" width="360" height="360" />
+        <img
+          [src]="preview.url"
+          [alt]="preview.file.name"
+          width="360"
+          height="360"
+          (error)="onPreviewImageError($event)"
+        />
         <button
           class="remove-media"
           type="button"

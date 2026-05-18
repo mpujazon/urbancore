@@ -1,0 +1,98 @@
+<section class="incident-detail-controls" aria-labelledby="incident-controls-title">
+  <header class="incident-detail-controls__header">
+    <h2 id="incident-controls-title">Operational controls</h2>
+    @if (canManage()) {
+      <p>Quick admin actions for this incident.</p>
+    } @else {
+      <p>Available actions for your incident.</p>
+    }
+  </header>
+
+  @if (canManage()) {
+    <div class="incident-detail-controls__quick-actions" aria-label="Quick incident actions">
+      <article class="incident-detail-controls__panel incident-detail-controls__panel--inline" aria-label="Update status">
+        <h3>Status</h3>
+        <form class="incident-detail-controls__row-form" [formGroup]="statusForm" (ngSubmit)="onUpdateStatus()">
+          <label for="incident-status">Update</label>
+          <select id="incident-status" formControlName="status" aria-label="Incident status">
+            @for (option of statusOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+          <button type="submit">Apply</button>
+        </form>
+      </article>
+
+      <article class="incident-detail-controls__panel incident-detail-controls__panel--inline" aria-label="Update priority">
+        <h3>Priority</h3>
+        <form class="incident-detail-controls__row-form" [formGroup]="priorityForm" (ngSubmit)="onUpdatePriority()">
+          <label for="incident-priority">Update</label>
+          <select id="incident-priority" formControlName="priority" aria-label="Incident priority">
+            @for (option of priorityOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+          <button type="submit">Apply</button>
+        </form>
+      </article>
+    </div>
+
+    <article class="incident-detail-controls__panel" aria-label="Create planned action">
+      <h3>Planned action</h3>
+      <form class="incident-detail-controls__planned-form" [formGroup]="plannedActionForm" (ngSubmit)="onCreatePlannedAction()">
+        <div class="incident-detail-controls__planned-title-field">
+          <label for="planned-action-title">Title</label>
+          <input
+            id="planned-action-title"
+            type="text"
+            formControlName="title"
+            placeholder="Repair and quality check"
+          />
+        </div>
+
+        <div class="incident-detail-controls__date-time-row">
+          <div class="incident-detail-controls__date-time-field">
+            <label for="planned-action-start">Start</label>
+            <input
+              id="planned-action-start"
+              type="datetime-local"
+              formControlName="scheduledStart"
+              [min]="minScheduledStart"
+            />
+          </div>
+
+          <div class="incident-detail-controls__date-time-field">
+            <label for="planned-action-end">End</label>
+            <input
+              id="planned-action-end"
+              type="datetime-local"
+              formControlName="scheduledEnd"
+              [min]="plannedActionForm.controls.scheduledStart.value"
+            />
+          </div>
+        </div>
+
+        @if (hasPlannedActionStartPastError()) {
+          <p class="incident-detail-controls__error" role="alert">Start date/time cannot be in the past.</p>
+        }
+
+        @if (hasPlannedActionDateError()) {
+          <p class="incident-detail-controls__error" role="alert">End date/time must be after start date/time.</p>
+        }
+
+        <label class="incident-detail-controls__planned-description" for="planned-action-description">Description</label>
+        <textarea id="planned-action-description" rows="2" formControlName="description"></textarea>
+
+        <button type="submit" [disabled]="plannedActionForm.invalid">Create action</button>
+      </form>
+    </article>
+  }
+
+  @if (canDelete()) {
+    <article class="incident-detail-controls__panel incident-detail-controls__panel--danger" aria-label="Delete incident">
+      <h3>Delete incident</h3>
+      <p>This action permanently removes this incident and its planned actions.</p>
+      <button type="button" (click)="onDeleteIncident()">Delete incident</button>
+    </article>
+  }
+</section>

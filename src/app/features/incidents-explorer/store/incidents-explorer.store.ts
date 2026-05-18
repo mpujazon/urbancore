@@ -143,7 +143,6 @@ export class IncidentsExplorerStore {
 
   scrollIncidentsContainerToTop(): void {
     if (!this.incidentsContainer) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 

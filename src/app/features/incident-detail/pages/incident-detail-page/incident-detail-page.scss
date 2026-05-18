@@ -1,0 +1,119 @@
+@use 'styles/variables' as *;
+
+:host {
+  display: block;
+  color: $on-surface;
+  background:
+    radial-gradient(circle at 12% -6%, rgba($secondary-fixed, 0.95) 0, rgba($secondary-fixed, 0) 30rem),
+    linear-gradient(180deg, rgba($surface-container-lowest, 0.9), rgba($surface-container-low, 0.55) 42rem),
+    $surface;
+}
+
+.incident-detail-page {
+  min-height: 100%;
+  padding-bottom: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.incident-detail-page__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(19rem, 22.5rem);
+  align-items: start;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  width: min(100% - 2rem, 76rem);
+  margin: 0 auto;
+  padding: 0 0 clamp(1rem, 3vw, 2rem);
+}
+
+.incident-detail-page__main,
+.incident-detail-page__aside {
+  display: grid;
+  align-content: start;
+  gap: 1.5rem;
+}
+
+.incident-detail-page__aside {
+  position: sticky;
+  top: calc(var(--navbar-height, 72px) + 1.25rem);
+}
+
+.incident-detail-page__state {
+  display: grid;
+  place-items: center;
+  gap: 1rem;
+  width: min(100% - 2rem, 40rem);
+  min-height: 70dvh;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.incident-detail-page__state-icon {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 999px;
+  color: $secondary;
+  background: $secondary-fixed;
+  font-size: 1.5rem;
+}
+
+.incident-detail-page__state h1 {
+  margin: 0;
+  color: $primary;
+  font-family: $font-display;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+}
+
+.incident-detail-page__state p {
+  max-width: 32rem;
+  margin: 0;
+  color: $neutral-variant;
+  line-height: 1.7;
+}
+
+.incident-detail-page__state-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.incident-detail-page__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0 1.25rem;
+  border: 1px solid $outline-variant;
+  border-radius: $radius-lg;
+  color: $primary;
+  background: $surface-container-lowest;
+  font-weight: 800;
+  cursor: pointer;
+  transition: $transition-hover;
+
+  &:hover { transform: translateY(-1px); box-shadow: $shadow-md; }
+  &:focus-visible { outline: 3px solid rgba($secondary, 0.35); outline-offset: 3px; }
+}
+
+.incident-detail-page__button--primary {
+  border-color: $primary;
+  color: $on-primary;
+  background: $primary;
+}
+
+@media (max-width: 1023px) {
+  .incident-detail-page__layout { grid-template-columns: 1fr; }
+  .incident-detail-page__aside {
+    position: static;
+    order: initial;
+  }
+}
+
+@media (max-width: 767px) {
+  .incident-detail-page__layout {
+    width: min(100% - 1rem, 76rem);
+    gap: 1rem;
+  }
+}

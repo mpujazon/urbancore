@@ -1,0 +1,110 @@
+@use 'styles/variables' as *;
+
+:host { display: block; }
+
+.incident-detail-history {
+  padding: clamp(1.35rem, 3vw, 2rem);
+  border: 1px solid rgba(#ffffff, 0.08);
+  border-radius: 1rem;
+  color: #d6e3ff;
+  background:
+    radial-gradient(circle at 92% 6%, rgba($secondary, 0.22), transparent 16rem),
+    linear-gradient(145deg, $primary-container, #061d3b);
+  box-shadow: 0 20px 56px rgba($primary-container, 0.18);
+}
+
+h2 {
+  margin: 0 0 1.5rem;
+  color: #ffffff;
+  font-family: $font-display;
+  font-size: clamp(1.2rem, 2.4vw, 1.55rem);
+  letter-spacing: -0.02em;
+}
+
+.incident-detail-history__timeline {
+  position: relative;
+  display: grid;
+  gap: 1.35rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    left: 0.68rem;
+    width: 2px;
+    background: rgba(#ffffff, 0.2);
+  }
+}
+
+.incident-detail-history__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.incident-detail-history__content {
+  padding: 0 0 1.15rem;
+  border-bottom: 1px solid rgba(#ffffff, 0.1);
+}
+
+.incident-detail-history__item:last-child .incident-detail-history__content {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.incident-detail-history__dot {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  color: #ffffff;
+  background: $on-tertiary-container;
+  font-size: 0.75rem;
+}
+
+time {
+  display: block;
+  color: rgba(#d6e3ff, 0.72);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h3 {
+  margin: 0.18rem 0 0.45rem;
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+p {
+  margin: 0 0 0.65rem;
+  color: rgba(#ffffff, 0.78);
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+
+.incident-detail-history__transition {
+  display: inline-flex;
+  max-width: 100%;
+  padding: 0.35rem 0.55rem;
+  border-radius: $radius-md;
+  color: rgba(#d6e3ff, 0.92);
+  background: rgba(#ffffff, 0.08);
+}
+
+.incident-detail-history__empty {
+  margin: 0;
+  padding: 1rem;
+  border: 1px dashed rgba(#ffffff, 0.2);
+  border-radius: 0.75rem;
+  color: rgba(#ffffff, 0.78);
+}

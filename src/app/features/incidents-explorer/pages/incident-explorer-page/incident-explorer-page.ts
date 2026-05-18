@@ -45,8 +45,10 @@ export class IncidentExplorerPage implements AfterViewInit, OnDestroy {
   @ViewChild('mapContainer', { static: true })
   private mapContainer?: ElementRef<HTMLElement>;
 
-  @ViewChild('incidentsContainer', { static: true })
-  private incidentsContainer?: ElementRef<HTMLElement>;
+  @ViewChild('incidentsContainer')
+  private set incidentsContainer(container: ElementRef<HTMLElement> | undefined) {
+    this.store.setIncidentsContainer(container?.nativeElement ?? null);
+  }
 
   private readonly defaultCenter: L.LatLngTuple = [41.3874, 2.1686];
   private readonly defaultZoom = 13;
@@ -103,8 +105,6 @@ export class IncidentExplorerPage implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.store.setIncidentsContainer(this.incidentsContainer?.nativeElement ?? null);
-
     if (!this.mapContainer) return;
 
     this.mapFacade.setMap(
