@@ -31,7 +31,6 @@ const INITIAL_PRIORITY: IncidentPriority = 'MEDIUM';
 
 const STATUS_OPTIONS: SelectOption<IncidentStatus>[] = [
   { value: 'UNDER_REVIEW', label: 'Under Review' },
-  { value: 'PLANNED', label: 'Planned' },
   { value: 'IN_PROGRESS', label: 'In Progress' },
   { value: 'RESOLVED', label: 'Resolved' },
   { value: 'REJECTED', label: 'Rejected' },
