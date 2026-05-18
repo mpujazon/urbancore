@@ -1,23 +1,15 @@
-export type UserRole = 'CITIZEN' | 'ADMIN';
+import type { IncidentStatus } from '../../shared/models/incident-dto.model';
+import type { UserRole } from '../../shared/models/user-dto.model';
 
 export interface CurrentUser {
   id: string;
   role: UserRole;
-  cityId: string;
+  cityId?: string;
 }
 
 export interface IncidentPermissionContext {
   id: string;
   reporterId?: string;
-  cityId: string;
+  cityId?: string;
   status: IncidentStatus;
 }
-
-export type IncidentStatus =
-  | 'NEW'
-  | 'UNDER_REVIEW'
-  | 'PLANNED'
-  | 'IN_PROGRESS'
-  | 'RESOLVED'
-  | 'REJECTED'
-  | 'CANCELLED';
