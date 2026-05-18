@@ -7,15 +7,6 @@
         <p>Real-time transparency metrics for city operations.</p>
       </div>
 
-      <div class="public-statistics__filters" aria-label="Dashboard filters">
-        @for (filter of dashboardData().filters; track filter.id) {
-          <button class="public-statistics__filter" type="button" [attr.aria-label]="filter.label + ' filter'">
-            <i class="fa-solid" [class]="'fa-solid ' + filter.icon" aria-hidden="true"></i>
-            <span>{{ filter.label }}</span>
-            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-          </button>
-        }
-      </div>
     </section>
 
     @if (isLoading()) {
@@ -55,9 +46,6 @@
           <div class="kpi-card__value-row">
             <p class="kpi-card__value">
               {{ kpi.value }}
-              @if (kpi.unit) {
-                <span>{{ kpi.unit }}</span>
-              }
             </p>
             <span class="kpi-card__badge">
               @if (kpi.icon) {
@@ -71,82 +59,31 @@
       </section>
 
       <section class="analytics-grid" aria-label="Statistics charts and rankings">
-      <article class="report-chart" aria-labelledby="reports-chart-title">
-        <header class="panel-header">
-          <div>
-            <span class="panel-header__label">Volume trend</span>
-            <h2 id="reports-chart-title">Reports over Time</h2>
-          </div>
-          <button class="panel-header__action" type="button" aria-label="Open report chart options">
-            <i class="fa-solid fa-ellipsis" aria-hidden="true"></i>
-          </button>
-        </header>
-
-        <div class="report-chart__canvas" aria-hidden="true">
-          <div class="report-chart__y-axis">
-            @for (label of dashboardData().yAxisLabels; track label) {
-              <span>{{ label }}</span>
-            }
-          </div>
-
-          <div class="report-chart__plot">
-            <div class="report-chart__grid">
-              @for (_ of gridLines; track $index) {
-                <span></span>
-              }
-            </div>
-            <svg preserveAspectRatio="none" viewBox="0 0 100 100" role="img">
-              <defs>
-                <linearGradient id="publicStatisticsChartGradient" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0%" stop-color="#002855" stop-opacity="0.24" />
-                  <stop offset="62%" stop-color="#0052cc" stop-opacity="0.09" />
-                  <stop offset="100%" stop-color="#002855" stop-opacity="0" />
-                </linearGradient>
-              </defs>
-              <path
-                d="M0,80 C10,70 20,90 30,60 C40,30 50,50 60,40 C70,30 80,60 90,20 L100,10 L100,100 L0,100 Z"
-                fill="url(#publicStatisticsChartGradient)"
-              />
-              <path
-                d="M0,80 C10,70 20,90 30,60 C40,30 50,50 60,40 C70,30 80,60 90,20 L100,10"
-                fill="none"
-                stroke="#002855"
-                stroke-linecap="round"
-                stroke-width="2"
-              />
-            </svg>
-          </div>
-
-          <div class="report-chart__x-axis">
-            @for (label of dashboardData().xAxisLabels; track label) {
-              <span>{{ label }}</span>
-            }
-          </div>
-        </div>
-
-        <p class="sr-only">Reports rise from week one to week four, ending near the highest observed level.</p>
-      </article>
-
-      <div class="analytics-grid__side-stack">
         <article class="status-panel" aria-labelledby="status-title">
-          <header class="panel-header panel-header--compact">
-            <div>
-              <span class="panel-header__label">Operational mix</span>
-              <h2 id="status-title">Status Distribution</h2>
-            </div>
-          </header>
+          <div class="status-panel__copy">
+            <span class="panel-header__label">Operational mix</span>
+            <h2 id="status-title">Status Distribution</h2>
+            <p>
+              A live read of where every report sits in the civic workflow, from first review to
+              planned action and resolution.
+            </p>
+          </div>
+
+          <div class="status-panel__chart">
+            <canvas #statusChart aria-label="Incident status distribution" role="img"></canvas>
+          </div>
 
           <div class="status-list">
             @for (status of dashboardData().statusMetrics; track status.id) {
               <div class="status-list__item">
                 <div class="status-list__row">
                   <span>{{ status.label }}</span>
-                  <strong>{{ status.value }}%</strong>
+                  <strong>{{ status.count }} · {{ status.value }}%</strong>
                 </div>
                 <div class="status-list__track" [attr.aria-label]="status.label + ' ' + status.value + '%'">
                   <span
                     class="status-list__bar"
-                    [class]="'status-list__bar status-list__bar--' + status.tone"
+                    [style.background-color]="status.color"
                     [style.width.%]="status.value"
                   ></span>
                 </div>
@@ -155,13 +92,32 @@
           </div>
         </article>
 
+        <article class="report-chart" aria-labelledby="reports-chart-title">
+          <header class="panel-header">
+            <div>
+              <span class="panel-header__label">Volume trend</span>
+              <h2 id="reports-chart-title">Reports over Time</h2>
+            </div>
+          </header>
+
+          <div class="report-chart__canvas">
+            <canvas #trendChart aria-label="Incidents reported over time" role="img"></canvas>
+          </div>
+
+          <p class="sr-only">Line chart showing daily incident report volume from the incidents summary endpoint.</p>
+        </article>
+
         <article class="category-panel" aria-labelledby="category-title">
           <header class="panel-header panel-header--compact">
             <div>
               <span class="panel-header__label">Most reported</span>
-              <h2 id="category-title">Top Categories</h2>
+              <h2 id="category-title">Category Load</h2>
             </div>
           </header>
+
+          <div class="category-panel__chart">
+            <canvas #categoryChart aria-label="Incidents by category" role="img"></canvas>
+          </div>
 
           <ul class="category-list" aria-label="Top incident categories">
             @for (category of dashboardData().categoryMetrics; track category.id) {
@@ -178,8 +134,16 @@
               </li>
             }
           </ul>
+
+          <ul class="area-list" aria-label="Incidents by area">
+            @for (area of dashboardData().areaMetrics; track area.id) {
+              <li class="area-list__item">
+                <span>{{ area.label }}</span>
+                <strong>{{ area.total }}</strong>
+              </li>
+            }
+          </ul>
         </article>
-      </div>
       </section>
     }
   </div>
