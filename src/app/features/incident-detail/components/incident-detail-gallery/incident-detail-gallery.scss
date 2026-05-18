@@ -49,20 +49,37 @@ h2 {
   grid-column: span 2;
   aspect-ratio: 4 / 3;
   overflow: hidden;
-  border: 1px solid rgba($primary, 0.08);
   border-radius: 0.85rem;
   background: #d9d9e3;
   box-shadow: 0 10px 24px rgba($on-surface, 0.07);
 
+  // Reset button defaults
+  appearance: none;
+  display: block;
+  border: 1px solid rgba($primary, 0.08);
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+
+  transition: transform 200ms ease, box-shadow 200ms ease;
+
   &:first-child:nth-last-child(1) {
     grid-column: 1 / -1;
-    aspect-ratio: 16 / 8;
+    aspect-ratio: 16 / 9;
   }
 
   &:first-child:nth-last-child(n + 2) {
     grid-column: span 4;
     grid-row: span 2;
-    aspect-ratio: 16 / 10;
+    aspect-ratio: auto;
+  }
+
+  figure {
+    margin: 0;
+    width: 100%;
+    height: 100%;
   }
 
   img {
@@ -72,20 +89,24 @@ h2 {
     transition: transform 500ms ease;
   }
 
-  figcaption {
-    position: absolute;
-    inset: auto 0 0;
-    padding: 2.5rem 1rem 1rem;
-    color: #ffffff;
-    font-size: 0.75rem;
-    font-weight: 800;
-    background: linear-gradient(to top, rgba($primary, 0.72), rgba($primary, 0));
-    opacity: 1;
-    transition: opacity 200ms ease;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 32px rgba($on-surface, 0.12);
   }
 
-  &:hover img { transform: scale(1.08); }
-  &:hover figcaption { opacity: 1; }
+  &:hover img {
+    transform: scale(1.08);
+  }
+
+  &:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 2px $primary, 0 14px 32px rgba($on-surface, 0.12);
+    outline: none;
+  }
+
+  &:focus-visible img {
+    transform: scale(1.08);
+  }
 }
 
 .incident-detail-gallery__empty {
@@ -103,13 +124,194 @@ h2 {
   p { margin: 0; }
 }
 
+// ---- Image visualizer ----
+.incident-detail-gallery__visualizer {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  background: rgba($on-surface, 0.88);
+  backdrop-filter: blur(6px);
+  animation: visualizer-fade-in 200ms ease;
+}
+
+.incident-detail-gallery__visualizer-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 72rem;
+  max-height: 100%;
+}
+
+.incident-detail-gallery__visualizer-frame {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  font-size: 0;
+}
+
+.incident-detail-gallery__visualizer-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 1.4rem;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: $radius-full;
+  background: rgba(255, 255, 255, .5);
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 200ms ease, transform 200ms ease;
+
+  &:hover,
+  &:focus-visible {
+    transform: scale(1.08);
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px #fff;
+    outline: none;
+  }
+}
+
+.incident-detail-gallery__visualizer-media {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  max-height: 80vh;
+  margin: 0;
+  animation: visualizer-img-in 300ms ease;
+
+  img {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 0.5rem;
+    box-shadow: 0 24px 64px rgba($on-surface, 0.25);
+  }
+
+  figcaption {
+    margin-top: 0.75rem;
+    color: #fff;
+    font-size: 0.875rem;
+    text-align: center;
+    text-shadow: 0 1px 4px rgba($on-surface, 0.5);
+  }
+}
+
+.incident-detail-gallery__visualizer-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.incident-detail-gallery__visualizer-counter {
+  min-width: 3.5rem;
+  text-align: center;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-shadow: 0 1px 4px rgba($on-surface, 0.5);
+}
+
+.incident-detail-gallery__visualizer-prev,
+.incident-detail-gallery__visualizer-next {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: none;
+  border-radius: $radius-full;
+  background: rgba($surface-container-high, 0.85);
+  color: $on-surface;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: background 200ms ease, transform 200ms ease;
+
+  &:hover,
+  &:focus-visible {
+    background: $surface-container-high;
+    transform: scale(1.08);
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px $primary;
+    outline: none;
+  }
+}
+
+// ---- Keyframes ----
+@keyframes visualizer-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes visualizer-img-in {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+// ---- Responsive breakpoints ----
+@media (max-width: 1023px) and (min-width: 768px) {
+  .incident-detail-gallery__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .incident-detail-gallery__item {
+    grid-column: span 1;
+    aspect-ratio: 4 / 3;
+
+    &:first-child:nth-last-child(1) {
+      grid-column: 1 / -1;
+      aspect-ratio: 16 / 9;
+    }
+
+    &:first-child:nth-last-child(n + 2) {
+      grid-column: span 2;
+      grid-row: span 2;
+      aspect-ratio: auto;
+    }
+  }
+}
+
 @media (max-width: 767px) {
-  .incident-detail-gallery__header { align-items: flex-start; flex-direction: column; }
-  .incident-detail-gallery__grid { grid-template-columns: 1fr; }
+  .incident-detail-gallery__header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .incident-detail-gallery__grid {
+    grid-template-columns: 1fr;
+  }
+
   .incident-detail-gallery__item,
   .incident-detail-gallery__item:first-child:nth-last-child(n + 2),
   .incident-detail-gallery__item:first-child:nth-last-child(1) {
     grid-column: auto;
     aspect-ratio: 16 / 10;
+  }
+
+  .incident-detail-gallery__visualizer {
+    padding: 1rem;
+  }
+
+  .incident-detail-gallery__visualizer-prev,
+  .incident-detail-gallery__visualizer-next {
+    width: 2.5rem;
+    height: 2.5rem;
   }
 }
