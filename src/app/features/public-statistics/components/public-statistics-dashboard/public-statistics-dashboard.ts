@@ -1,14 +1,15 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ResourceState } from '../../../../shared/models/resource-state.model';
 
-type KpiTone = 'positive' | 'warning' | 'neutral';
+export type KpiTone = 'positive' | 'warning' | 'neutral';
 
-interface DashboardFilter {
+export interface DashboardFilter {
   readonly id: string;
   readonly label: string;
   readonly icon: string;
 }
 
-interface KpiCard {
+export interface KpiCard {
   readonly id: string;
   readonly label: string;
   readonly value: string;
@@ -18,33 +19,35 @@ interface KpiCard {
   readonly tone: KpiTone;
 }
 
-interface StatusMetric {
+export interface StatusMetric {
   readonly id: string;
   readonly label: string;
   readonly value: number;
   readonly tone: 'resolved' | 'progress' | 'planned';
 }
 
-interface CategoryMetric {
+export interface CategoryMetric {
   readonly id: string;
   readonly label: string;
   readonly total: string;
   readonly tone: 'infrastructure' | 'sanitation' | 'safety' | 'parks';
 }
 
-@Component({
-  selector: 'app-public-statistics-dashboard',
-  templateUrl: './public-statistics-dashboard.html',
-  styleUrl: './public-statistics-dashboard.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class PublicStatisticsDashboard {
-  protected readonly filters: readonly DashboardFilter[] = [
+export interface PublicStatisticsDashboardData {
+  readonly filters: readonly DashboardFilter[];
+  readonly kpis: readonly KpiCard[];
+  readonly yAxisLabels: readonly string[];
+  readonly xAxisLabels: readonly string[];
+  readonly statusMetrics: readonly StatusMetric[];
+  readonly categoryMetrics: readonly CategoryMetric[];
+}
+
+const DEFAULT_DASHBOARD_DATA: PublicStatisticsDashboardData = {
+  filters: [
     { id: 'districts', label: 'All Districts', icon: 'fa-location-dot' },
     { id: 'period', label: 'Last 30 Days', icon: 'fa-calendar-days' },
-  ];
-
-  protected readonly kpis: readonly KpiCard[] = [
+  ],
+  kpis: [
     {
       id: 'total-reports',
       label: 'Total Reports',
@@ -77,22 +80,47 @@ export class PublicStatisticsDashboard {
       badge: 'Projects',
       tone: 'neutral',
     },
-  ];
-
-  protected readonly yAxisLabels: readonly string[] = ['500', '400', '300', '200', '100', '0'];
-  protected readonly xAxisLabels: readonly string[] = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
-  protected readonly gridLines = Array.from({ length: 5 });
-
-  protected readonly statusMetrics: readonly StatusMetric[] = [
+  ],
+  yAxisLabels: ['500', '400', '300', '200', '100', '0'],
+  xAxisLabels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+  statusMetrics: [
     { id: 'resolved', label: 'Resolved', value: 68, tone: 'resolved' },
     { id: 'in-progress', label: 'In Progress', value: 22, tone: 'progress' },
     { id: 'planned', label: 'Planned', value: 10, tone: 'planned' },
-  ];
-
-  protected readonly categoryMetrics: readonly CategoryMetric[] = [
+  ],
+  categoryMetrics: [
     { id: 'infrastructure', label: 'Infrastructure', total: '4,210', tone: 'infrastructure' },
     { id: 'sanitation', label: 'Sanitation', total: '3,892', tone: 'sanitation' },
     { id: 'public-safety', label: 'Public Safety', total: '2,150', tone: 'safety' },
     { id: 'parks-rec', label: 'Parks & Rec', total: '1,045', tone: 'parks' },
-  ];
+  ],
+};
+
+const DEFAULT_RESOURCE_STATE: ResourceState<PublicStatisticsDashboardData> = {
+  data: DEFAULT_DASHBOARD_DATA,
+  status: 'success',
+  error: null,
+};
+
+@Component({
+  selector: 'app-public-statistics-dashboard',
+  templateUrl: './public-statistics-dashboard.html',
+  styleUrl: './public-statistics-dashboard.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class PublicStatisticsDashboard {
+  readonly dashboardState = input<ResourceState<PublicStatisticsDashboardData>>(DEFAULT_RESOURCE_STATE);
+  readonly retryRequested = output<void>();
+
+  protected readonly dashboardData = computed(() => this.dashboardState().data);
+  protected readonly isLoading = computed(() => this.dashboardState().status === 'loading');
+  protected readonly isError = computed(() => this.dashboardState().status === 'error');
+  protected readonly errorMessage = computed(
+    () => this.dashboardState().error ?? 'Could not load public statistics. Please try again.'
+  );
+  protected readonly gridLines = Array.from({ length: 5 });
+
+  protected retry(): void {
+    this.retryRequested.emit();
+  }
 }

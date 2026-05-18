@@ -8,7 +8,7 @@
       </div>
 
       <div class="public-statistics__filters" aria-label="Dashboard filters">
-        @for (filter of filters; track filter.id) {
+        @for (filter of dashboardData().filters; track filter.id) {
           <button class="public-statistics__filter" type="button" [attr.aria-label]="filter.label + ' filter'">
             <i class="fa-solid" [class]="'fa-solid ' + filter.icon" aria-hidden="true"></i>
             <span>{{ filter.label }}</span>
@@ -18,8 +18,38 @@
       </div>
     </section>
 
-    <section class="kpi-grid" aria-label="Key performance indicators">
-      @for (kpi of kpis; track kpi.id) {
+    @if (isLoading()) {
+      <section class="dashboard-state dashboard-state--loading" aria-label="Loading public statistics">
+        <div class="dashboard-state__header">
+          <span class="dashboard-state__pulse" aria-hidden="true"></span>
+          <div>
+            <h2>Loading public statistics</h2>
+            <p>Preparing the latest city operations snapshot.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-skeleton" aria-hidden="true">
+          @for (_ of dashboardData().kpis; track $index) {
+            <span class="dashboard-skeleton__card"></span>
+          }
+          <span class="dashboard-skeleton__chart"></span>
+          <span class="dashboard-skeleton__stack"></span>
+        </div>
+      </section>
+    } @else if (isError()) {
+      <section class="dashboard-state dashboard-state--error" aria-live="polite">
+        <div class="dashboard-state__icon" aria-hidden="true">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <div>
+          <h2>Statistics unavailable</h2>
+          <p>{{ errorMessage() }}</p>
+        </div>
+        <button class="dashboard-state__button" type="button" (click)="retry()">Try again</button>
+      </section>
+    } @else {
+      <section class="kpi-grid" aria-label="Key performance indicators">
+      @for (kpi of dashboardData().kpis; track kpi.id) {
         <article class="kpi-card" [class]="'kpi-card kpi-card--' + kpi.tone">
           <h2>{{ kpi.label }}</h2>
           <div class="kpi-card__value-row">
@@ -38,9 +68,9 @@
           </div>
         </article>
       }
-    </section>
+      </section>
 
-    <section class="analytics-grid" aria-label="Statistics charts and rankings">
+      <section class="analytics-grid" aria-label="Statistics charts and rankings">
       <article class="report-chart" aria-labelledby="reports-chart-title">
         <header class="panel-header">
           <div>
@@ -54,7 +84,7 @@
 
         <div class="report-chart__canvas" aria-hidden="true">
           <div class="report-chart__y-axis">
-            @for (label of yAxisLabels; track label) {
+            @for (label of dashboardData().yAxisLabels; track label) {
               <span>{{ label }}</span>
             }
           </div>
@@ -88,7 +118,7 @@
           </div>
 
           <div class="report-chart__x-axis">
-            @for (label of xAxisLabels; track label) {
+            @for (label of dashboardData().xAxisLabels; track label) {
               <span>{{ label }}</span>
             }
           </div>
@@ -107,7 +137,7 @@
           </header>
 
           <div class="status-list">
-            @for (status of statusMetrics; track status.id) {
+            @for (status of dashboardData().statusMetrics; track status.id) {
               <div class="status-list__item">
                 <div class="status-list__row">
                   <span>{{ status.label }}</span>
@@ -134,7 +164,7 @@
           </header>
 
           <ul class="category-list" aria-label="Top incident categories">
-            @for (category of categoryMetrics; track category.id) {
+            @for (category of dashboardData().categoryMetrics; track category.id) {
               <li class="category-list__item">
                 <span class="category-list__name">
                   <span
@@ -150,6 +180,7 @@
           </ul>
         </article>
       </div>
-    </section>
+      </section>
+    }
   </div>
 </main>
