@@ -1,0 +1,155 @@
+<main class="public-statistics" aria-labelledby="public-statistics-title">
+  <div class="public-statistics__shell">
+    <section class="public-statistics__hero" aria-label="Public statistics summary">
+      <div class="public-statistics__heading">
+        <span class="public-statistics__eyebrow">UrbanCore Metrics</span>
+        <h1 id="public-statistics-title">Public Statistics Dashboard</h1>
+        <p>Real-time transparency metrics for city operations.</p>
+      </div>
+
+      <div class="public-statistics__filters" aria-label="Dashboard filters">
+        @for (filter of filters; track filter.id) {
+          <button class="public-statistics__filter" type="button" [attr.aria-label]="filter.label + ' filter'">
+            <i class="fa-solid" [class]="'fa-solid ' + filter.icon" aria-hidden="true"></i>
+            <span>{{ filter.label }}</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+        }
+      </div>
+    </section>
+
+    <section class="kpi-grid" aria-label="Key performance indicators">
+      @for (kpi of kpis; track kpi.id) {
+        <article class="kpi-card" [class]="'kpi-card kpi-card--' + kpi.tone">
+          <h2>{{ kpi.label }}</h2>
+          <div class="kpi-card__value-row">
+            <p class="kpi-card__value">
+              {{ kpi.value }}
+              @if (kpi.unit) {
+                <span>{{ kpi.unit }}</span>
+              }
+            </p>
+            <span class="kpi-card__badge">
+              @if (kpi.icon) {
+                <i class="fa-solid" [class]="'fa-solid ' + kpi.icon" aria-hidden="true"></i>
+              }
+              {{ kpi.badge }}
+            </span>
+          </div>
+        </article>
+      }
+    </section>
+
+    <section class="analytics-grid" aria-label="Statistics charts and rankings">
+      <article class="report-chart" aria-labelledby="reports-chart-title">
+        <header class="panel-header">
+          <div>
+            <span class="panel-header__label">Volume trend</span>
+            <h2 id="reports-chart-title">Reports over Time</h2>
+          </div>
+          <button class="panel-header__action" type="button" aria-label="Open report chart options">
+            <i class="fa-solid fa-ellipsis" aria-hidden="true"></i>
+          </button>
+        </header>
+
+        <div class="report-chart__canvas" aria-hidden="true">
+          <div class="report-chart__y-axis">
+            @for (label of yAxisLabels; track label) {
+              <span>{{ label }}</span>
+            }
+          </div>
+
+          <div class="report-chart__plot">
+            <div class="report-chart__grid">
+              @for (_ of gridLines; track $index) {
+                <span></span>
+              }
+            </div>
+            <svg preserveAspectRatio="none" viewBox="0 0 100 100" role="img">
+              <defs>
+                <linearGradient id="publicStatisticsChartGradient" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="#002855" stop-opacity="0.24" />
+                  <stop offset="62%" stop-color="#0052cc" stop-opacity="0.09" />
+                  <stop offset="100%" stop-color="#002855" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M0,80 C10,70 20,90 30,60 C40,30 50,50 60,40 C70,30 80,60 90,20 L100,10 L100,100 L0,100 Z"
+                fill="url(#publicStatisticsChartGradient)"
+              />
+              <path
+                d="M0,80 C10,70 20,90 30,60 C40,30 50,50 60,40 C70,30 80,60 90,20 L100,10"
+                fill="none"
+                stroke="#002855"
+                stroke-linecap="round"
+                stroke-width="2"
+              />
+            </svg>
+          </div>
+
+          <div class="report-chart__x-axis">
+            @for (label of xAxisLabels; track label) {
+              <span>{{ label }}</span>
+            }
+          </div>
+        </div>
+
+        <p class="sr-only">Reports rise from week one to week four, ending near the highest observed level.</p>
+      </article>
+
+      <div class="analytics-grid__side-stack">
+        <article class="status-panel" aria-labelledby="status-title">
+          <header class="panel-header panel-header--compact">
+            <div>
+              <span class="panel-header__label">Operational mix</span>
+              <h2 id="status-title">Status Distribution</h2>
+            </div>
+          </header>
+
+          <div class="status-list">
+            @for (status of statusMetrics; track status.id) {
+              <div class="status-list__item">
+                <div class="status-list__row">
+                  <span>{{ status.label }}</span>
+                  <strong>{{ status.value }}%</strong>
+                </div>
+                <div class="status-list__track" [attr.aria-label]="status.label + ' ' + status.value + '%'">
+                  <span
+                    class="status-list__bar"
+                    [class]="'status-list__bar status-list__bar--' + status.tone"
+                    [style.width.%]="status.value"
+                  ></span>
+                </div>
+              </div>
+            }
+          </div>
+        </article>
+
+        <article class="category-panel" aria-labelledby="category-title">
+          <header class="panel-header panel-header--compact">
+            <div>
+              <span class="panel-header__label">Most reported</span>
+              <h2 id="category-title">Top Categories</h2>
+            </div>
+          </header>
+
+          <ul class="category-list" aria-label="Top incident categories">
+            @for (category of categoryMetrics; track category.id) {
+              <li class="category-list__item">
+                <span class="category-list__name">
+                  <span
+                    class="category-list__dot"
+                    [class]="'category-list__dot category-list__dot--' + category.tone"
+                    aria-hidden="true"
+                  ></span>
+                  {{ category.label }}
+                </span>
+                <strong>{{ category.total }}</strong>
+              </li>
+            }
+          </ul>
+        </article>
+      </div>
+    </section>
+  </div>
+</main>
