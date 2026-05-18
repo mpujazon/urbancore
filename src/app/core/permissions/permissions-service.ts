@@ -8,10 +8,6 @@ import type { UserRole } from '../../shared/models/user-dto.model';
 export class PermissionsService {
   private readonly readOnlyStatuses = new Set(['CANCELLED', 'REJECTED', 'RESOLVED']);
 
-  canAccessByRole(userRole: UserRole | undefined, allowedRoles: UserRole[]): boolean {
-    return allowedRoles.includes(userRole ?? 'unlogged');
-  }
-
   canManageIncident(user: CurrentUser | null, incident: IncidentPermissionContext | null): boolean {
     if (!user || !incident || this.isReadOnlyIncident(incident)) return false;
     return user.role === 'ROLE_ADMIN';
