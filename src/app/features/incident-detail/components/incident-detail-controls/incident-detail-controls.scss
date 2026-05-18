@@ -1,0 +1,240 @@
+@use 'styles/variables' as *;
+
+:host {
+  display: block;
+}
+
+.incident-detail-controls {
+  display: grid;
+  gap: 0.6rem;
+  width: min(100% - 2rem, 76rem);
+  margin: 0.85rem auto 1.25rem;
+  padding: 0.8rem;
+  border: 1px solid rgba($primary, 0.1);
+  border-radius: 0.9rem;
+  background:
+    linear-gradient(155deg, rgba($secondary-fixed, 0.35), rgba($secondary-fixed, 0) 40%),
+    $surface-container-low;
+  box-shadow: 0 16px 34px rgba($on-surface, 0.06);
+}
+
+.incident-detail-controls__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.incident-detail-controls h2 {
+  margin: 0;
+  color: $primary;
+  font-family: $font-display;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.incident-detail-controls__header p {
+  margin: 0;
+  color: $neutral-variant;
+  font-size: 0.78rem;
+}
+
+.incident-detail-controls__panel {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.65rem;
+  border: 1px solid rgba($primary, 0.08);
+  border-radius: 0.65rem;
+  background: $surface-container-lowest;
+}
+
+.incident-detail-controls__quick-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.incident-detail-controls__panel h3 {
+  margin: 0;
+  color: $primary;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.incident-detail-controls__panel form {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.incident-detail-controls__row-form {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  column-gap: 0.5rem;
+}
+
+.incident-detail-controls__row-form label {
+  grid-column: 1;
+}
+
+.incident-detail-controls__row-form select {
+  grid-column: 1;
+}
+
+.incident-detail-controls__row-form button {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  min-width: 9rem;
+}
+
+.incident-detail-controls__panel label,
+.incident-detail-controls__panel p {
+  color: $neutral-variant;
+  font-size: 0.76rem;
+}
+
+.incident-detail-controls__panel input,
+.incident-detail-controls__panel select,
+.incident-detail-controls__panel textarea,
+.incident-detail-controls__panel button {
+  min-height: 2rem;
+  border-radius: 0.55rem;
+  font: inherit;
+}
+
+.incident-detail-controls__panel input,
+.incident-detail-controls__panel select,
+.incident-detail-controls__panel textarea {
+  padding: 0.45rem 0.6rem;
+  border: 1px solid rgba($primary, 0.2);
+  color: $on-surface;
+  background: $surface;
+  font-size: 0.84rem;
+}
+
+.incident-detail-controls__panel textarea {
+  min-height: 3.5rem;
+  resize: vertical;
+}
+
+.incident-detail-controls__planned-form {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.45rem 0.5rem;
+}
+
+.incident-detail-controls__planned-form label,
+.incident-detail-controls__planned-form input,
+.incident-detail-controls__planned-form select {
+  grid-column: span 1;
+}
+
+.incident-detail-controls__planned-description,
+.incident-detail-controls__planned-title-field,
+.incident-detail-controls__planned-form textarea,
+.incident-detail-controls__planned-form button {
+  grid-column: 1 / -1;
+}
+
+.incident-detail-controls__planned-title-field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.incident-detail-controls__planned-title-field input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.incident-detail-controls__date-time-row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.incident-detail-controls__date-time-field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.incident-detail-controls__error {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: $on-error-container;
+  font-size: 0.74rem;
+}
+
+.incident-detail-controls__panel button {
+  border: 1px solid $primary;
+  color: $on-primary;
+  background: $primary;
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: $transition-hover;
+}
+
+.incident-detail-controls__panel button:hover {
+  transform: translateY(-1px);
+  box-shadow: $shadow-md;
+}
+
+.incident-detail-controls__panel button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.incident-detail-controls__panel button:focus-visible,
+.incident-detail-controls__panel input:focus-visible,
+.incident-detail-controls__panel select:focus-visible,
+.incident-detail-controls__panel textarea:focus-visible {
+  outline: 3px solid rgba($secondary, 0.3);
+  outline-offset: 2px;
+}
+
+.incident-detail-controls__panel--danger {
+  border-color: rgba($on-error-container, 0.35);
+  background: linear-gradient(180deg, rgba($error-container, 0.55), $surface-container-lowest);
+}
+
+.incident-detail-controls__panel--danger button {
+  border-color: $on-error-container;
+  background: $on-error-container;
+  color: $surface;
+}
+
+@media (max-width: 767px) {
+  .incident-detail-controls {
+    width: min(100% - 1rem, 76rem);
+  }
+
+  .incident-detail-controls__row-form {
+    grid-template-columns: 1fr;
+  }
+
+  .incident-detail-controls__quick-actions,
+  .incident-detail-controls__planned-form {
+    grid-template-columns: 1fr;
+  }
+
+  .incident-detail-controls__date-time-row {
+    grid-template-columns: 1fr;
+  }
+
+  .incident-detail-controls__row-form button {
+    grid-column: 1;
+    grid-row: auto;
+    min-width: 0;
+  }
+
+  .incident-detail-controls__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
