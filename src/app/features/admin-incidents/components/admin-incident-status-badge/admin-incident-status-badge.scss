@@ -1,0 +1,51 @@
+@use 'styles/variables' as *;
+
+.status-badge {
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: $radius-full;
+  display: inline-flex;
+  font-size: $body-sm;
+  font-weight: $font-weight-semibold;
+  gap: 0.35rem;
+  line-height: 1;
+  padding: 0.35rem 0.65rem;
+  white-space: nowrap;
+}
+
+.status-badge__dot {
+  background: currentcolor;
+  border-radius: $radius-full;
+  height: 0.42rem;
+  width: 0.42rem;
+}
+
+.status-badge--neutral {
+  background: $surface-container;
+  border-color: $outline-variant;
+  color: $neutral-variant;
+}
+
+.status-badge--info {
+  background: $secondary-fixed;
+  border-color: rgba($secondary, 0.22);
+  color: $secondary;
+}
+
+.status-badge--warning {
+  background: #ffedc2;
+  border-color: rgba(#aa7000, 0.3);
+  color: #5b3a00;
+}
+
+.status-badge--success {
+  background: $tertiary-container;
+  border-color: rgba($on-tertiary-container, 0.25);
+  color: $on-tertiary-container;
+}
+
+.status-badge--danger {
+  background: $error-container;
+  border-color: rgba($on-error-container, 0.24);
+  color: $on-error-container;
+}
