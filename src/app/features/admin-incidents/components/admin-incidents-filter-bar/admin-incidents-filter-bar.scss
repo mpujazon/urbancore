@@ -1,0 +1,155 @@
+@use 'styles/variables' as *;
+
+.sr-only {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.manage-incidents-toolbar {
+  background: rgba($surface-container-lowest, 0.88);
+  border: 1px solid rgba($primary, 0.11);
+  border-radius: 1.25rem;
+  box-shadow: $shadow-md;
+  display: grid;
+  gap: $space-md;
+  grid-template-columns: minmax(16rem, 1.6fr) repeat(3, minmax(9rem, 1fr)) repeat(2, minmax(8rem, 0.8fr)) auto;
+  margin: 0;
+  padding: $space-md;
+  position: relative;
+}
+
+.manage-incidents-toolbar--refreshing::after {
+  animation: toolbar-loading 1s linear infinite;
+  background: linear-gradient(90deg, transparent, rgba($secondary, 0.58), transparent);
+  bottom: 0;
+  content: '';
+  height: 3px;
+  left: 1rem;
+  position: absolute;
+  right: 1rem;
+}
+
+.filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+  min-width: 0;
+}
+
+label {
+  color: $neutral-variant;
+  font-size: $label-sm;
+  font-weight: $font-weight-semibold;
+}
+
+input,
+select {
+  background: $surface-container-lowest;
+  border: 1px solid $outline-variant;
+  border-radius: $radius-lg;
+  color: $on-surface;
+  min-height: 2.65rem;
+  padding: 0.65rem 0.75rem;
+  transition: $transition-hover;
+  width: 100%;
+
+  &:focus-visible {
+    border-color: $secondary;
+    box-shadow: 0 0 0 3px rgba($secondary, 0.14);
+    outline: none;
+  }
+}
+
+.filter-actions {
+  align-items: end;
+  display: flex;
+}
+
+.filter-clear {
+  align-items: center;
+  border: 1px solid $outline-variant;
+  border-radius: $radius-full;
+  color: $primary;
+  cursor: pointer;
+  display: inline-flex;
+  font-weight: $font-weight-semibold;
+  gap: $space-xs;
+  min-height: 2.65rem;
+  padding: 0.65rem 0.95rem;
+  white-space: nowrap;
+
+  span {
+    align-items: center;
+    background: $primary;
+    border-radius: $radius-full;
+    color: $on-primary;
+    display: inline-flex;
+    font-size: $body-sm;
+    height: 1.15rem;
+    justify-content: center;
+    min-width: 1.15rem;
+    padding: 0 0.25rem;
+  }
+
+  &:hover:not(:disabled) {
+    background: $surface-container;
+  }
+
+  &:focus-visible {
+    outline: 3px solid rgba($secondary, 0.35);
+    outline-offset: 3px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.42;
+  }
+}
+
+@keyframes toolbar-loading {
+  from { transform: translateX(-20%); }
+  to { transform: translateX(20%); }
+}
+
+@media (max-width: #{$bp-xl - 1px}) {
+  .manage-incidents-toolbar {
+    gap: $space-sm-md;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding: $space-sm-md;
+  }
+
+  .filter-field--search {
+    grid-column: 1 / -1;
+  }
+
+  .filter-actions {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: #{$bp-md - 1px}) {
+  .manage-incidents-toolbar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .filter-actions,
+  .filter-field--search { grid-column: 1 / -1; }
+}
+
+@media (max-width: #{$bp-sm - 1px}) {
+  .manage-incidents-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-actions,
+  .filter-field--search {
+    grid-column: auto;
+  }
+}
