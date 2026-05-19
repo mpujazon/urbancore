@@ -10,6 +10,12 @@ import { ReportIncidentPage } from './features/report-incident/pages/report-inci
 import { IncidentExplorerPage } from './features/incidents-explorer/pages/incident-explorer-page/incident-explorer-page';
 import { IncidentDetailPageComponent } from './features/incident-detail/pages/incident-detail-page/incident-detail-page';
 import { publicIncidentDetailResolver } from './features/incident-detail/resolvers/public-incident-detail.resolver';
+import {
+  PublicStatisticsDashboard
+} from './features/public-statistics/components/public-statistics-dashboard/public-statistics-dashboard';
+import {
+  PlannedActionsPage
+} from './features/planned-actions/pages/planned-actions-page/planned-actions-page';
 
 export const routes: Routes = [
   {
@@ -47,10 +53,11 @@ export const routes: Routes = [
   },
   {
     path:'stats',
-    loadComponent: () =>
-      import('./features/public-statistics/components/public-statistics-dashboard/public-statistics-dashboard').then(
-        (component) => component.PublicStatisticsDashboard
-      ),
+    component: PublicStatisticsDashboard
+  },
+  {
+    path: 'planned-actions',
+    component: PlannedActionsPage
   },
   {
     path: 'unauthorized',
