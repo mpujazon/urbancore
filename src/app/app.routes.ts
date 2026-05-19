@@ -35,10 +35,24 @@ export const routes: Routes = [
     data: { roles: ROUTE_ROLES.reportIncident}
   },
   {
-    path: 'manage-incidents',
+    path: 'admin/incidents',
     component: ManageIncidents,
     canActivate: [authGuard, roleGuard],
     data: { roles: ROUTE_ROLES.manageIncidents },
+  },
+  {
+    path: 'admin/incidents/:id',
+    component: IncidentDetailPageComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ROUTE_ROLES.manageIncidents },
+    resolve: {
+      incident: publicIncidentDetailResolver,
+    },
+  },
+  {
+    path: 'manage-incidents',
+    redirectTo: 'admin/incidents',
+    pathMatch: 'full',
   },
   {
     path: 'incidents',
