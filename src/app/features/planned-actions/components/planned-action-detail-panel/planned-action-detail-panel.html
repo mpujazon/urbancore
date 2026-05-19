@@ -38,7 +38,7 @@
 
     <p>{{ action.description }}</p>
 
-    <a [routerLink]="action.detailUrl" class="incident-link">
+    <a [routerLink]="['/incidents', action.incidentId]" class="incident-link">
       Open linked incident
       <span aria-hidden="true">→</span>
     </a>

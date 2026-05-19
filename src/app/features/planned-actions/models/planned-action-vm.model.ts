@@ -19,7 +19,6 @@ export interface PlannedActionCalendarEventVm {
   incidentCategoryLabel?: string;
   incidentStatusLabel?: string;
   addressLabel?: string;
-  detailUrl: string;
 }
 
 export interface PlannedActionsDateRange {

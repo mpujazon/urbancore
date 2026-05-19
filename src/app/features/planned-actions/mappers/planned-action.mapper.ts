@@ -20,12 +20,13 @@ export function mapPublicPlannedActionToCalendarEvent(
 ): PlannedActionCalendarEventVm {
   const startsAt = new Date(dto.scheduledStart);
   const endsAt = dto.scheduledEnd ? new Date(dto.scheduledEnd) : null;
+  const incidentId = dto.incident?.id?.trim() || dto.incidentId;
   const incidentTitle = dto.incident?.title?.trim() || 'Linked incident';
   const addressLabel = dto.incident?.location?.addressLabel || dto.incident?.location?.area;
 
   return {
     id: dto.id,
-    incidentId: dto.incidentId,
+    incidentId,
     title: dto.title.trim() || 'Planned maintenance action',
     description: dto.description?.trim() || 'No public description has been provided yet.',
     status: dto.status,
@@ -39,7 +40,6 @@ export function mapPublicPlannedActionToCalendarEvent(
     incidentCategoryLabel: dto.incident?.category ? toTitleCase(dto.incident.category) : undefined,
     incidentStatusLabel: dto.incident?.status ? toTitleCase(dto.incident.status) : undefined,
     addressLabel,
-    detailUrl: `/incidents/${dto.incidentId}`,
   };
 }
 
