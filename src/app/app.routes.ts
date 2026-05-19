@@ -10,6 +10,12 @@ import { ReportIncidentPage } from './features/report-incident/pages/report-inci
 import { IncidentExplorerPage } from './features/incidents-explorer/pages/incident-explorer-page/incident-explorer-page';
 import { IncidentDetailPageComponent } from './features/incident-detail/pages/incident-detail-page/incident-detail-page';
 import { publicIncidentDetailResolver } from './features/incident-detail/resolvers/public-incident-detail.resolver';
+import {
+  PublicStatisticsDashboard
+} from './features/public-statistics/components/public-statistics-dashboard/public-statistics-dashboard';
+import {
+  PlannedActionsPage
+} from './features/planned-actions/pages/planned-actions-page/planned-actions-page';
 
 export const routes: Routes = [
   {
@@ -29,10 +35,24 @@ export const routes: Routes = [
     data: { roles: ROUTE_ROLES.reportIncident}
   },
   {
-    path: 'manage-incidents',
+    path: 'admin/incidents',
     component: ManageIncidents,
     canActivate: [authGuard, roleGuard],
     data: { roles: ROUTE_ROLES.manageIncidents },
+  },
+  {
+    path: 'admin/incidents/:id',
+    component: IncidentDetailPageComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ROUTE_ROLES.manageIncidents },
+    resolve: {
+      incident: publicIncidentDetailResolver,
+    },
+  },
+  {
+    path: 'manage-incidents',
+    redirectTo: 'admin/incidents',
+    pathMatch: 'full',
   },
   {
     path: 'incidents',
@@ -44,6 +64,14 @@ export const routes: Routes = [
     resolve: {
       incident: publicIncidentDetailResolver,
     },
+  },
+  {
+    path:'stats',
+    component: PublicStatisticsDashboard
+  },
+  {
+    path: 'planned-actions',
+    component: PlannedActionsPage
   },
   {
     path: 'unauthorized',

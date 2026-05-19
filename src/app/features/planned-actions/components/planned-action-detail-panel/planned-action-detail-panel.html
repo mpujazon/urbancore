@@ -1,0 +1,50 @@
+<aside class="detail-panel" aria-label="Selected planned action summary">
+  @if (event(); as action) {
+    <p class="eyebrow">Selected action</p>
+    <h2>{{ action.title }}</h2>
+    <span class="status-badge" [attr.data-tone]="action.statusTone">
+      <span aria-hidden="true"></span>
+      {{ action.statusLabel }}
+    </span>
+
+    <dl>
+      <div>
+        <dt>Schedule</dt>
+        <dd>{{ action.dateLabel }} · {{ action.timeLabel }}</dd>
+      </div>
+      <div>
+        <dt>Linked incident</dt>
+        <dd>{{ action.incidentTitle }}</dd>
+      </div>
+      @if (action.incidentCategoryLabel) {
+        <div>
+          <dt>Category</dt>
+          <dd>{{ action.incidentCategoryLabel }}</dd>
+        </div>
+      }
+      @if (action.incidentStatusLabel) {
+        <div>
+          <dt>Incident status</dt>
+          <dd>{{ action.incidentStatusLabel }}</dd>
+        </div>
+      }
+      @if (action.addressLabel) {
+        <div>
+          <dt>Location</dt>
+          <dd>{{ action.addressLabel }}</dd>
+        </div>
+      }
+    </dl>
+
+    <p>{{ action.description }}</p>
+
+    <a [routerLink]="action.detailUrl" class="incident-link">
+      Open linked incident
+      <span aria-hidden="true">→</span>
+    </a>
+  } @else {
+    <p class="eyebrow">Action summary</p>
+    <h2>Select a planned action</h2>
+    <p>Choose an item in the calendar or agenda to inspect the public summary and linked incident.</p>
+  }
+</aside>

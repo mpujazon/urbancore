@@ -1,0 +1,60 @@
+<fieldset class="manage-incidents-toolbar" [class.manage-incidents-toolbar--refreshing]="refreshing()">
+  <legend class="sr-only">Filter admin incidents</legend>
+
+  <div class="filter-field filter-field--search">
+    <label for="admin-incidents-search">Search</label>
+    <input
+      id="admin-incidents-search"
+      type="search"
+      placeholder="Search by title, id or reporter"
+      [ngModel]="searchText"
+      (ngModelChange)="onSearchChange($event)"
+    />
+  </div>
+
+  <div class="filter-field">
+    <label for="admin-incidents-status">Status</label>
+    <select id="admin-incidents-status" [ngModel]="selectedStatus" (ngModelChange)="onStatusChange($event)">
+      @for (option of statusOptions; track option.value) {
+        <option [value]="option.value">{{ option.label }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="filter-field">
+    <label for="admin-incidents-category">Category</label>
+    <select id="admin-incidents-category" [ngModel]="selectedCategory" (ngModelChange)="onCategoryChange($event)">
+      @for (option of categoryOptions; track option.value) {
+        <option [value]="option.value">{{ option.label }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="filter-field">
+    <label for="admin-incidents-priority">Priority</label>
+    <select id="admin-incidents-priority" [ngModel]="selectedPriority" (ngModelChange)="onPriorityChange($event)">
+      @for (option of priorityOptions; track option.value) {
+        <option [value]="option.value">{{ option.label }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="filter-field filter-field--date">
+    <label for="admin-incidents-date-from">From</label>
+    <input id="admin-incidents-date-from" type="date" [ngModel]="dateFrom" (ngModelChange)="onDateFromChange($event)" />
+  </div>
+
+  <div class="filter-field filter-field--date">
+    <label for="admin-incidents-date-to">To</label>
+    <input id="admin-incidents-date-to" type="date" [ngModel]="dateTo" (ngModelChange)="onDateToChange($event)" />
+  </div>
+
+  <div class="filter-actions">
+    <button type="button" class="filter-clear" [disabled]="activeFilterCount() === 0" (click)="onClearFilters()">
+      Clear filters
+      @if (activeFilterCount() > 0) {
+        <span aria-hidden="true">{{ activeFilterCount() }}</span>
+      }
+    </button>
+  </div>
+</fieldset>

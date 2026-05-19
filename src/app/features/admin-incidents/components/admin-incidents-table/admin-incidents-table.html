@@ -1,0 +1,106 @@
+<div class="manage-incidents-table-card" [class.manage-incidents-table-card--refreshing]="refreshing()">
+  @if (refreshing()) {
+    <p class="refreshing-label" aria-live="polite">Refreshing incidents...</p>
+  }
+
+  <div class="table-scroll" [class.table-scroll--muted]="refreshing()">
+    <table class="manage-incidents-table">
+      <caption class="sr-only">Admin incidents table</caption>
+      <thead>
+        <tr>
+          <th scope="col">Incident</th>
+          <th scope="col" [attr.aria-sort]="ariaSort('title')">
+            <button type="button" class="sort-button" (click)="onSort('title')">Title <span aria-hidden="true">{{ sortIcon('title') }}</span></button>
+          </th>
+          <th scope="col" [attr.aria-sort]="ariaSort('category')">
+            <button type="button" class="sort-button" (click)="onSort('category')">Category <span aria-hidden="true">{{ sortIcon('category') }}</span></button>
+          </th>
+          <th scope="col" [attr.aria-sort]="ariaSort('priority')">
+            <button type="button" class="sort-button" (click)="onSort('priority')">Priority <span aria-hidden="true">{{ sortIcon('priority') }}</span></button>
+          </th>
+          <th scope="col" [attr.aria-sort]="ariaSort('status')">
+            <button type="button" class="sort-button" (click)="onSort('status')">Status <span aria-hidden="true">{{ sortIcon('status') }}</span></button>
+          </th>
+          <th scope="col">Reporter</th>
+          <th scope="col" [attr.aria-sort]="ariaSort('createdAt')">
+            <button type="button" class="sort-button" (click)="onSort('createdAt')">Created <span aria-hidden="true">{{ sortIcon('createdAt') }}</span></button>
+          </th>
+          <th scope="col">Planned actions</th>
+          <th scope="col"><span class="sr-only">Row actions</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (hasRows()) {
+          @for (row of rows(); track row.id) {
+            <tr>
+              <td class="incident-id">{{ row.shortId }}</td>
+              <td class="incident-title">{{ row.title }}</td>
+              <td>{{ row.category.label }}</td>
+              <td><app-admin-incident-priority-badge [label]="row.priority.label" [tone]="row.priority.tone" /></td>
+              <td><app-admin-incident-status-badge [label]="row.status.label" [tone]="row.status.tone" /></td>
+              <td>{{ row.reporterLabel }}</td>
+              <td>{{ row.createdAtLabel }}</td>
+              <td class="planned-actions-count">{{ row.linkedPlannedActionsCount }}</td>
+              <td>
+                <button type="button" class="details-link" (click)="viewDetails.emit(row.id)" [attr.aria-label]="'View details for ' + row.shortId">
+                  View details
+                </button>
+              </td>
+            </tr>
+          }
+        } @else {
+          @for (row of skeletonRows; track row) {
+            <tr class="skeleton-row" aria-hidden="true">
+              <td><span></span></td>
+              <td><span></span></td>
+              <td><span></span></td>
+              <td><span></span></td>
+              <td><span></span></td>
+              <td><span></span></td>
+              <td><span></span></td>
+              <td><span></span></td>
+              <td><span></span></td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="incident-mobile-list" [class.incident-mobile-list--muted]="refreshing()">
+    @if (hasRows()) {
+      @for (row of rows(); track row.id) {
+        <article class="incident-mobile-card" aria-labelledby="mobile-incident-title-{{ row.id }}">
+          <div class="incident-mobile-card__topline">
+            <span>{{ row.shortId }}</span>
+            <app-admin-incident-status-badge [label]="row.status.label" [tone]="row.status.tone" />
+          </div>
+          <h3 id="mobile-incident-title-{{ row.id }}">{{ row.title }}</h3>
+          <dl>
+            <div>
+              <dt>Priority</dt>
+              <dd><app-admin-incident-priority-badge [label]="row.priority.label" [tone]="row.priority.tone" /></dd>
+            </div>
+            <div>
+              <dt>Category</dt>
+              <dd>{{ row.category.label }}</dd>
+            </div>
+            <div>
+              <dt>Reporter</dt>
+              <dd>{{ row.reporterLabel }}</dd>
+            </div>
+            <div>
+              <dt>Date</dt>
+              <dd>{{ row.createdAtLabel }}</dd>
+            </div>
+          </dl>
+          <button type="button" class="details-link" (click)="viewDetails.emit(row.id)">View details</button>
+        </article>
+      }
+    } @else {
+      @for (row of skeletonRows; track row) {
+        <div class="incident-mobile-card incident-mobile-card--skeleton" aria-hidden="true"><span></span><span></span><span></span></div>
+      }
+    }
+  </div>
+</div>

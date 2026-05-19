@@ -82,7 +82,7 @@ export class AuthService {
     }
 
     if(dbUser.role === 'ROLE_ADMIN'){
-      await this.router.navigateByUrl('/manage-incidents');
+      await this.router.navigateByUrl('/admin/incidents');
     }
   }
 }

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-const PAGE_SIZE_OPTIONS = [10, 20, 50] as const;
+const PAGE_SIZE_OPTIONS = [10, 25, 50] as const;
 
 @Component({
   selector: 'app-pagination',
