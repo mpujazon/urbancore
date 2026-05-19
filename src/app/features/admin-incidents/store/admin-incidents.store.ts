@@ -13,7 +13,7 @@ import type {
   ResourceStatus,
 } from '../models/admin-incident-query.model';
 import type { AdminIncidentRowVm } from '../models/admin-incident-vm.model';
-import { AdminIncidentsApiService } from '../services/admin-incidents-api.service';
+import { AdminIncidentsApiService } from '../services/admin-incidents-api-service';
 
 const DEFAULT_PAGE = 0;
 const DEFAULT_SIZE = 10;
