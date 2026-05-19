@@ -1,0 +1,74 @@
+@use 'styles/variables' as *;
+
+.admin-incidents-empty-state {
+  align-items: center;
+  background: linear-gradient(145deg, rgba($surface-container-lowest, 0.96), rgba($surface-container, 0.78));
+  border: 1px dashed rgba($primary, 0.22);
+  border-radius: 1.25rem;
+  color: $on-surface;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(2rem, 5vw, 4rem);
+  text-align: center;
+}
+
+.admin-incidents-empty-state__mark {
+  align-items: center;
+  background: $primary;
+  border-radius: 1rem;
+  color: $on-primary;
+  display: flex;
+  font-weight: 900;
+  height: 3.2rem;
+  justify-content: center;
+  letter-spacing: -0.08em;
+  margin-bottom: $space-md;
+  width: 3.2rem;
+}
+
+.admin-incidents-empty-state__eyebrow {
+  color: $secondary;
+  font-size: $label-sm;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  margin: 0 0 $space-sm;
+  text-transform: uppercase;
+}
+
+h2 {
+  font-family: $font-display;
+  font-size: clamp(1.7rem, 4vw, 2.5rem);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin: 0 0 $space-sm;
+}
+
+p:not(.admin-incidents-empty-state__eyebrow) {
+  color: $neutral-variant;
+  margin: 0;
+}
+
+.admin-incidents-empty-state__button {
+  background: $gradient-primary-cta;
+  border-radius: $radius-full;
+  color: $on-primary;
+  cursor: pointer;
+  font-weight: $font-weight-semibold;
+  margin-top: $space-lg;
+  padding: 0.8rem 1.15rem;
+  transition: $transition-hover;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  &:focus-visible {
+    outline: 3px solid rgba($secondary, 0.4);
+    outline-offset: 3px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+}

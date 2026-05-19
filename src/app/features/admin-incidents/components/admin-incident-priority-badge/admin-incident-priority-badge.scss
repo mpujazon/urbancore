@@ -1,0 +1,42 @@
+@use 'styles/variables' as *;
+
+.priority-badge {
+  border: 1px solid transparent;
+  border-radius: $radius-full;
+  display: inline-flex;
+  font-size: $body-sm;
+  font-weight: $font-weight-semibold;
+  line-height: 1;
+  padding: 0.35rem 0.65rem;
+  white-space: nowrap;
+}
+
+.priority-badge--neutral {
+  background: $surface-container;
+  border-color: $outline-variant;
+  color: $neutral-variant;
+}
+
+.priority-badge--low {
+  background: $tertiary-container;
+  border-color: rgba($on-tertiary-container, 0.24);
+  color: $on-tertiary-container;
+}
+
+.priority-badge--medium {
+  background: #ffedc2;
+  border-color: rgba(#aa7000, 0.28);
+  color: #5b3a00;
+}
+
+.priority-badge--high {
+  background: #ffe1cc;
+  border-color: rgba(#b55300, 0.28);
+  color: #7a3300;
+}
+
+.priority-badge--critical {
+  background: $error-container;
+  border-color: rgba($on-error-container, 0.24);
+  color: $on-error-container;
+}

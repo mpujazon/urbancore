@@ -23,7 +23,7 @@ export const NAV_LINKS: Link[] = [
     {
       label: 'Manage incidents',
       roles: ROUTE_ROLES.manageIncidents,
-      url: '/manage-incidents',
+      url: '/admin/incidents',
       iconClasses: 'fa-solid fa-list'
     },
     {

@@ -1,1 +1,75 @@
-<p>manage-incidents works!</p>
+<main class="manage-incidents-page">
+  <div class="page-background" aria-hidden="true"></div>
+
+  <section class="manage-incidents-shell" aria-labelledby="manage-incidents-title">
+    <header class="manage-incidents-header">
+      <div>
+        <p class="eyebrow">Admin backoffice</p>
+        <h1 id="manage-incidents-title">Manage Incidents</h1>
+        <p class="subtitle">Review, prioritize and manage reported urban incidents.</p>
+      </div>
+
+      <aside class="metric-card" aria-label="Incident result count">
+        <span>{{ store.totalElements() }}</span>
+        <p>{{ store.activeFilterCount() > 0 ? 'Filtered incidents' : 'Total incidents' }}</p>
+      </aside>
+    </header>
+
+    <app-admin-incidents-filter-bar
+      [filters]="store.filters()"
+      [activeFilterCount]="store.activeFilterCount()"
+      [refreshing]="store.isRefreshing()"
+      (searchChange)="store.setSearch($event)"
+      (statusChange)="store.setStatus($event)"
+      (categoryChange)="store.setCategory($event)"
+      (priorityChange)="store.setPriority($event)"
+      (dateFromChange)="store.setDateFrom($event)"
+      (dateToChange)="store.setDateTo($event)"
+      (clearFilters)="store.clearFilters()"
+    />
+
+    <p class="results-live" aria-live="polite">{{ store.resultsLabel() }}</p>
+
+    @if (store.error()) {
+      <section class="state-panel state-panel--error" role="alert" aria-labelledby="admin-incidents-error-title">
+        <p class="eyebrow">Request failed</p>
+        <h2 id="admin-incidents-error-title">
+          {{ store.error()?.status === 403 ? 'Admin access required' : 'Could not load incidents' }}
+        </h2>
+        <p>{{ store.error()?.message }}</p>
+        <div class="state-actions">
+          @if (store.error()?.status === 403) {
+            <a routerLink="/unauthorized" class="state-link">Go to unauthorized page</a>
+          } @else {
+            <button type="button" class="state-button" (click)="store.retry()">Retry</button>
+          }
+        </div>
+      </section>
+    } @else if (store.isEmpty()) {
+      <app-admin-incidents-empty-state
+        [activeFilterCount]="store.activeFilterCount()"
+        (clearFilters)="store.clearFilters()"
+      />
+    } @else {
+      <app-admin-incidents-table
+        [rows]="store.rows()"
+        [sort]="store.sort()"
+        [refreshing]="store.isRefreshing()"
+        (sortChange)="store.setSort($event)"
+        (viewDetails)="store.openIncident($event)"
+      />
+
+      <app-pagination
+        [page]="store.pagination().page"
+        [size]="store.pagination().size"
+        [totalPages]="store.pagination().totalPages"
+        [totalElements]="store.pagination().totalElements"
+        [first]="store.pagination().first"
+        [last]="store.pagination().last"
+        [loading]="store.isLoading()"
+        (pageChange)="store.setPage($event)"
+        (sizeChange)="store.setSize($event)"
+      />
+    }
+  </section>
+</main>
