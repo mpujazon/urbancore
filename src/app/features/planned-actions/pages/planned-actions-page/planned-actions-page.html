@@ -1,0 +1,63 @@
+<section class="planned-actions-page" aria-labelledby="planned-actions-title">
+  <div class="page-background" aria-hidden="true"></div>
+
+  <header class="hero">
+    <p class="eyebrow">Public transparency calendar</p>
+    <div>
+      <h1 id="planned-actions-title">Planned maintenance actions</h1>
+      <p>
+        Browse upcoming civic work by date range. This public calendar is read-only and
+        links every action back to its related incident record.
+      </p>
+    </div>
+  </header>
+
+  <app-planned-actions-toolbar
+    [rangeLabel]="store.rangeLabel()"
+    [viewMode]="store.viewMode()"
+    [isLoading]="store.isLoading()"
+    (previousRange)="store.goToPreviousRange()"
+    (nextRange)="store.goToNextRange()"
+    (currentRange)="store.goToCurrentRange()"
+    (viewModeChanged)="onViewModeChanged($event)"
+  />
+
+  <p class="results-announcer" aria-live="polite">{{ store.resultLabel() }}</p>
+
+  @if (store.hasError()) {
+    <section class="state-card error-card" role="alert" aria-labelledby="planned-actions-error-title">
+      <p class="eyebrow">Schedule unavailable</p>
+      <h2 id="planned-actions-error-title">We could not load planned actions.</h2>
+      <p>{{ store.error()?.message }}</p>
+      <button type="button" (click)="store.retry()">Retry loading planned actions</button>
+    </section>
+  }
+
+  @if (store.isEmpty()) {
+    <section class="state-card empty-card" aria-labelledby="planned-actions-empty-title">
+      <p class="eyebrow">No scheduled work</p>
+      <h2 id="planned-actions-empty-title">No planned maintenance actions are scheduled for this period.</h2>
+      <p>Try changing the date range to explore planned maintenance across other periods.</p>
+    </section>
+  }
+
+  @if (!store.hasError() && !store.isEmpty()) {
+    <div class="content-grid" [class.is-refreshing]="store.isLoading()">
+      <app-planned-actions-calendar
+        [events]="store.events()"
+        [range]="store.visibleDateRange()"
+        [viewMode]="store.viewMode()"
+        [selectedEventId]="store.selectedEventId()"
+        (eventSelected)="store.selectEvent($event)"
+      />
+      <app-planned-action-detail-panel [event]="store.selectedEvent()" />
+    </div>
+  }
+
+  @if (store.isLoading() && store.events().length === 0) {
+    <section class="state-card loading-card" aria-live="polite" aria-label="Loading planned actions">
+      <span class="loader" aria-hidden="true"></span>
+      <p>Loading planned actions for {{ store.rangeLabel() }}.</p>
+    </section>
+  }
+</section>

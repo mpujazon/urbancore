@@ -1,0 +1,73 @@
+<section class="calendar-shell" aria-label="Planned actions results">
+  @if (viewMode() !== 'agenda') {
+    <div class="calendar-grid" role="grid" aria-label="Planned actions calendar">
+      <div class="weekday-row" role="row">
+        @for (day of weeks()[0]?.days ?? []; track day.isoDate) {
+          <span role="columnheader">{{ day.weekdayLabel }}</span>
+        }
+      </div>
+
+      @for (week of weeks(); track week.id) {
+        <div class="week-row" role="row">
+          @for (day of week.days; track day.isoDate) {
+            <article
+              class="day-cell"
+              [class.outside-range]="day.isOutsideRange"
+              [class.today]="day.isToday"
+              role="gridcell"
+              [attr.aria-label]="day.monthLabel + ' ' + day.dayNumber + ', ' + day.events.length + ' planned actions'"
+            >
+              <header>
+                <span>{{ day.monthLabel }}</span>
+                <strong>{{ day.dayNumber }}</strong>
+              </header>
+
+              <div class="event-stack">
+                @for (event of day.events; track event.id) {
+                  <button
+                    type="button"
+                    class="event-chip"
+                    [class.selected]="selectedEventId() === event.id"
+                    [attr.data-tone]="event.statusTone"
+                    [attr.aria-pressed]="selectedEventId() === event.id"
+                    (click)="selectEvent(event)"
+                  >
+                    <span class="status-dot" aria-hidden="true"></span>
+                    <span class="event-time">{{ event.timeLabel }}</span>
+                    <span class="event-title">{{ event.title }}</span>
+                    @if (selectedEventId() === event.id) {
+                      <span class="selected-marker">Selected</span>
+                    }
+                  </button>
+                }
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  <div class="agenda-list" [class.force-agenda]="viewMode() === 'agenda'">
+    @for (event of agendaEvents(); track event.id) {
+      <button
+        type="button"
+        class="agenda-card"
+        [class.selected]="selectedEventId() === event.id"
+        [attr.data-tone]="event.statusTone"
+        [attr.aria-pressed]="selectedEventId() === event.id"
+        (click)="selectEvent(event)"
+      >
+        <span class="agenda-date">{{ event.dateLabel }}</span>
+        <span class="agenda-main">
+          <strong>{{ event.title }}</strong>
+          <span>{{ event.timeLabel }} · {{ event.incidentTitle }}</span>
+        </span>
+        <span class="agenda-status">
+          <span class="status-dot" aria-hidden="true"></span>
+          {{ event.statusLabel }}
+        </span>
+      </button>
+    }
+  </div>
+</section>
