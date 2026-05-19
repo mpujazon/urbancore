@@ -1,0 +1,9 @@
+<section class="admin-incidents-empty-state" aria-labelledby="empty-incidents-title">
+  <div class="admin-incidents-empty-state__mark" aria-hidden="true">UC</div>
+  <p class="admin-incidents-empty-state__eyebrow">Incident queue</p>
+  <h2 id="empty-incidents-title">No incidents found</h2>
+  <p>Try adjusting your filters or search query.</p>
+  <button type="button" class="admin-incidents-empty-state__button" (click)="clearFilters.emit()" [disabled]="activeFilterCount() === 0">
+    Clear filters
+  </button>
+</section>
