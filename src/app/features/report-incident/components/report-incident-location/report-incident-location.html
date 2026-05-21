@@ -26,7 +26,13 @@
   }
 
   <div class="location-fields">
-    @if(addressInfo()){
+    @if (isAddressLoading()) {
+      <div class="address-label-container is-loading" role="status" aria-live="polite" aria-busy="true">
+        <span class="sr-only">Loading selected address</span>
+        <span class="address-loading-line address-loading-line--primary" aria-hidden="true"></span>
+        <span class="address-loading-line address-loading-line--secondary" aria-hidden="true"></span>
+      </div>
+    } @else if (addressInfo()) {
       <div class="address-label-container">
         <p>{{ addressInfo()?.addressLine1}}, {{ addressInfo()?.city }}</p>
         @if (addressInfo()?.suburb){

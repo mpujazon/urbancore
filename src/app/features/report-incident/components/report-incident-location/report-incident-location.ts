@@ -15,7 +15,7 @@ import { IncidentCoordinates } from '../../../../shared/models/incident-dto.mode
 import {ReverseGeocodingService} from '../../services/reverse-geocoding-service';
 import {ReverseGeocodingDto} from '../../models/reverse-geocoding-dto.models';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {catchError, of, Subject, switchMap} from 'rxjs';
+import {catchError, finalize, of, Subject, switchMap} from 'rxjs';
 
 @Component({
   selector: 'app-report-incident-location',
@@ -37,6 +37,7 @@ export class ReportIncidentLocation implements AfterViewInit, OnDestroy {
   protected readonly coordinates = signal('');
   protected readonly coordinatesChanged = output<IncidentCoordinates>();
   protected readonly addressInfo = signal<ReverseGeocodingDto | undefined>(undefined);
+  protected readonly isAddressLoading = signal(false);
   protected readonly isLocating = signal(false);
   protected readonly locationMessage = signal<string | null>(null);
 
@@ -47,12 +48,14 @@ export class ReportIncidentLocation implements AfterViewInit, OnDestroy {
     this.addressLookupRequest.pipe(
       switchMap(([lat, lng]) => {
         this.addressInfo.set(undefined);
+        this.isAddressLoading.set(true);
 
         return this.reverseGeocoding.getAddressInfo(lat, lng).pipe(
           catchError(() => {
             this.locationMessage.set('Could not resolve the selected address.');
             return of(undefined);
-          })
+          }),
+          finalize(() => this.isAddressLoading.set(false))
         );
       }),
       takeUntilDestroyed(this.destroyRef)
