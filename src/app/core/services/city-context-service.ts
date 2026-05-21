@@ -34,7 +34,6 @@ export class CityContextService {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((cities) => {
-        console.log(cities);
         this.availableCitiesState.set(cities);
         this.restoreOrValidateSelectedCity(cities);
       });
