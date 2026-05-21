@@ -2,6 +2,7 @@ export interface ReverseGeocodingDto{
   lat: number;
   lng: number;
   addressLabel: string;
+  addressLine1: string;
   street: string;
   houseNumber: string;
   postcode: string;
