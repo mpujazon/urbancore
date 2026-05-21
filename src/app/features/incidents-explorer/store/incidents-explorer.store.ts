@@ -1,12 +1,15 @@
 import {
   computed,
   DestroyRef,
+  effect,
   inject,
   Injectable,
   signal,
+  untracked,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject, switchMap, tap } from 'rxjs';
+import { CityContextService } from '../../../core/services/city-context-service';
 import {
   IncidentExplorerQuery,
   IncidentListItemDto,
@@ -18,6 +21,7 @@ import { PagedResponseDto } from '../../../shared/models/paged-response.model';
 @Injectable()
 export class IncidentsExplorerStore {
   private readonly incidentService = inject(IncidentsApiService);
+  private readonly cityContext = inject(CityContextService);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly filters = signal<IncidentExplorerFilters>({});
@@ -28,7 +32,10 @@ export class IncidentsExplorerStore {
   private readonly response = signal<PagedResponseDto<IncidentListItemDto> | null>(null);
   private readonly loadingState = signal<boolean>(false);
   private readonly errorState = signal<string | null>(null);
+  private readonly hasHydrated = signal(false);
   private incidentsContainer: HTMLElement | null = null;
+  private lastCityId: string | undefined;
+  private hasLoadedForCityContext = false;
 
   readonly incidents = computed(() => this.response()?.content ?? []);
   readonly totalPages = computed(() => this.response()?.totalPages ?? 0);
@@ -52,7 +59,6 @@ export class IncidentsExplorerStore {
     if (f.status) count++;
     if (f.category) count++;
     if (f.priority) count++;
-    if (f.cityId) count++;
     if (f.from) count++;
     if (f.to) count++;
     return count;
@@ -87,7 +93,23 @@ export class IncidentsExplorerStore {
         },
       });
 
-    this.emitQuery();
+    effect(() => {
+      if (!this.hasHydrated() || !this.cityContext.citiesLoaded()) {
+        return;
+      }
+
+      const cityId = this.cityContext.selectedCityId();
+
+      if (this.hasLoadedForCityContext && this.lastCityId !== cityId) {
+        this.page.set(0);
+        this.scrollIncidentsContainerToTop();
+      }
+
+      this.lastCityId = cityId;
+      this.hasLoadedForCityContext = true;
+
+      untracked(() => this.emitQuery(cityId));
+    });
   }
 
   setFilters(partial: Partial<IncidentExplorerFilters>): void {
@@ -159,7 +181,6 @@ export class IncidentsExplorerStore {
     if (params['status']) filters.status = params['status'] as IncidentExplorerFilters['status'];
     if (params['category']) filters.category = params['category'] as IncidentExplorerFilters['category'];
     if (params['priority']) filters.priority = params['priority'] as IncidentExplorerFilters['priority'];
-    if (params['cityId']) filters.cityId = params['cityId'];
     if (params['from']) filters.from = params['from'];
     if (params['to']) filters.to = params['to'];
 
@@ -171,8 +192,7 @@ export class IncidentsExplorerStore {
     this.page.set(Number.isNaN(page) ? 0 : page);
     this.size.set(Number.isNaN(size) || size < 1 || size > 50 ? 10 : size);
     this.sort.set(sort);
-
-    this.emitQuery();
+    this.hasHydrated.set(true);
   }
 
   buildQueryParams(): Record<string, string | undefined> {
@@ -183,7 +203,6 @@ export class IncidentsExplorerStore {
     if (f.status) params['status'] = f.status;
     if (f.category) params['category'] = f.category;
     if (f.priority) params['priority'] = f.priority;
-    if (f.cityId) params['cityId'] = f.cityId;
     if (f.from) params['from'] = f.from;
     if (f.to) params['to'] = f.to;
 
@@ -194,7 +213,11 @@ export class IncidentsExplorerStore {
     return params;
   }
 
-  private emitQuery(): void {
+  private emitQuery(cityId = this.cityContext.selectedCityId()): void {
+    if (!this.hasHydrated() || !this.cityContext.citiesLoaded()) {
+      return;
+    }
+
     const f = this.filters();
     const query: IncidentExplorerQuery = {
       page: this.page(),
@@ -206,7 +229,7 @@ export class IncidentsExplorerStore {
     if (f.status) query.status = f.status;
     if (f.category) query.category = f.category;
     if (f.priority) query.priority = f.priority;
-    if (f.cityId) query.cityId = f.cityId;
+    if (cityId) query.cityId = cityId;
     if (f.from) query.from = f.from;
     if (f.to) query.to = f.to;
 
