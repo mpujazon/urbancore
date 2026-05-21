@@ -26,18 +26,14 @@
   }
 
   <div class="location-fields">
-    <label class="field coordinates-field">
-      <span>Coordinates</span>
-      <span class="input-with-icon">
-        <input
-          type="text"
-          [value]="coordinates()"
-          aria-label="Coordinates"
-          placeholder="Select a location on the map"
-          readonly
-        />
-      </span>
-    </label>
+    @if(addressInfo()){
+      <div class="address-label-container">
+        <p>{{ addressInfo()?.addressLine1}}, {{ addressInfo()?.city }}</p>
+        @if (addressInfo()?.suburb){
+          <p>{{ addressInfo()?.suburb}}</p>
+        }
+      </div>
+    }
 
     <div class="notice">
       <i class="icon fa-solid fa-circle-info"></i>
