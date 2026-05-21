@@ -6,12 +6,16 @@ import {
   OnDestroy,
   ViewChild,
   inject,
-  signal, output,
+  signal, output, DestroyRef,
 } from '@angular/core';
 import * as L from 'leaflet';
 import { LeafletMapService } from '../../../../shared/services/leaflet-map-service';
 import { ReportIncidentMapFacade } from '../../services/report-incident-map.facade';
 import { IncidentCoordinates } from '../../../../shared/models/incident-dto.model';
+import {ReverseGeocodingService} from '../../services/reverse-geocoding-service';
+import {ReverseGeocodingDto} from '../../models/reverse-geocoding-dto.models';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {catchError, finalize, of, Subject, switchMap} from 'rxjs';
 
 @Component({
   selector: 'app-report-incident-location',
@@ -23,17 +27,40 @@ import { IncidentCoordinates } from '../../../../shared/models/incident-dto.mode
 export class ReportIncidentLocation implements AfterViewInit, OnDestroy {
   private readonly leafletMapService = inject(LeafletMapService);
   private readonly reportIncidentMapFacade = inject(ReportIncidentMapFacade);
+  private readonly reverseGeocoding = inject(ReverseGeocodingService);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly addressLookupRequest = new Subject<L.LatLngTuple>();
 
   @ViewChild('mapContainer', { static: true })
   private mapContainer?: ElementRef<HTMLElement>;
 
   protected readonly coordinates = signal('');
   protected readonly coordinatesChanged = output<IncidentCoordinates>();
+  protected readonly addressInfo = signal<ReverseGeocodingDto | undefined>(undefined);
+  protected readonly isAddressLoading = signal(false);
   protected readonly isLocating = signal(false);
   protected readonly locationMessage = signal<string | null>(null);
 
   private readonly defaultCenter: L.LatLngTuple = [41.3874, 2.1686];
   private readonly defaultZoom = 13;
+
+  constructor() {
+    this.addressLookupRequest.pipe(
+      switchMap(([lat, lng]) => {
+        this.addressInfo.set(undefined);
+        this.isAddressLoading.set(true);
+
+        return this.reverseGeocoding.getAddressInfo(lat, lng).pipe(
+          catchError(() => {
+            this.locationMessage.set('Could not resolve the selected address.');
+            return of(undefined);
+          }),
+          finalize(() => this.isAddressLoading.set(false))
+        );
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe((addressInfo) => this.addressInfo.set(addressInfo));
+  }
 
   ngAfterViewInit(): void {
     if (!this.mapContainer) {
@@ -131,6 +158,7 @@ export class ReportIncidentLocation implements AfterViewInit, OnDestroy {
     if (!this.reportIncidentMapFacade.map()) {
       return;
     }
+    this.addressLookupRequest.next(location);
     this.reportIncidentMapFacade.setMarker(location, recenter);
     this.coordinates.set(`${location[0].toFixed(5)}, ${location[1].toFixed(5)}`);
     this.coordinatesChanged.emit({lat: location[0], lng: location[1]});
