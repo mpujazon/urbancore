@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -9,9 +9,12 @@ import {
   inject,
   signal,
   viewChild,
+  untracked,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Chart, type ChartConfiguration, type ChartOptions, type ChartType, registerables } from 'chart.js';
+import { Subject, catchError, map, of, switchMap, tap } from 'rxjs';
+import { CityContextService } from '../../../../core/services/city-context-service';
 import { environment } from '../../../../../environments/environment';
 import type {
   IncidentSummaryResponse,
@@ -32,6 +35,10 @@ import {
 
 Chart.register(...registerables);
 
+type SummaryLoadResult =
+  | { summary: IncidentSummaryResponse; error: null }
+  | { summary: IncidentSummaryResponse; error: string };
+
 @Component({
   selector: 'app-public-statistics-dashboard',
   templateUrl: './public-statistics-dashboard.html',
@@ -40,6 +47,7 @@ Chart.register(...registerables);
 })
 export class PublicStatisticsDashboard {
   private readonly http = inject(HttpClient);
+  private readonly cityContext = inject(CityContextService);
   private readonly destroyRef = inject(DestroyRef);
 
   private readonly trendChartCanvas = viewChild<ElementRef<HTMLCanvasElement>>('trendChart');
@@ -58,9 +66,49 @@ export class PublicStatisticsDashboard {
   private trendChart: Chart<'line'> | null = null;
   private statusChart: Chart<'doughnut'> | null = null;
   private categoryChart: Chart<'bar'> | null = null;
+  private readonly summaryRequest = new Subject<string | undefined>();
 
   constructor() {
-    this.loadSummary();
+    this.summaryRequest
+      .pipe(
+        tap(() => {
+          this.destroyCharts();
+          this.dashboardState.set({ data: this.dashboardState().data, status: 'loading', error: null });
+        }),
+        switchMap((cityId) =>
+          this.http
+            .get<IncidentSummaryResponse>(`${environment.API_BASE_URL}${INCIDENT_SUMMARY_ENDPOINT}`, {
+              params: this.buildSummaryParams(cityId),
+            })
+            .pipe(
+              map<IncidentSummaryResponse, SummaryLoadResult>((summary) => ({ summary, error: null })),
+              catchError(() =>
+                of<SummaryLoadResult>({
+                  summary: EMPTY_INCIDENT_SUMMARY,
+                  error: 'Could not load public statistics from the incidents summary endpoint.',
+                }),
+              ),
+            ),
+        ),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((result) => {
+        this.dashboardState.set({
+          data: result.summary,
+          status: result.error ? 'error' : 'success',
+          error: result.error,
+        });
+      });
+
+    effect(() => {
+      if (!this.cityContext.citiesLoaded()) {
+        return;
+      }
+
+      const cityId = this.cityContext.selectedCityId();
+
+      untracked(() => this.loadSummary(cityId));
+    });
 
     effect(() => {
       const data = this.dashboardData();
@@ -82,21 +130,12 @@ export class PublicStatisticsDashboard {
     this.loadSummary();
   }
 
-  private loadSummary(): void {
-    this.dashboardState.set({ data: this.dashboardState().data, status: 'loading', error: null });
+  private loadSummary(cityId = this.cityContext.selectedCityId()): void {
+    this.summaryRequest.next(cityId);
+  }
 
-    this.http
-      .get<IncidentSummaryResponse>(`${environment.API_BASE_URL}${INCIDENT_SUMMARY_ENDPOINT}`)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (summary) => this.dashboardState.set({ data: summary, status: 'success', error: null }),
-        error: () =>
-          this.dashboardState.set({
-            data: EMPTY_INCIDENT_SUMMARY,
-            status: 'error',
-            error: 'Could not load public statistics from the incidents summary endpoint.',
-          }),
-      });
+  private buildSummaryParams(cityId: string | undefined): HttpParams | undefined {
+    return cityId ? new HttpParams().set('cityId', cityId) : undefined;
   }
 
   private renderCharts(
@@ -219,5 +258,8 @@ export class PublicStatisticsDashboard {
     this.trendChart?.destroy();
     this.statusChart?.destroy();
     this.categoryChart?.destroy();
+    this.trendChart = null;
+    this.statusChart = null;
+    this.categoryChart = null;
   }
 }
