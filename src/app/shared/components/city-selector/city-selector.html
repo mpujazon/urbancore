@@ -1,0 +1,53 @@
+@if (isOpen()) {
+  <button
+    type="button"
+    class="city-selector-backdrop"
+    aria-label="Cerrar selector de ciudad"
+    (click)="close()"
+  ></button>
+}
+
+<section class="city-selector" aria-label="Selector de ciudad">
+  @if (isOpen()) {
+    <div class="city-selector-panel" id="city-selector-panel">
+      <label class="city-selector-label" for="city-selector-search">Buscar ciudad</label>
+      <input
+        id="city-selector-search"
+        class="city-selector-search"
+        type="search"
+        autocomplete="off"
+        [value]="query()"
+        (input)="updateQuery($event)"
+        placeholder="Escribe una ciudad"
+      />
+
+      <div class="city-selector-results" role="listbox" aria-label="Ciudades disponibles">
+        @for (city of filteredCities(); track city.id) {
+          <button
+            type="button"
+            class="city-selector-option"
+            role="option"
+            [attr.aria-selected]="selectedCity()?.id === city.id"
+            [class.selected]="selectedCity()?.id === city.id"
+            (click)="selectCity(city)"
+          >
+            {{ city.name }}
+          </button>
+        } @empty {
+          <p class="city-selector-empty">No hay ciudades con ese nombre.</p>
+        }
+      </div>
+    </div>
+  }
+
+  <button
+    type="button"
+    class="city-selector-trigger"
+    aria-controls="city-selector-panel"
+    [attr.aria-expanded]="isOpen()"
+    (click)="toggle()"
+  >
+    <span class="city-selector-pin" aria-hidden="true">⌖</span>
+    <span class="city-selector-name">{{ selectedCity()?.name ?? 'Seleccionar ciudad' }}</span>
+  </button>
+</section>
