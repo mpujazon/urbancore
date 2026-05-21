@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { DestroyRef, computed, inject, Injectable, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { catchError, EMPTY } from 'rxjs';
+import { catchError, EMPTY, finalize } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import type { CityDto } from '../../shared/models/city-dto.model';
 import {ToastService} from './toast-service';
@@ -17,20 +17,25 @@ export class CityContextService {
   private readonly toastService = inject(ToastService);
   private readonly availableCitiesState = signal<readonly CityDto[]>([]);
   private readonly selectedCityState = signal<CityDto | undefined>(undefined);
+  private readonly citiesLoadedState = signal(false);
 
   readonly availableCities = this.availableCitiesState.asReadonly();
   readonly selectedCity = this.selectedCityState.asReadonly();
   readonly selectedCityId = computed(() => this.selectedCity()?.id);
+  readonly citiesLoaded = this.citiesLoadedState.asReadonly();
 
   constructor() {
     this.loadCities();
   }
 
   loadCities(): void {
+    this.citiesLoadedState.set(false);
+
     this.http
       .get<CityDto[]>(`${environment.API_BASE_URL}/cities`)
       .pipe(
         catchError(() => EMPTY),
+        finalize(() => this.citiesLoadedState.set(true)),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((cities) => {
