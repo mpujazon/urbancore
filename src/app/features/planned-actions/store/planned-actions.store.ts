@@ -1,6 +1,7 @@
-import { DestroyRef, Injectable, computed, inject, signal } from '@angular/core';
+import { DestroyRef, Injectable, computed, effect, inject, signal, untracked } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject, catchError, map, of, switchMap, tap } from 'rxjs';
+import { CityContextService } from '../../../core/services/city-context-service';
 import { mapPublicPlannedActionsToCalendarEvents } from '../mappers/planned-action.mapper';
 import { ApiError } from '../models/planned-action-dto.model';
 import {
@@ -19,6 +20,7 @@ type ResourceState<T> = {
 
 interface PlannedActionsQueryState {
   range: PlannedActionsDateRange;
+  cityId?: string;
 }
 
 const today = new Date();
@@ -26,11 +28,13 @@ const today = new Date();
 @Injectable()
 export class PlannedActionsStore {
   private readonly api = inject(PlannedActionsApiService);
+  private readonly cityContext = inject(CityContextService);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly visibleDateRange = signal<PlannedActionsDateRange>(getMonthRange(today));
   readonly viewMode = signal<PlannedActionsViewMode>('month');
   readonly selectedEventId = signal<string | null>(null);
+  private readonly hasHydrated = signal(false);
   readonly resource = signal<ResourceState<PlannedActionCalendarEventVm[]>>({
     data: [],
     status: 'idle',
@@ -56,6 +60,8 @@ export class PlannedActionsStore {
   });
 
   private readonly reloadSubject = new Subject<PlannedActionsQueryState>();
+  private lastCityId: string | undefined;
+  private hasLoadedForCityContext = false;
 
   constructor() {
     this.reloadSubject
@@ -68,6 +74,7 @@ export class PlannedActionsStore {
             .getPublicPlannedActions({
               dateFrom: toIsoDate(query.range.from),
               dateTo: toIsoDate(query.range.to),
+              cityId: query.cityId,
             })
             .pipe(
               map((dtos) => ({ events: mapPublicPlannedActionsToCalendarEvents(dtos), error: null })),
@@ -101,6 +108,23 @@ export class PlannedActionsStore {
           this.selectedEventId.set(result.events[0].id);
         }
       });
+
+    effect(() => {
+      if (!this.hasHydrated() || !this.cityContext.citiesLoaded()) {
+        return;
+      }
+
+      const cityId = this.cityContext.selectedCityId();
+
+      if (this.hasLoadedForCityContext && this.lastCityId !== cityId) {
+        this.selectedEventId.set(null);
+      }
+
+      this.lastCityId = cityId;
+      this.hasLoadedForCityContext = true;
+
+      untracked(() => this.fetch(cityId));
+    });
   }
 
   hydrateFromQueryParams(params: Record<string, string | undefined>): void {
@@ -109,7 +133,7 @@ export class PlannedActionsStore {
 
     this.viewMode.set(view);
     this.visibleDateRange.set(range);
-    this.fetch();
+    this.hasHydrated.set(true);
   }
 
   buildQueryParams(): Record<string, string | undefined> {
@@ -156,9 +180,14 @@ export class PlannedActionsStore {
     this.fetch();
   }
 
-  private fetch(): void {
+  private fetch(cityId = this.cityContext.selectedCityId()): void {
+    if (!this.hasHydrated() || !this.cityContext.citiesLoaded()) {
+      return;
+    }
+
     this.reloadSubject.next({
       range: this.visibleDateRange(),
+      cityId,
     });
   }
 }
