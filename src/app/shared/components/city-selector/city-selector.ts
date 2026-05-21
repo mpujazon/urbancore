@@ -12,10 +12,16 @@ import type { CityDto } from '../../models/city-dto.model';
   },
 })
 export class CitySelector {
+  private readonly globalCityLabel = 'Worldwide';
   protected readonly cityContext = inject(CityContextService);
   protected readonly isOpen = signal(false);
   protected readonly query = signal('');
   protected readonly selectedCity = this.cityContext.selectedCity;
+  protected readonly showGlobalOption = computed(() => {
+    const query = this.query().trim().toLocaleLowerCase();
+
+    return !query || this.globalCityLabel.toLocaleLowerCase().includes(query);
+  });
   protected readonly filteredCities = computed(() => {
     const query = this.query().trim().toLocaleLowerCase();
     const cities = this.cityContext.availableCities();
@@ -26,6 +32,7 @@ export class CitySelector {
 
     return cities.filter((city) => city.name.toLocaleLowerCase().includes(query));
   });
+  protected readonly hasNoResults = computed(() => !this.showGlobalOption() && this.filteredCities().length === 0);
 
   protected toggle(): void {
     this.isOpen.update((isOpen) => !isOpen);
@@ -43,6 +50,12 @@ export class CitySelector {
 
   protected selectCity(city: CityDto): void {
     this.cityContext.selectCity(city);
+    this.query.set('');
+    this.close();
+  }
+
+  protected selectGlobalCity(): void {
+    this.cityContext.clearSelectedCity();
     this.query.set('');
     this.close();
   }

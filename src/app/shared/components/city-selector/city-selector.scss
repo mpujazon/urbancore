@@ -92,6 +92,10 @@
   }
 }
 
+.city-selector-option-global {
+  font-weight: $font-weight-semibold;
+}
+
 .city-selector-empty {
   margin: 0;
   padding: $space-sm $space-xs;
