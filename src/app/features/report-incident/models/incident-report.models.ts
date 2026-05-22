@@ -5,9 +5,12 @@ export interface CreateIncidentRequest {
   title: string;
   description: string;
   category: IncidentDto['category'];
+  citySlug: string;
   location: {
     lat: number;
     lng: number;
+    addressLabel: string;
+    city: string;
     geohash: string;
   };
   images: IncidentImageDto[];

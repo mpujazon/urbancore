@@ -36,6 +36,9 @@ export class ReportIncidentLocation implements AfterViewInit, OnDestroy {
 
   protected readonly coordinates = signal('');
   protected readonly coordinatesChanged = output<IncidentCoordinates>();
+  protected readonly addressLabelChanged = output<string | null>();
+  protected readonly citySlugChanged = output<string | null>();
+  protected readonly cityChanged = output<string | null>();
   protected readonly addressInfo = signal<ReverseGeocodingDto | undefined>(undefined);
   protected readonly isAddressLoading = signal(false);
   protected readonly isLocating = signal(false);
@@ -59,7 +62,12 @@ export class ReportIncidentLocation implements AfterViewInit, OnDestroy {
         );
       }),
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe((addressInfo) => this.addressInfo.set(addressInfo));
+    ).subscribe((addressInfo) => {
+      this.addressInfo.set(addressInfo);
+      this.addressLabelChanged.emit(addressInfo?.addressLine1 ?? null);
+      this.citySlugChanged.emit(addressInfo?.citySlug ?? null);
+      this.cityChanged.emit(addressInfo?.city ?? null);
+    });
   }
 
   ngAfterViewInit(): void {
@@ -158,6 +166,9 @@ export class ReportIncidentLocation implements AfterViewInit, OnDestroy {
     if (!this.reportIncidentMapFacade.map()) {
       return;
     }
+    this.addressLabelChanged.emit(null);
+    this.citySlugChanged.emit(null);
+    this.cityChanged.emit(null);
     this.addressLookupRequest.next(location);
     this.reportIncidentMapFacade.setMarker(location, recenter);
     this.coordinates.set(`${location[0].toFixed(5)}, ${location[1].toFixed(5)}`);

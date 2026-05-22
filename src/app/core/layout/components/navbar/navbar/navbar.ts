@@ -30,7 +30,6 @@ export class Navbar implements OnInit {
     onCleanup(() => body.classList.remove('mobile-menu-open'));
   });
 
-  // TODO: links will be given by a computed expression based on a signal of AuthService.
   links = computed(()=>
     NAV_LINKS.filter(link =>
       link.roles.includes(this.auth.dbUser()?.role ?? 'unlogged')

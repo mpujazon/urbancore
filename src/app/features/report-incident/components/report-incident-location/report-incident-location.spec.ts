@@ -15,11 +15,17 @@ type MapClickHandler = (event: L.LeafletMouseEvent) => void;
   template: `
     <app-report-incident-location
       (coordinatesChanged)="selectedCoordinates = $event"
+      (addressLabelChanged)="selectedAddressLabel = $event"
+      (citySlugChanged)="selectedCitySlug = $event"
+      (cityChanged)="selectedCity = $event"
     />
   `,
 })
 class TestHostComponent {
   selectedCoordinates?: IncidentCoordinates;
+  selectedAddressLabel?: string | null;
+  selectedCitySlug?: string | null;
+  selectedCity?: string | null;
 }
 
 describe('ReportIncidentLocation integration', () => {
@@ -93,6 +99,7 @@ describe('ReportIncidentLocation integration', () => {
       houseNumber: '401',
       postcode: '08013',
       city: 'Barcelona',
+      citySlug: 'es-barcelona',
       country: 'Spain',
       countryCode: 'ES',
       suburb: 'Eixample',
@@ -109,6 +116,9 @@ describe('ReportIncidentLocation integration', () => {
     expect(leafletMapServiceMock.createMarker).toHaveBeenCalledWith(mockMap, [lat, lng]);
     expect(mockMap.panTo).toHaveBeenCalledWith([lat, lng]);
     expect(hostComponent.selectedCoordinates).toEqual({ lat, lng });
+    expect(hostComponent.selectedAddressLabel).toBe('Carrer de Mallorca');
+    expect(hostComponent.selectedCitySlug).toBe('es-barcelona');
+    expect(hostComponent.selectedCity).toBe('Barcelona');
     expect(fixture.nativeElement.textContent).toContain('Location selected.');
     expect(fixture.nativeElement.textContent).toContain('Carrer de Mallorca, Barcelona');
     expect(fixture.nativeElement.textContent).toContain('Eixample');

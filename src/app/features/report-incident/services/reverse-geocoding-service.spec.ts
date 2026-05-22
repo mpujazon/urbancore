@@ -38,6 +38,7 @@ describe('ReverseGeocodingService', () => {
       houseNumber: '1',
       postcode: '08002',
       city: 'Barcelona',
+      citySlug: 'es-barcelona',
       country: 'Spain',
       countryCode: 'ES',
       suburb: 'Eixample',

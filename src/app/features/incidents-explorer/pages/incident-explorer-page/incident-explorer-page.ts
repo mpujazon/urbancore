@@ -88,7 +88,7 @@ export class IncidentExplorerPage implements AfterViewInit, OnDestroy {
   private syncUrl(): void {
     effect(() => {
       const queryParams = this.store.buildQueryParams();
-      const cleaned: Record<string, string> = {};
+      const cleaned: Record<string, string | null> = { cityId: null };
 
       Object.entries(queryParams).forEach(([key, value]) => {
         if (value !== undefined) {

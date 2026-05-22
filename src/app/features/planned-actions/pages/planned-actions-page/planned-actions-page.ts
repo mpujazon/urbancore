@@ -46,7 +46,7 @@ export class PlannedActionsPage {
   private syncUrl(): void {
     effect(() => {
       void this.router.navigate([], {
-        queryParams: this.store.buildQueryParams(),
+        queryParams: { ...this.store.buildQueryParams(), cityId: null },
         queryParamsHandling: 'merge',
         replaceUrl: true,
       });

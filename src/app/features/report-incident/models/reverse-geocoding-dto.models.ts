@@ -7,6 +7,7 @@ export interface ReverseGeocodingDto{
   houseNumber: string;
   postcode: string;
   city: string;
+  citySlug: string;
   country: string;
   countryCode: string;
   suburb: string;
