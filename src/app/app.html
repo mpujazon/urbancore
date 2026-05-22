@@ -3,6 +3,9 @@
   <router-outlet/>
 </main>
 <app-toast/>
+@if (!router.url.startsWith('/admin/')) {
+  <app-city-selector/>
+}
 @if (!router.url.startsWith('/incidents') || router.url.startsWith('/incidents/')) {
   <app-footer/>
 }
