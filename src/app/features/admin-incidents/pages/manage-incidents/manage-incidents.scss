@@ -67,6 +67,13 @@ h1 {
   max-width: 42rem;
 }
 
+.admin-city-label {
+  color: $primary;
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  font-weight: $font-weight-semibold;
+  margin: $space-sm 0 0;
+}
+
 .metric-card {
   background: rgba($primary, 0.94);
   border: 1px solid rgba($on-primary, 0.12);
