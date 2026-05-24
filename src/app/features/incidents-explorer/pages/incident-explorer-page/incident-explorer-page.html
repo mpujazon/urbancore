@@ -84,14 +84,16 @@
       [class.mobile-open]="isMobileMapOpen()"
       aria-label="Map preview"
     >
-      <button
-        class="close-map-btn"
-        type="button"
-        (click)="closeMobileMap()"
-        aria-label="Close map"
-      >
-        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-      </button>
+      @if (isMobileMapOpen()) {
+        <button
+          class="close-map-btn"
+          type="button"
+          (click)="closeMobileMap()"
+          aria-label="Close map"
+        >
+          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+        </button>
+      }
     </aside>
   </div>
 
