@@ -1,16 +1,14 @@
 import { Routes } from '@angular/router';
-import { Homepage } from './features/home/pages/homepage/homepage';
 import { authGuard } from './core/guards/auth-guard';
 import { roleGuard } from './core/guards/role-guard';
 import { ROUTE_ROLES } from './core/routing/route-roles';
-import { Unauthorized } from './features/auth/pages/unauthorized/unauthorized';
-import { ReportIncidentPage } from './features/report-incident/pages/report-incident-page/report-incident-page';
 import { publicIncidentDetailResolver } from './features/incident-detail/resolvers/public-incident-detail.resolver';
 
 export const routes: Routes = [
   {
     path: '',
-    component: Homepage,
+    loadComponent: () =>
+      import('./features/home/pages/homepage/homepage').then((m) => m.Homepage),
   },
   {
     path: 'dashboard',
@@ -23,7 +21,10 @@ export const routes: Routes = [
   },
   {
     path: 'report-incident',
-    component: ReportIncidentPage,
+    loadComponent: () =>
+      import('./features/report-incident/pages/report-incident-page/report-incident-page').then(
+        (m) => m.ReportIncidentPage,
+      ),
     canActivate: [authGuard, roleGuard],
     data: { roles: ROUTE_ROLES.reportIncident}
   },
@@ -86,6 +87,7 @@ export const routes: Routes = [
   },
   {
     path: 'unauthorized',
-    component: Unauthorized,
+    loadComponent: () =>
+      import('./features/auth/pages/unauthorized/unauthorized').then((m) => m.Unauthorized),
   },
 ];
