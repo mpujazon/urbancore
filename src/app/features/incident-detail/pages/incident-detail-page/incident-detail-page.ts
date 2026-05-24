@@ -22,6 +22,15 @@ import type { IncidentDetailVm } from '../../../../shared/models/incident-vm.mod
 import { IncidentsApiService } from '../../../../shared/services/incidents-api-service';
 import type { CurrentUser, IncidentPermissionContext } from '../../../../core/permissions/permissions.model';
 
+const INCIDENT_STATUS_LABELS: Record<IncidentStatus, string> = {
+  UNDER_REVIEW: 'Under Review',
+  IN_PROGRESS: 'In Progress',
+  PLANNED: 'Planned',
+  RESOLVED: 'Resolved',
+  REJECTED: 'Rejected',
+  CANCELLED: 'Cancelled',
+};
+
 @Component({
   selector: 'app-incident-detail-page',
   imports: [
@@ -50,6 +59,7 @@ export class IncidentDetailPageComponent {
   private readonly permissions = inject(PermissionsService);
 
   protected readonly incident = signal<IncidentDetailVm | null>(null);
+  protected readonly statusChangeAnnouncement = signal('');
   private readonly ownedIncidentIds = signal<Set<string>>(new Set<string>());
   protected readonly resolvedIncident = computed(() => this.incident());
   private readonly permissionUser = computed<CurrentUser | null>(() => {
@@ -121,7 +131,10 @@ export class IncidentDetailPageComponent {
     this.incidentsApi
       .updateIncidentStatus(this.getApiIncidentId(), status)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(this.createIncidentUpdateObserver('Incident status updated.', 'Could not update incident status.'));
+      .subscribe(this.createIncidentUpdateObserver(
+        `Incident status updated to ${INCIDENT_STATUS_LABELS[status]}.`,
+        'Could not update incident status.',
+      ));
   }
 
   protected onUpdateIncidentPriority(priority: IncidentPriority): void {
@@ -218,9 +231,13 @@ export class IncidentDetailPageComponent {
     return {
       next: (updatedIncident) => {
         this.incident.set(mapIncidentToDetailVm(updatedIncident));
+        this.statusChangeAnnouncement.set(successMessage);
         this.toast.showSuccess(successMessage);
       },
-      error: () => this.toast.showError(errorMessage),
+      error: () => {
+        this.statusChangeAnnouncement.set(errorMessage);
+        this.toast.showError(errorMessage);
+      },
     };
   }
 

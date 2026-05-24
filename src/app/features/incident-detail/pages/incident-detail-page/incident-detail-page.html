@@ -1,4 +1,6 @@
 <section class="incident-detail-page">
+  <p class="sr-only" role="status" aria-live="polite" aria-atomic="true">{{ statusChangeAnnouncement() }}</p>
+
   @if (resolvedIncident(); as incident) {
     <app-incident-detail-header
       [incidentId]="incident.id"

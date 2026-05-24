@@ -13,26 +13,26 @@
       <article class="incident-detail-controls__panel incident-detail-controls__panel--inline" aria-label="Update status">
         <h3>Status</h3>
         <form class="incident-detail-controls__row-form" [formGroup]="statusForm" (ngSubmit)="onUpdateStatus()">
-          <label for="incident-status">Update</label>
-          <select id="incident-status" formControlName="status" aria-label="Incident status">
+          <label for="incident-status">Incident status</label>
+          <select id="incident-status" formControlName="status">
             @for (option of statusOptions; track option.value) {
               <option [value]="option.value">{{ option.label }}</option>
             }
           </select>
-          <button type="submit">Apply</button>
+          <button type="submit">Apply status</button>
         </form>
       </article>
 
       <article class="incident-detail-controls__panel incident-detail-controls__panel--inline" aria-label="Update priority">
         <h3>Priority</h3>
         <form class="incident-detail-controls__row-form" [formGroup]="priorityForm" (ngSubmit)="onUpdatePriority()">
-          <label for="incident-priority">Update</label>
-          <select id="incident-priority" formControlName="priority" aria-label="Incident priority">
+          <label for="incident-priority">Incident priority</label>
+          <select id="incident-priority" formControlName="priority">
             @for (option of priorityOptions; track option.value) {
               <option [value]="option.value">{{ option.label }}</option>
             }
           </select>
-          <button type="submit">Apply</button>
+          <button type="submit">Apply priority</button>
         </form>
       </article>
     </div>
