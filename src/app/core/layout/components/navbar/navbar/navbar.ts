@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, Component, HostListener, OnInit, computed, effect, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { NavUserAvatar } from "../nav-user-avatar/nav-user-avatar";
 import { NavLink } from "../nav-link/nav-link";
 import { NAV_LINKS } from '../../../config/nav-links';
@@ -8,7 +8,7 @@ import { AuthService } from '../../../../services/auth-service';
 
 @Component({
   selector: 'app-navbar',
-  imports: [NavUserAvatar, NavLink],
+  imports: [NavUserAvatar, NavLink, RouterLink],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,7 +21,6 @@ export class Navbar implements OnInit {
   isScrolled = signal(false);
 
   private auth = inject(AuthService);
-  private router = inject(Router);
   private document = inject(DOCUMENT);
   private scrollLockEffect = effect((onCleanup) => {
     const body = this.document.body;
@@ -57,11 +56,6 @@ export class Navbar implements OnInit {
   }
   onCloseMenuClick(){
     this.isMenuOpen.set(false);
-  }
-
-  onLogoClick() {
-    this.isMenuOpen.set(false);
-    void this.router.navigateByUrl('/');
   }
 
   async onSignInWithGoogle(){
