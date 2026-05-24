@@ -1,21 +1,11 @@
 import { Routes } from '@angular/router';
 import { Homepage } from './features/home/pages/homepage/homepage';
-import { CitizenDashboard } from './features/citizen-dashboard/pages/citizen-dashboard/citizen-dashboard';
-import { ManageIncidents } from './features/admin-incidents/pages/manage-incidents/manage-incidents';
 import { authGuard } from './core/guards/auth-guard';
 import { roleGuard } from './core/guards/role-guard';
 import { ROUTE_ROLES } from './core/routing/route-roles';
 import { Unauthorized } from './features/auth/pages/unauthorized/unauthorized';
 import { ReportIncidentPage } from './features/report-incident/pages/report-incident-page/report-incident-page';
-import { IncidentExplorerPage } from './features/incidents-explorer/pages/incident-explorer-page/incident-explorer-page';
-import { IncidentDetailPageComponent } from './features/incident-detail/pages/incident-detail-page/incident-detail-page';
 import { publicIncidentDetailResolver } from './features/incident-detail/resolvers/public-incident-detail.resolver';
-import {
-  PublicStatisticsDashboard
-} from './features/public-statistics/components/public-statistics-dashboard/public-statistics-dashboard';
-import {
-  PlannedActionsPage
-} from './features/planned-actions/pages/planned-actions-page/planned-actions-page';
 
 export const routes: Routes = [
   {
@@ -24,7 +14,10 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    component: CitizenDashboard,
+    loadComponent: () =>
+      import('./features/citizen-dashboard/pages/citizen-dashboard/citizen-dashboard').then(
+        (m) => m.CitizenDashboard,
+      ),
     canActivate: [authGuard, roleGuard],
     data: { roles: ROUTE_ROLES.citizenDashboard },
   },
@@ -36,13 +29,19 @@ export const routes: Routes = [
   },
   {
     path: 'admin/incidents',
-    component: ManageIncidents,
+    loadComponent: () =>
+      import('./features/admin-incidents/pages/manage-incidents/manage-incidents').then(
+        (m) => m.ManageIncidents,
+      ),
     canActivate: [authGuard, roleGuard],
     data: { roles: ROUTE_ROLES.manageIncidents },
   },
   {
     path: 'admin/incidents/:id',
-    component: IncidentDetailPageComponent,
+    loadComponent: () =>
+      import('./features/incident-detail/pages/incident-detail-page/incident-detail-page').then(
+        (m) => m.IncidentDetailPageComponent,
+      ),
     canActivate: [authGuard, roleGuard],
     data: { roles: ROUTE_ROLES.manageIncidents },
     resolve: {
@@ -56,22 +55,34 @@ export const routes: Routes = [
   },
   {
     path: 'incidents',
-    component: IncidentExplorerPage
+    loadComponent: () =>
+      import('./features/incidents-explorer/pages/incident-explorer-page/incident-explorer-page').then(
+        (m) => m.IncidentExplorerPage,
+      ),
   },
   {
     path: 'incidents/:id',
-    component: IncidentDetailPageComponent,
+    loadComponent: () =>
+      import('./features/incident-detail/pages/incident-detail-page/incident-detail-page').then(
+        (m) => m.IncidentDetailPageComponent,
+      ),
     resolve: {
       incident: publicIncidentDetailResolver,
     },
   },
   {
     path:'stats',
-    component: PublicStatisticsDashboard
+    loadComponent: () =>
+      import(
+        './features/public-statistics/components/public-statistics-dashboard/public-statistics-dashboard'
+      ).then((m) => m.PublicStatisticsDashboard),
   },
   {
     path: 'planned-actions',
-    component: PlannedActionsPage
+    loadComponent: () =>
+      import('./features/planned-actions/pages/planned-actions-page/planned-actions-page').then(
+        (m) => m.PlannedActionsPage,
+      ),
   },
   {
     path: 'unauthorized',
