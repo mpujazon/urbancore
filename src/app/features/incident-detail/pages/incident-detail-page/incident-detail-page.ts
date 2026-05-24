@@ -23,6 +23,7 @@ import { IncidentsApiService } from '../../../../shared/services/incidents-api-s
 import type { CurrentUser, IncidentPermissionContext } from '../../../../core/permissions/permissions.model';
 
 const INCIDENT_STATUS_LABELS: Record<IncidentStatus, string> = {
+  NEW: 'New',
   UNDER_REVIEW: 'Under Review',
   IN_PROGRESS: 'In Progress',
   PLANNED: 'Planned',
