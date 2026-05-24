@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, computed, inject, signal, viewChild } from '@angular/core';
 import { CityContextService } from '../../../core/services/city-context-service';
 import type { CityDto } from '../../models/city-dto.model';
 
@@ -8,7 +8,7 @@ import type { CityDto } from '../../models/city-dto.model';
   styleUrl: './city-selector.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    '(keydown.escape)': 'close()',
+    '(keydown.escape)': 'close(true)',
   },
 })
 export class CitySelector {
@@ -17,6 +17,8 @@ export class CitySelector {
   protected readonly isOpen = signal(false);
   protected readonly query = signal('');
   protected readonly selectedCity = this.cityContext.selectedCity;
+  private readonly citySearch = viewChild<ElementRef<HTMLInputElement>>('citySearch');
+  private readonly citySelectorTrigger = viewChild<ElementRef<HTMLButtonElement>>('citySelectorTrigger');
   protected readonly showGlobalOption = computed(() => {
     const query = this.query().trim().toLocaleLowerCase();
 
@@ -35,11 +37,20 @@ export class CitySelector {
   protected readonly hasNoResults = computed(() => !this.showGlobalOption() && this.filteredCities().length === 0);
 
   protected toggle(): void {
-    this.isOpen.update((isOpen) => !isOpen);
+    const nextOpen = !this.isOpen();
+    this.isOpen.set(nextOpen);
+
+    if (nextOpen) {
+      requestAnimationFrame(() => this.citySearch()?.nativeElement.focus());
+    }
   }
 
-  protected close(): void {
+  protected close(restoreFocus = false): void {
     this.isOpen.set(false);
+
+    if (restoreFocus) {
+      requestAnimationFrame(() => this.citySelectorTrigger()?.nativeElement.focus());
+    }
   }
 
   protected updateQuery(event: Event): void {
@@ -51,12 +62,12 @@ export class CitySelector {
   protected selectCity(city: CityDto): void {
     this.cityContext.selectCity(city);
     this.query.set('');
-    this.close();
+    this.close(true);
   }
 
   protected selectGlobalCity(): void {
     this.cityContext.clearSelectedCity();
     this.query.set('');
-    this.close();
+    this.close(true);
   }
 }

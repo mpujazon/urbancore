@@ -245,13 +245,12 @@ h1 {
     max-width: 44ch;
   }
 
-  a {
+  .pending-link {
     display: inline-flex;
     margin-top: 0.95rem;
     color: $secondary;
     font-size: $label-md;
     font-weight: 700;
-    text-underline-offset: 0.2em;
   }
 }
 

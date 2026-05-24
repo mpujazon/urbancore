@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, Component, HostListener, OnInit, computed, effect, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, OnInit, computed, effect, inject, signal, viewChild } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { NavUserAvatar } from "../nav-user-avatar/nav-user-avatar";
 import { NavLink } from "../nav-link/nav-link";
 import { NAV_LINKS } from '../../../config/nav-links';
@@ -8,20 +8,24 @@ import { AuthService } from '../../../../services/auth-service';
 
 @Component({
   selector: 'app-navbar',
-  imports: [NavUserAvatar, NavLink],
+  imports: [NavUserAvatar, NavLink, RouterLink],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.scrolled]': 'isScrolled()',
+    '(document:keydown)': 'onDocumentKeydown($event)',
   },
 })
 export class Navbar implements OnInit {
   isMenuOpen = signal(false);
   isScrolled = signal(false);
 
+  private readonly openMenuButton = viewChild<ElementRef<HTMLButtonElement>>('openMenuButton');
+  private readonly closeMenuButton = viewChild<ElementRef<HTMLButtonElement>>('closeMenuButton');
+  private readonly mobileNavigation = viewChild<ElementRef<HTMLElement>>('mobileNavigation');
+
   private auth = inject(AuthService);
-  private router = inject(Router);
   private document = inject(DOCUMENT);
   private scrollLockEffect = effect((onCleanup) => {
     const body = this.document.body;
@@ -54,14 +58,59 @@ export class Navbar implements OnInit {
 
   onOpenMenuClick(){
     this.isMenuOpen.set(true);
+
+    requestAnimationFrame(() => this.closeMenuButton()?.nativeElement.focus());
   }
   onCloseMenuClick(){
     this.isMenuOpen.set(false);
+
+    requestAnimationFrame(() => this.openMenuButton()?.nativeElement.focus());
   }
 
-  onLogoClick() {
-    this.isMenuOpen.set(false);
-    void this.router.navigateByUrl('/');
+  protected onDocumentKeydown(event: KeyboardEvent): void {
+    if (!this.isMenuOpen()) return;
+
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.onCloseMenuClick();
+      return;
+    }
+
+    if (event.key === 'Tab') {
+      this.trapMobileMenuFocus(event);
+    }
+  }
+
+  private trapMobileMenuFocus(event: KeyboardEvent): void {
+    const focusable = this.getMobileMenuFocusableElements();
+    const first = focusable.at(0);
+    const last = focusable.at(-1);
+
+    if (!first || !last) {
+      event.preventDefault();
+      return;
+    }
+
+    const activeElement = this.document.activeElement;
+
+    if (event.shiftKey && activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
+  private getMobileMenuFocusableElements(): HTMLElement[] {
+    const mobileNavigation = this.mobileNavigation()?.nativeElement;
+    if (!mobileNavigation) return [];
+
+    return Array.from(
+      mobileNavigation.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      ),
+    ).filter((element) => !element.hasAttribute('disabled') && element.offsetParent !== null);
   }
 
   async onSignInWithGoogle(){

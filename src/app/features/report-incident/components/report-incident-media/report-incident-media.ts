@@ -24,6 +24,7 @@ export class ReportIncidentMedia {
   readonly isAutocompleteLoading = input(false);
   protected readonly previews = signal<MediaPreview[]>([]);
   protected readonly errorMessage = signal<string | null>(null);
+  protected readonly uploadStatusMessage = signal('No evidence files selected.');
   protected readonly canUploadMore = computed(
     () => this.previews().length < MAX_FILES
   );
@@ -42,7 +43,7 @@ export class ReportIncidentMedia {
     const availableSlots = Math.max(0, MAX_FILES - currentCount);
 
     if (availableSlots === 0) {
-      this.errorMessage.set(`You can upload up to ${MAX_FILES} files.`);
+      this.setUploadError(`You can upload up to ${MAX_FILES} files.`);
       input.value = '';
       return;
     }
@@ -52,7 +53,7 @@ export class ReportIncidentMedia {
     const overflowCount = selectedFiles.length - filesToProcess.length;
 
     if (overflowCount > 0) {
-      this.errorMessage.set(`Only ${MAX_FILES} files are allowed.`);
+      this.setUploadError(`Only ${MAX_FILES} files are allowed.`);
     } else {
       this.errorMessage.set(null);
     }
@@ -63,7 +64,7 @@ export class ReportIncidentMedia {
       const validationError = validateImageFile(file);
 
       if (validationError) {
-        this.errorMessage.set(validationError);
+        this.setUploadError(`${file.name} was not uploaded. ${validationError}`);
         continue;
       }
 
@@ -77,16 +78,22 @@ export class ReportIncidentMedia {
     if (newPreviews.length > 0) {
       this.previews.update((current) => [...current, ...newPreviews]);
       this.emitSelectedFiles();
+      this.uploadStatusMessage.set(this.buildUploadStatus(newPreviews.length));
+    } else if (!this.errorMessage()) {
+      this.uploadStatusMessage.set('No valid evidence files were selected.');
     }
 
     input.value = '';
   }
 
   protected removePreview(previewId: number): void {
+    let removedFileName: string | null = null;
+
     this.previews.update((current) => {
       const preview = current.find((item) => item.id === previewId);
 
       if (preview) {
+        removedFileName = preview.file.name;
         URL.revokeObjectURL(preview.url);
       }
 
@@ -98,6 +105,11 @@ export class ReportIncidentMedia {
     }
 
     this.emitSelectedFiles();
+    this.uploadStatusMessage.set(
+      removedFileName
+        ? `${removedFileName} removed. ${this.previews().length} evidence file${this.previews().length === 1 ? '' : 's'} selected.`
+        : `${this.previews().length} evidence file${this.previews().length === 1 ? '' : 's'} selected.`
+    );
   }
 
   protected onPreviewImageError(event: Event): void {
@@ -112,11 +124,26 @@ export class ReportIncidentMedia {
   }
 
   protected requestAutocomplete(): void {
+    this.uploadStatusMessage.set('Generating incident details from the first uploaded image.');
     this.autocompleteRequested.emit();
+  }
+
+  protected previewAltText(preview: MediaPreview): string {
+    return `Uploaded evidence image: ${preview.file.name}`;
   }
 
   private emitSelectedFiles(): void {
     this.selectedFilesChanged.emit(this.previews().map((preview) => preview.file));
+  }
+
+  private setUploadError(message: string): void {
+    this.errorMessage.set(message);
+    this.uploadStatusMessage.set(message);
+  }
+
+  private buildUploadStatus(addedCount: number): string {
+    const total = this.previews().length;
+    return `${addedCount} evidence file${addedCount === 1 ? '' : 's'} added. ${total} of ${MAX_FILES} selected.`;
   }
 
   ngOnDestroy(): void {

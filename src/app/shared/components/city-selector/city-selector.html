@@ -2,32 +2,31 @@
   <button
     type="button"
     class="city-selector-backdrop"
-    aria-label="Cerrar selector de ciudad"
-    (click)="close()"
+    aria-label="Close city selector"
+    (click)="close(true)"
   ></button>
 }
 
-<section class="city-selector" aria-label="Selector de ciudad">
+<section class="city-selector" aria-label="City selector">
   @if (isOpen()) {
     <div class="city-selector-panel" id="city-selector-panel">
-      <label class="city-selector-label" for="city-selector-search">Buscar ciudad</label>
+      <label class="city-selector-label" for="city-selector-search">Search city</label>
       <input
         id="city-selector-search"
+        #citySearch
         class="city-selector-search"
         type="search"
         autocomplete="off"
         [value]="query()"
         (input)="updateQuery($event)"
-        placeholder="Escribe una ciudad"
+        placeholder="Type a city"
       />
 
-      <div class="city-selector-results" role="listbox" aria-label="Ciudades disponibles">
+      <div class="city-selector-results" role="group" aria-label="Available cities">
         @if (showGlobalOption()) {
           <button
             type="button"
             class="city-selector-option city-selector-option-global"
-            role="option"
-            [attr.aria-selected]="!selectedCity()"
             [class.selected]="!selectedCity()"
             (click)="selectGlobalCity()"
           >
@@ -39,8 +38,6 @@
           <button
             type="button"
             class="city-selector-option"
-            role="option"
-            [attr.aria-selected]="selectedCity()?.id === city.id"
             [class.selected]="selectedCity()?.id === city.id"
             (click)="selectCity(city)"
           >
@@ -49,13 +46,14 @@
         }
 
         @if (hasNoResults()) {
-          <p class="city-selector-empty">No hay ciudades con ese nombre.</p>
+          <p class="city-selector-empty">No cities match that name.</p>
         }
       </div>
     </div>
   }
 
   <button
+    #citySelectorTrigger
     type="button"
     class="city-selector-trigger"
     aria-controls="city-selector-panel"

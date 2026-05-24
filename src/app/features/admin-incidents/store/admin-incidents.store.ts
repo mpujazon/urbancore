@@ -69,11 +69,19 @@ export class AdminIncidentsStore {
   }));
   readonly resultsLabel = computed(() => {
     if (this.status() === 'loading' && !this.hasRows()) {
-      return 'Loading incidents';
+      return 'Loading incident results.';
+    }
+
+    if (this.status() === 'loading') {
+      return 'Refreshing incident results.';
+    }
+
+    if (this.status() === 'error') {
+      return 'Incident results could not be loaded.';
     }
 
     const total = this.totalElements();
-    return `${total} incident${total === 1 ? '' : 's'} found`;
+    return `${total} incident result${total === 1 ? '' : 's'} found.`;
   });
 
   constructor() {

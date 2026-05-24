@@ -14,6 +14,16 @@
   padding-bottom: clamp(2.5rem, 5vw, 4.5rem);
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .incident-detail-page__layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(19rem, 22.5rem);

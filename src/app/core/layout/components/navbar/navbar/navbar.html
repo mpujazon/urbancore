@@ -1,14 +1,16 @@
 <nav id="desktop-navigation">
-  <div class="company-logo" (click)="onLogoClick()">
-    <img src="/icons/logo.svg" alt="UrbanCore Logo">
+  <a class="company-logo" routerLink="/">
+    <img src="/icons/logo.svg" alt="">
     <p>URBAN CORE</p>
-  </div>
+  </a>
 
   <ul class="desktop-menu">
     @for (link of links(); track $index) {
-      <app-nav-link
-        [link]="link"
-      />
+      <li>
+        <app-nav-link
+          [link]="link"
+        />
+      </li>
     }
   </ul>
 
@@ -28,33 +30,40 @@
   </div>
 
   <button
+    #openMenuButton
     (click)="onOpenMenuClick()"
     id="open-menu-button"
     aria-controls="mobile-navigation"
-    [ariaExpanded]="isMenuOpen()"
+    aria-label="Open menu"
+    [attr.aria-expanded]="isMenuOpen()"
     [class.hidden]="isMenuOpen()"
 
     >
-      <i class="menu-icon fa-solid fa-bars"></i>
+      <i class="menu-icon fa-solid fa-bars" aria-hidden="true"></i>
   </button>
 </nav>
 <nav
+  #mobileNavigation
   id="mobile-navigation"
   aria-label="Mobile Navigation"
   [class.visible]="isMenuOpen()"
+  [attr.aria-hidden]="!isMenuOpen()"
+  [attr.inert]="isMenuOpen() ? null : ''"
 >
   <header>
-    <div class="company-logo" (click)="onLogoClick()">
-      <img src="/icons/logo.svg" alt="UrbanCore Logo">
+    <a class="company-logo" routerLink="/" (click)="onCloseMenuClick()">
+      <img src="/icons/logo.svg" alt="">
       <p>URBAN CORE</p>
-    </div>
+    </a>
     <button
+        #closeMenuButton
         (click)="onCloseMenuClick()"
         id="close-menu-button"
         aria-controls="mobile-navigation"
-        [ariaExpanded]="isMenuOpen()"
+        aria-label="Close menu"
+        [attr.aria-expanded]="isMenuOpen()"
       >
-        <i class="menu-icon fa-solid fa-xmark"></i>
+        <i class="menu-icon fa-solid fa-xmark" aria-hidden="true"></i>
     </button>
   </header>
   @if (isUserLogged()) {
@@ -62,10 +71,12 @@
   }
   <ul>
     @for (link of links(); track $index) {
-      <app-nav-link
-        [link]="link"
-        (clicked)="onCloseMenuClick()"
-      />
+      <li>
+        <app-nav-link
+          [link]="link"
+          (clicked)="onCloseMenuClick()"
+        />
+      </li>
     }
   </ul>
   <footer>

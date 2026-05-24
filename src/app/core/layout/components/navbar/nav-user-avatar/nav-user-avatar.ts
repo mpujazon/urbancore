@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, ElementRef, HostListener, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, HostListener, inject, viewChild } from '@angular/core';
 import { AuthService } from '../../../../services/auth-service';
 import { UserRoleLabelPipe } from '../../../pipes/user-role-label.pipe';
 
@@ -11,6 +11,7 @@ import { UserRoleLabelPipe } from '../../../pipes/user-role-label.pipe';
 })
 export class NavUserAvatar {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
+  private readonly avatarButton = viewChild<ElementRef<HTMLButtonElement>>('avatarButton');
   private auth = inject(AuthService);
 
   name = computed(()=>this.auth.user()?.displayName);
@@ -28,8 +29,12 @@ export class NavUserAvatar {
     this.isDesktopMenuOpen = !this.isDesktopMenuOpen;
   }
 
-  closeDesktopMenu(): void {
+  closeDesktopMenu(restoreFocus = false): void {
     this.isDesktopMenuOpen = false;
+
+    if (restoreFocus) {
+      requestAnimationFrame(() => this.avatarButton()?.nativeElement.focus());
+    }
   }
 
   @HostListener('document:click', ['$event'])
@@ -45,7 +50,9 @@ export class NavUserAvatar {
 
   @HostListener('document:keydown.escape')
   onEscape(): void {
-    this.closeDesktopMenu();
+    if (this.isDesktopMenuOpen) {
+      this.closeDesktopMenu(true);
+    }
   }
 
   onSignOut(){

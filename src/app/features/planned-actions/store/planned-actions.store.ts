@@ -55,8 +55,18 @@ export class PlannedActionsStore {
   readonly error = computed(() => this.resource().error);
   readonly rangeLabel = computed(() => formatRangeLabel(this.visibleDateRange()));
   readonly resultLabel = computed(() => {
+    if (this.isLoading()) {
+      return this.events().length > 0
+        ? `Refreshing planned action results for ${this.rangeLabel()}.`
+        : `Loading planned action results for ${this.rangeLabel()}.`;
+    }
+
+    if (this.hasError()) {
+      return 'Planned action results could not be loaded.';
+    }
+
     const count = this.events().length;
-    return `${count} planned ${count === 1 ? 'action' : 'actions'} in ${this.rangeLabel()}`;
+    return `${count} planned action result${count === 1 ? '' : 's'} in ${this.rangeLabel()}.`;
   });
 
   private readonly reloadSubject = new Subject<PlannedActionsQueryState>();

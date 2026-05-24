@@ -1,14 +1,21 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ToastService } from '../../../core/services/toast-service';
+import type { Toast } from '../../models/toast.model';
 
 @Component({
   selector: 'app-toast',
-  standalone: true,
-  imports: [CommonModule],
   templateUrl:'./toast.html',
-  styleUrl: './toast.scss'
+  styleUrl: './toast.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToastComponent {
-  toastService = inject(ToastService);
+  protected readonly toastService = inject(ToastService);
+
+  protected toastRole(toast: Toast): 'alert' | 'status' {
+    return toast.type === 'error' ? 'alert' : 'status';
+  }
+
+  protected closeLabel(toast: Toast): string {
+    return `Close ${toast.type} message: ${toast.message}`;
+  }
 }
