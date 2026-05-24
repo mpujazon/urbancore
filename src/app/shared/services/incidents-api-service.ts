@@ -11,6 +11,7 @@ import type {
 } from '../models/incident-dto.model';
 import type { PagedResponseDto } from '../models/paged-response.model';
 import type { CreateIncidentRequest } from '../../features/report-incident/models/incident-report.models';
+import type { IncidentSuggestionResponse } from '../../features/report-incident/models/incident-suggestion.model';
 import {CreatePlannedActionRequest} from '../models/planned-action.model';
 
 
@@ -22,6 +23,16 @@ export class IncidentsApiService {
 
   createIncident(request: CreateIncidentRequest): Observable<IncidentDto> {
     return this.http.post<IncidentDto>(`${environment.API_BASE_URL}/incidents`, request);
+  }
+
+  getIncidentSuggestions(image: File): Observable<IncidentSuggestionResponse> {
+    const formData = new FormData();
+    formData.append('image', image);
+
+    return this.http.post<IncidentSuggestionResponse>(
+      `${environment.API_BASE_URL}/ai/incident-suggestions`,
+      formData
+    );
   }
 
   getSignedInCitizenIncidents(): Observable<IncidentListItemDto[]> {
