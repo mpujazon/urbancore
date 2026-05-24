@@ -5,13 +5,15 @@ import { finalize, forkJoin, Observable, of, switchMap, tap } from 'rxjs';
 import { CityContextService } from '../../../../core/services/city-context-service';
 import { ToastService } from '../../../../core/services/toast-service';
 import type { CreateIncidentRequest } from '../../models/incident-report.models';
+import type { IncidentSuggestionFormValues, IncidentSuggestionResponse } from '../../models/incident-suggestion.model';
 import type { IncidentImageDto } from '../../models/upload.models';
 import { ImageUploadService } from '../../services/image-upload-service';
 import { IncidentsApiService } from '../../../../shared/services/incidents-api-service';
 import { ReportIncidentForm, ReportIncidentFormValues } from '../report-incident-form/report-incident-form';
 import { ReportIncidentLocation } from '../report-incident-location/report-incident-location';
 import { ReportIncidentMedia } from '../report-incident-media/report-incident-media';
-import { IncidentCoordinates } from '../../../../shared/models/incident-dto.model';
+import { IncidentCategory, IncidentCoordinates } from '../../../../shared/models/incident-dto.model';
+import { INCIDENT_CATEGORIES } from '../../config/incident-categories';
 
 const GEOHASH_PRECISION = 9;
 
@@ -42,6 +44,11 @@ export class ReportIncidentWizard {
 
   isSubmitting = signal<boolean>(false);
   submitError = signal<string | null>(null);
+  isAutocompleteLoading = signal<boolean>(false);
+  autocompleteMessage = signal<string | null>(null);
+  suggestedFormValues = signal<IncidentSuggestionFormValues | null>(null);
+
+  private readonly validCategories = new Set<IncidentCategory>(INCIDENT_CATEGORIES);
 
   canSubmit = computed(()=>{
     return  this.isFormValid()    &&
@@ -131,6 +138,39 @@ export class ReportIncidentWizard {
       });
   }
 
+  requestFormAutocomplete(): void {
+    const files = this.selectedFiles();
+
+    if (files.length === 0 || this.isAutocompleteLoading()) {
+      return;
+    }
+
+    const confirmed = window.confirm(
+      'This will replace the current title, description, and category with AI suggestions. Continue?'
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.isAutocompleteLoading.set(true);
+    this.autocompleteMessage.set('Generating suggestions from the first image...');
+
+    this.incidentService
+      .getIncidentSuggestions(files[0])
+      .pipe(finalize(() => this.isAutocompleteLoading.set(false)))
+      .subscribe({
+        next: (suggestion) => {
+          this.suggestedFormValues.set(this.mapSuggestionToFormValues(suggestion));
+          this.autocompleteMessage.set('Suggestions applied to the form.');
+          this.toastService.showInfo('Incident form autocompleted from image.');
+        },
+        error: () => {
+          this.autocompleteMessage.set('Could not generate suggestions. Please try again.');
+        },
+      });
+  }
+
   private uploadImages(files: File[]): Observable<IncidentImageDto[]> {
     if (files.length === 0) {
       return of<IncidentImageDto[]>([]);
@@ -156,6 +196,18 @@ export class ReportIncidentWizard {
         geohash: encode(coordinates.lat, coordinates.lng, GEOHASH_PRECISION),
       },
       images,
+    };
+  }
+
+  private mapSuggestionToFormValues(suggestion: IncidentSuggestionResponse): IncidentSuggestionFormValues {
+    const category = this.validCategories.has(suggestion.category as IncidentCategory)
+      ? (suggestion.category as IncidentCategory)
+      : 'OTHER';
+
+    return {
+      title: suggestion.title,
+      description: suggestion.description,
+      category,
     };
   }
 }

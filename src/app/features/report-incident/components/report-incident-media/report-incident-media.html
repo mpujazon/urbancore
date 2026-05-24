@@ -47,4 +47,18 @@
   @if (errorMessage(); as error) {
     <p class="upload-error" role="status" aria-live="polite">{{ error }}</p>
   }
+
+  <div class="autocomplete-actions">
+    <p class="autocomplete-warning" role="note">
+      AI autocomplete will replace the current title, description, and category.
+    </p>
+    <button
+      class="autocomplete-button"
+      type="button"
+      [disabled]="previews().length === 0 || isAutocompleteLoading()"
+      (click)="requestAutocomplete()"
+    >
+      {{ isAutocompleteLoading() ? 'Generating suggestions...' : 'Autocomplete from first image' }}
+    </button>
+  </div>
 </article>
