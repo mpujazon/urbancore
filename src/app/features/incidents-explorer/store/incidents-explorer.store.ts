@@ -40,6 +40,18 @@ export class IncidentsExplorerStore {
   readonly incidents = computed(() => this.response()?.content ?? []);
   readonly totalPages = computed(() => this.response()?.totalPages ?? 0);
   readonly totalElements = computed(() => this.response()?.totalElements ?? 0);
+  readonly resultCountLabel = computed(() => {
+    if (this.isLoading()) {
+      return this.isRefreshing() ? 'Refreshing incident results.' : 'Loading incident results.';
+    }
+
+    if (this.error()) {
+      return 'Incident results could not be loaded.';
+    }
+
+    const total = this.totalElements();
+    return `${total} incident result${total === 1 ? '' : 's'} found.`;
+  });
   readonly first = computed(() => this.response()?.first ?? true);
   readonly last = computed(() => this.response()?.last ?? true);
   readonly isLoading = computed(() => this.loadingState());

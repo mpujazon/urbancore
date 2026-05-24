@@ -1,6 +1,7 @@
 @use 'styles/variables' as *;
-li {
-  list-style: none;
+
+:host {
+  display: block;
 }
 
 .link{

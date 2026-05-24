@@ -1,5 +1,7 @@
-import { Component, signal } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Component, ElementRef, viewChild } from '@angular/core';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs';
 import {Navbar} from './core/layout/components/navbar/navbar/navbar';
 import { Footer } from "./core/layout/components/footer/footer";
 import { ToastComponent } from "./shared/components/toast/toast";
@@ -12,7 +14,16 @@ import { CitySelector } from './shared/components/city-selector/city-selector';
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('urbancore');
+  protected readonly mainContent = viewChild<ElementRef<HTMLElement>>('mainContent');
 
-  constructor(public router: Router) {}
+  constructor(public router: Router) {
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => {
+        requestAnimationFrame(() => this.mainContent()?.nativeElement.focus({ preventScroll: true }));
+      });
+  }
 }

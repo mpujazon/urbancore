@@ -1,4 +1,4 @@
-<main class="public-statistics" aria-labelledby="public-statistics-title">
+<section class="public-statistics" aria-labelledby="public-statistics-title">
   <div class="public-statistics__shell">
     <section class="public-statistics__hero" aria-label="Public statistics summary">
       <div class="public-statistics__heading">
@@ -80,7 +80,14 @@
                   <span>{{ status.label }}</span>
                   <strong>{{ status.count }} · {{ status.value }}%</strong>
                 </div>
-                <div class="status-list__track" [attr.aria-label]="status.label + ' ' + status.value + '%'">
+                <div
+                  class="status-list__track"
+                  role="progressbar"
+                  [attr.aria-label]="status.label"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  [attr.aria-valuenow]="status.value"
+                >
                   <span
                     class="status-list__bar"
                     [style.background-color]="status.color"
@@ -147,4 +154,4 @@
       </section>
     }
   </div>
-</main>
+</section>

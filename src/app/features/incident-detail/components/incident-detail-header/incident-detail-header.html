@@ -6,7 +6,7 @@
 
   <div class="incident-detail-header__content">
     <div class="incident-detail-header__copy">
-      <div class="incident-detail-header__eyebrow" aria-label="Incident metadata">
+      <div class="incident-detail-header__eyebrow" role="group" aria-label="Incident metadata">
         <span class="incident-detail-header__id">#{{ incidentId() }}</span>
         <app-status-pill
           class="status-pill--inline status-pill--compact"
@@ -18,7 +18,7 @@
       <h1>{{ header().title }}</h1>
       <p>{{ header().categoryLabel }}</p>
 
-      <div class="incident-detail-header__dates" aria-label="Publication dates">
+      <div class="incident-detail-header__dates" role="group" aria-label="Publication dates">
         <span>Reported {{ header().createdAtLabel }}</span>
         @if (header().updatedAtLabel) {
           <span>Updated {{ header().updatedAtLabel }}</span>
