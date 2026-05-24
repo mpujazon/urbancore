@@ -55,9 +55,6 @@
   }
 
   <div class="autocomplete-actions">
-    <p class="autocomplete-warning" role="note">
-      AI autocomplete will replace the current title, description, and category.
-    </p>
     <button
       class="autocomplete-button"
       type="button"
@@ -66,7 +63,10 @@
       aria-describedby="media-upload-status"
       (click)="requestAutocomplete()"
     >
-      {{ isAutocompleteLoading() ? 'Generating suggestions...' : 'Autocomplete from first image' }}
+      {{ isAutocompleteLoading() ? 'Generating suggestions...' : 'Autocomplete form from first image' }}
     </button>
+    <p class="autocomplete-warning" role="note">
+      AI autocomplete will replace the current title, description, and category.
+    </p>
   </div>
 </article>
