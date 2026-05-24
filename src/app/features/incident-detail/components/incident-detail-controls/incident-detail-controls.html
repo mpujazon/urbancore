@@ -9,7 +9,7 @@
   </header>
 
   @if (canManage()) {
-    <div class="incident-detail-controls__quick-actions" aria-label="Quick incident actions">
+    <div class="incident-detail-controls__quick-actions" role="group" aria-label="Quick incident actions">
       <article class="incident-detail-controls__panel incident-detail-controls__panel--inline" aria-label="Update status">
         <h3>Status</h3>
         <form class="incident-detail-controls__row-form" [formGroup]="statusForm" (ngSubmit)="onUpdateStatus()">
