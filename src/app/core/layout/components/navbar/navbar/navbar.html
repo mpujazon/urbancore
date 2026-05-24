@@ -28,20 +28,25 @@
   </div>
 
   <button
+    #openMenuButton
     (click)="onOpenMenuClick()"
     id="open-menu-button"
     aria-controls="mobile-navigation"
-    [ariaExpanded]="isMenuOpen()"
+    aria-label="Open menu"
+    [attr.aria-expanded]="isMenuOpen()"
     [class.hidden]="isMenuOpen()"
 
     >
-      <i class="menu-icon fa-solid fa-bars"></i>
+      <i class="menu-icon fa-solid fa-bars" aria-hidden="true"></i>
   </button>
 </nav>
 <nav
+  #mobileNavigation
   id="mobile-navigation"
   aria-label="Mobile Navigation"
   [class.visible]="isMenuOpen()"
+  [attr.aria-hidden]="!isMenuOpen()"
+  [attr.inert]="isMenuOpen() ? null : ''"
 >
   <header>
     <a class="company-logo" routerLink="/" aria-label="UrbanCore home" (click)="onCloseMenuClick()">
@@ -49,12 +54,14 @@
       <p>URBAN CORE</p>
     </a>
     <button
+        #closeMenuButton
         (click)="onCloseMenuClick()"
         id="close-menu-button"
         aria-controls="mobile-navigation"
-        [ariaExpanded]="isMenuOpen()"
+        aria-label="Close menu"
+        [attr.aria-expanded]="isMenuOpen()"
       >
-        <i class="menu-icon fa-solid fa-xmark"></i>
+        <i class="menu-icon fa-solid fa-xmark" aria-hidden="true"></i>
     </button>
   </header>
   @if (isUserLogged()) {
