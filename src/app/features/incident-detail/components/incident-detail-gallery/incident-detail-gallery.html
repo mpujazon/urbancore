@@ -10,7 +10,7 @@
         <button
           type="button"
           class="incident-detail-gallery__item"
-          (click)="open(i)"
+          (click)="open(i, $event)"
           [attr.aria-label]="'View image ' + (i + 1) + ' of ' + images().length">
           <figure>
             <img [src]="image.thumbnailUrl || image.url" [alt]="image.alt" loading="lazy" />
@@ -27,6 +27,7 @@
 
   @if (isOpen()) {
     <div
+      #previewDialog
       class="incident-detail-gallery__visualizer"
       role="dialog"
       aria-modal="true"
@@ -36,6 +37,7 @@
         @if (activeImage(); as img) {
           <div class="incident-detail-gallery__visualizer-frame">
             <button
+              #previewCloseButton
               type="button"
               class="incident-detail-gallery__visualizer-close"
               (click)="close()"
