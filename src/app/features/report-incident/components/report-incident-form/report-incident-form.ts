@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, input, output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { INCIDENT_CATEGORIES } from '../../config/incident-categories';
 import { IncidentCategoryLabelPipe } from '../../pipes/incident-category-label.pipe';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import type { IncidentCategory } from '../../../../shared/models/incident-dto.model';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs';
+import type { IncidentSuggestionFormValues } from '../../models/incident-suggestion.model';
 
 type ReportIncidentFormGroup = FormGroup<{
   title: FormControl<string>;
@@ -31,6 +32,8 @@ export class ReportIncidentForm {
   protected readonly incidentCategories = INCIDENT_CATEGORIES;
   formValuesChanged = output<ReportIncidentFormValues>();
   formValidityChanged = output<boolean>();
+  readonly suggestedValues = input<IncidentSuggestionFormValues | null>(null);
+  readonly isAutocompleteLoading = input(false);
 
   protected readonly incidentForm: ReportIncidentFormGroup = new FormGroup({
     title: new FormControl('', {
@@ -61,6 +64,24 @@ export class ReportIncidentForm {
         takeUntilDestroyed()
       )
       .subscribe();
+
+    effect(() => {
+      const suggestion = this.suggestedValues();
+
+      if (!suggestion) {
+        return;
+      }
+
+      this.incidentForm.patchValue(suggestion);
+      this.incidentForm.markAllAsTouched();
+
+      if (this.incidentForm.valid) {
+        this.emitValidFormData();
+        return;
+      }
+
+      this.emitFormValidity(false);
+    });
   }
 
   protected hasControlError(controlName: ReportIncidentFormControlName): boolean {

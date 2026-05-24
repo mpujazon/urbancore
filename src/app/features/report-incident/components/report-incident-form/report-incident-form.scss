@@ -18,6 +18,18 @@ textarea {
   background: $surface;
   border-radius: $radius-lg;
   padding: $space-xl;
+
+  &--ai-loading {
+    box-shadow: 0 20px 44px rgba($secondary, 0.1);
+
+    input,
+    select,
+    textarea {
+      background-color: rgba($secondary, 0.08);
+      box-shadow: inset 0 0 0 1px rgba($secondary, 0.14);
+      animation: ai-field-pulse 1.35s ease-in-out infinite;
+    }
+  }
 }
 
 .section-title {
@@ -33,6 +45,68 @@ textarea {
     font-weight: 800;
     letter-spacing: -0.02em;
   }
+}
+
+.ai-loading-card {
+  display: flex;
+  align-items: flex-start;
+  gap: $space-md;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: $space-lg;
+  border: 1px solid rgba($secondary, 0.18);
+  border-radius: $radius-lg;
+  background:
+    linear-gradient(120deg, rgba($secondary, 0.14), rgba($tertiary-container, 0.46)),
+    $surface-container-lowest;
+  color: $on-surface;
+  padding: $space-md;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba($surface, 0.52), transparent);
+    animation: ai-loading-shimmer 1.5s ease-in-out infinite;
+  }
+
+  > span:last-child {
+    display: grid;
+    gap: $space-xs;
+    position: relative;
+    z-index: 1;
+  }
+
+  strong {
+    color: $primary;
+    font-family: $font-display;
+    font-size: 0.98rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+
+  span span {
+    color: $neutral-variant;
+    font-size: $label-sm;
+    font-weight: $font-weight-medium;
+    line-height: 1.45;
+  }
+}
+
+.ai-loading-orb {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 2.5rem;
+  position: relative;
+  z-index: 1;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: $radius-full;
+  background: $secondary-fixed;
+  color: $secondary;
+  box-shadow: 0 0 0 0 rgba($secondary, 0.3);
+  animation: ai-orb-pulse 1.35s ease-out infinite;
 }
 
 .field-stack {
@@ -53,6 +127,18 @@ textarea {
     padding-inline: $space-xs;
     text-transform: uppercase;
   }
+}
+
+.field-loading-note {
+  width: fit-content;
+  border-radius: $radius-full;
+  background: rgba($secondary, 0.1);
+  color: $secondary;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: $space-xs $space-sm;
+  text-transform: uppercase;
 }
 
 .field-error {
@@ -103,9 +189,57 @@ textarea {
   font-size: 1.5rem;
 }
 
+@keyframes ai-loading-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes ai-orb-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba($secondary, 0.34);
+    transform: scale(1);
+  }
+
+  70% {
+    box-shadow: 0 0 0 0.7rem rgba($secondary, 0);
+    transform: scale(1.04);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba($secondary, 0);
+    transform: scale(1);
+  }
+}
+
+@keyframes ai-field-pulse {
+  0%,
+  100% {
+    box-shadow: inset 0 0 0 1px rgba($secondary, 0.14);
+  }
+
+  50% {
+    box-shadow: inset 0 0 0 1px rgba($secondary, 0.28), 0 0 0 0.25rem rgba($secondary, 0.06);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel--ai-loading input,
+  .panel--ai-loading select,
+  .panel--ai-loading textarea,
+  .ai-loading-card::after,
+  .ai-loading-orb {
+    animation: none;
+  }
+}
+
 @media (max-width: ($bp-md - 1px)) {
   .panel {
     padding: $space-lg;
+  }
+
+  .ai-loading-card {
+    gap: $space-sm-md;
   }
 
   .two-columns {
