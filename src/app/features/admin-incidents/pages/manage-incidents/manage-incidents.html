@@ -12,7 +12,7 @@
 
       <aside class="metric-card" aria-label="Incident result count">
         <span>{{ store.totalElements() }}</span>
-        <p>{{ store.activeFilterCount() > 0 ? 'Filtered incidents' : 'Total incidents' }}</p>
+        <p>{{ store.activeFilterCount() > 0 ? 'Filtered incident results' : 'Total incident results' }}</p>
       </aside>
     </header>
 
@@ -29,7 +29,7 @@
       (clearFilters)="store.clearFilters()"
     />
 
-    <p class="results-live" aria-live="polite">{{ store.resultsLabel() }}</p>
+    <p class="results-live" role="status" aria-live="polite" aria-atomic="true">{{ store.resultsLabel() }}</p>
 
     @if (store.error()) {
       <section class="state-panel state-panel--error" role="alert" aria-labelledby="admin-incidents-error-title">

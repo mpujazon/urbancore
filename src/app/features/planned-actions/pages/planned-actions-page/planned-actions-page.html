@@ -22,7 +22,7 @@
     (viewModeChanged)="onViewModeChanged($event)"
   />
 
-  <p class="results-announcer" aria-live="polite">{{ store.resultLabel() }}</p>
+  <p class="results-announcer" role="status" aria-live="polite" aria-atomic="true">{{ store.resultLabel() }}</p>
 
   @if (store.hasError()) {
     <section class="state-card error-card" role="alert" aria-labelledby="planned-actions-error-title">

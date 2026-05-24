@@ -27,12 +27,8 @@
         />
       </div>
 
-      <div class="results-count" aria-live="polite">
-        @if (store.isRefreshing()) {
-          <span class="results-count-label">Refreshing...</span>
-        } @else if (store.totalElements() > 0) {
-          <span class="results-count-label">{{ store.totalElements() }} result{{ store.totalElements() !== 1 ? 's' : '' }}</span>
-        }
+      <div class="results-count" role="status" aria-live="polite" aria-atomic="true">
+        <span class="results-count-label">{{ store.resultCountLabel() }}</span>
       </div>
 
       @if (store.isLoading() && !store.isRefreshing()) {

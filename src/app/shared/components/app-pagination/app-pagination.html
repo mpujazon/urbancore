@@ -1,5 +1,5 @@
 <nav class="pagination" aria-label="Incident list pagination">
-  <div class="pagination-info">
+  <div class="pagination-info" role="status" aria-live="polite" aria-atomic="true">
     @if (totalElements() > 0) {
       <span class="pagination-summary">
         Page {{ page() + 1 }} of {{ totalPages() }} &middot; {{ totalElements() }} result{{ totalElements() !== 1 ? 's' : '' }}
