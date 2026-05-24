@@ -5,7 +5,7 @@
       [header]="incident.header"
       (back)="onBackToExplorer()"
     />
-    <main class="incident-detail-page__layout">
+    <div class="incident-detail-page__layout">
       <section class="incident-detail-page__main" aria-label="Incident details">
         <app-incident-detail-description [description]="incident.description" />
         <app-incident-detail-gallery [images]="incident.images" />
@@ -17,7 +17,7 @@
         <app-incident-detail-summary [summary]="incident.summary" />
         <app-incident-detail-planned-actions [plannedActions]="incident.plannedActions" />
       </aside>
-    </main>
+    </div>
 
     @if (canManageIncident() || canDeleteIncident()) {
       <app-incident-detail-controls
