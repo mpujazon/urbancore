@@ -1,23 +1,29 @@
-<article class="panel">
+<article class="panel" aria-labelledby="media-evidence-title" aria-describedby="media-upload-help media-upload-status">
   <div class="section-title spread">
     <div>
-      <i class="icon fa-regular fa-image"></i>
-      <h2>Media Evidence</h2>
+      <i class="icon fa-regular fa-image" aria-hidden="true"></i>
+      <h2 id="media-evidence-title">Media Evidence</h2>
     </div>
-    <span class="file-limit">Up to 5 files</span>
+    <span class="file-limit" id="media-upload-help">Up to 5 image files. JPG, PNG, WebP, HEIC, and HEIF are supported.</span>
   </div>
+
+  <p id="media-upload-status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true">
+    {{ uploadStatusMessage() }}
+  </p>
 
   <div class="media-grid">
     @if (canUploadMore()) {
-      <label class="upload-tile">
-        <i class="icon fa-solid fa-file-arrow-up"></i>
+      <label class="upload-tile" for="evidence-upload-input" aria-describedby="media-upload-help">
+        <i class="icon fa-solid fa-file-arrow-up" aria-hidden="true"></i>
         <span>Upload</span>
         <input
+          id="evidence-upload-input"
           class="visually-hidden"
           type="file"
           multiple
           accept=".jpg,.jpeg,.png,.webp,.heic,.heif,image/jpeg,image/png,image/webp,image/heic,image/heif"
-          aria-label="Upload evidence files"
+          aria-label="Upload evidence image files"
+          aria-describedby="media-upload-help"
           (change)="onFilesSelected($event)"
         />
       </label>
@@ -27,7 +33,7 @@
       <div class="preview-card">
         <img
           [src]="preview.url"
-          [alt]="preview.file.name"
+          [alt]="previewAltText(preview)"
           width="360"
           height="360"
           (error)="onPreviewImageError($event)"
@@ -35,17 +41,17 @@
         <button
           class="remove-media"
           type="button"
-          [attr.aria-label]="'Remove ' + preview.file.name"
+          [attr.aria-label]="'Remove uploaded evidence image ' + preview.file.name"
           (click)="removePreview(preview.id)"
         >
-          <i class="fa-solid fa-xmark"></i>
+          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
         </button>
       </div>
     }
   </div>
 
   @if (errorMessage(); as error) {
-    <p class="upload-error" role="status" aria-live="polite">{{ error }}</p>
+    <p class="upload-error" role="alert">{{ error }}</p>
   }
 
   <div class="autocomplete-actions">
@@ -56,6 +62,8 @@
       class="autocomplete-button"
       type="button"
       [disabled]="previews().length === 0 || isAutocompleteLoading()"
+      [attr.aria-busy]="isAutocompleteLoading()"
+      aria-describedby="media-upload-status"
       (click)="requestAutocomplete()"
     >
       {{ isAutocompleteLoading() ? 'Generating suggestions...' : 'Autocomplete from first image' }}
