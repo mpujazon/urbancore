@@ -48,6 +48,7 @@
           }
         </div>
       } @else {
+        <h2 class="sr-only">Incident results</h2>
         <div #incidentsContainer class="incident-list">
           @for (incident of incidentCards(); track incident.id) {
             <div
