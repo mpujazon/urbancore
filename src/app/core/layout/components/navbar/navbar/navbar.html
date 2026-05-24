@@ -1,14 +1,16 @@
 <nav id="desktop-navigation">
-  <a class="company-logo" routerLink="/" aria-label="UrbanCore home">
-    <img src="/icons/logo.svg" alt="UrbanCore Logo">
+  <a class="company-logo" routerLink="/">
+    <img src="/icons/logo.svg" alt="">
     <p>URBAN CORE</p>
   </a>
 
   <ul class="desktop-menu">
     @for (link of links(); track $index) {
-      <app-nav-link
-        [link]="link"
-      />
+      <li>
+        <app-nav-link
+          [link]="link"
+        />
+      </li>
     }
   </ul>
 
@@ -49,8 +51,8 @@
   [attr.inert]="isMenuOpen() ? null : ''"
 >
   <header>
-    <a class="company-logo" routerLink="/" aria-label="UrbanCore home" (click)="onCloseMenuClick()">
-      <img src="/icons/logo.svg" alt="UrbanCore Logo">
+    <a class="company-logo" routerLink="/" (click)="onCloseMenuClick()">
+      <img src="/icons/logo.svg" alt="">
       <p>URBAN CORE</p>
     </a>
     <button
@@ -69,10 +71,12 @@
   }
   <ul>
     @for (link of links(); track $index) {
-      <app-nav-link
-        [link]="link"
-        (clicked)="onCloseMenuClick()"
-      />
+      <li>
+        <app-nav-link
+          [link]="link"
+          (clicked)="onCloseMenuClick()"
+        />
+      </li>
     }
   </ul>
   <footer>
