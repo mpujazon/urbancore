@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
 
 import { validateImageFile } from '../../utils/image-upload.validators';
 
@@ -20,6 +20,8 @@ const FALLBACK_IMAGE_URL = 'https://placehold.co/400x400?text=Unavailable previe
 
 export class ReportIncidentMedia {
   selectedFilesChanged = output<File[]>();
+  autocompleteRequested = output<void>();
+  readonly isAutocompleteLoading = input(false);
   protected readonly previews = signal<MediaPreview[]>([]);
   protected readonly errorMessage = signal<string | null>(null);
   protected readonly canUploadMore = computed(
@@ -107,6 +109,10 @@ export class ReportIncidentMedia {
     }
 
     image.src = fallbackUrl;
+  }
+
+  protected requestAutocomplete(): void {
+    this.autocompleteRequested.emit();
   }
 
   private emitSelectedFiles(): void {

@@ -146,6 +146,39 @@ button,
   font-weight: $font-weight-medium;
 }
 
+.autocomplete-actions {
+  margin-top: $space-lg;
+  display: grid;
+  gap: $space-sm;
+}
+
+.autocomplete-warning {
+  margin: 0;
+  color: $neutral-variant;
+  font-size: $label-sm;
+}
+
+.autocomplete-button {
+  width: fit-content;
+  border-radius: $radius-md;
+  background: $secondary-fixed;
+  color: $secondary;
+  cursor: pointer;
+  font-size: $label-sm;
+  font-weight: 700;
+  padding: $space-sm $space-md;
+  transition: $transition-hover;
+
+  &:hover:not(:disabled) {
+    background: rgba($secondary, 0.2);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+  }
+}
+
 @media (max-width: ($bp-md - 1px)) {
   .panel {
     padding: $space-lg;

@@ -1,10 +1,20 @@
 <section class="form-layout" aria-label="Incident report form preview">
   <div class="primary-column">
     <app-report-incident-form
+      [isAutocompleteLoading]="isAutocompleteLoading()"
+      [suggestedValues]="suggestedFormValues()"
       (formValidityChanged)="updateFormValidityState($event)"
       (formValuesChanged)="updateFormValues($event)"
     />
-    <app-report-incident-media (selectedFilesChanged)="updateSelectedFiles($event)" />
+    <app-report-incident-media
+      [isAutocompleteLoading]="isAutocompleteLoading()"
+      (selectedFilesChanged)="updateSelectedFiles($event)"
+      (autocompleteRequested)="requestFormAutocomplete()"
+    />
+
+    @if (autocompleteMessage(); as message) {
+      <p class="submit-feedback" role="status" aria-live="polite">{{ message }}</p>
+    }
   </div>
   <aside class="side-column" aria-labelledby="location-title">
     <app-report-incident-location
