@@ -3,7 +3,7 @@
     type="button"
     class="city-selector-backdrop"
     aria-label="Cerrar selector de ciudad"
-    (click)="close()"
+    (click)="close(true)"
   ></button>
 }
 
@@ -13,6 +13,7 @@
       <label class="city-selector-label" for="city-selector-search">Buscar ciudad</label>
       <input
         id="city-selector-search"
+        #citySearch
         class="city-selector-search"
         type="search"
         autocomplete="off"
@@ -21,13 +22,11 @@
         placeholder="Escribe una ciudad"
       />
 
-      <div class="city-selector-results" role="listbox" aria-label="Ciudades disponibles">
+      <div class="city-selector-results" aria-label="Ciudades disponibles">
         @if (showGlobalOption()) {
           <button
             type="button"
             class="city-selector-option city-selector-option-global"
-            role="option"
-            [attr.aria-selected]="!selectedCity()"
             [class.selected]="!selectedCity()"
             (click)="selectGlobalCity()"
           >
@@ -39,8 +38,6 @@
           <button
             type="button"
             class="city-selector-option"
-            role="option"
-            [attr.aria-selected]="selectedCity()?.id === city.id"
             [class.selected]="selectedCity()?.id === city.id"
             (click)="selectCity(city)"
           >
@@ -56,6 +53,7 @@
   }
 
   <button
+    #citySelectorTrigger
     type="button"
     class="city-selector-trigger"
     aria-controls="city-selector-panel"
