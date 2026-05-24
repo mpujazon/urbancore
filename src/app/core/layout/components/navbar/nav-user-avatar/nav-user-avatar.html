@@ -1,11 +1,12 @@
 <div class="user-card">
   <button
+    #avatarButton
     class="avatar-button"
     type="button"
     (click)="toggleDesktopMenu($event)"
     [attr.aria-expanded]="isDesktopMenuOpen"
-    aria-haspopup="menu"
-    aria-label="Open user menu"
+    aria-controls="avatar-desktop-menu"
+    [attr.aria-label]="isDesktopMenuOpen ? 'Close user menu' : 'Open user menu'"
   >
     <img [src]="imgUrl()" alt="User Avatar" referrerpolicy="no-referrer">
   </button>
@@ -14,20 +15,20 @@
       <p class="name">{{name()}}</p>
       <p>{{ role() | userRoleLabel }}</p>
     </div>
-    <p class="active_session"><i class="fa-solid fa-circle-dot"></i> Active Session</p>
+    <p class="active_session"><i class="fa-solid fa-circle-dot" aria-hidden="true"></i> Active Session</p>
   </div>
 </div>
 @if (isDesktopMenuOpen) {
-  <div class="avatar-desktop-menu" role="menu" aria-label="User menu">
+  <div class="avatar-desktop-menu" id="avatar-desktop-menu" aria-label="User menu">
     <div class="avatar-desktop-menu__user">
       <div class="user_details">
         <p class="name">{{name()}}</p>
         <p>{{ role() | userRoleLabel }}</p>
       </div>
-      <p class="active_session"><i class="fa-solid fa-circle-dot"></i> Active Session</p>
+      <p class="active_session"><i class="fa-solid fa-circle-dot" aria-hidden="true"></i> Active Session</p>
     </div>
-    <button type="button" role="menuitem" id="logout-button" (click)="onSignOut()">
-      <i class="fa-solid fa-arrow-right-from-bracket"></i>
+    <button type="button" id="logout-button" (click)="onSignOut()">
+      <i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
       <span>Log Out</span>
     </button>
   </div>
