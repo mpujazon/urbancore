@@ -6,7 +6,7 @@ import { CityContextService } from '../../../../core/services/city-context-servi
 import { ToastService } from '../../../../core/services/toast-service';
 import type { CreateIncidentRequest } from '../../models/incident-report.models';
 import type { IncidentSuggestionFormValues, IncidentSuggestionResponse } from '../../models/incident-suggestion.model';
-import type { IncidentImageDto } from '../../models/upload.models';
+import type { IncidentImageDto } from '../../../../shared/models/incident-dto.model';
 import { ImageUploadService } from '../../services/image-upload-service';
 import { IncidentSuggestionsApiService } from '../../services/incident-suggestions-api-service';
 import { ReportIncidentApiService } from '../../services/report-incident-api-service';

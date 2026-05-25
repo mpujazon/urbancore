@@ -14,11 +14,3 @@ export interface CloudinaryUploadResponse {
   resource_type: string;
   original_filename: string;
 }
-
-export interface IncidentImageDto {
-  url: string;
-  thumbnailUrl: string;
-  publicId: string;
-  mimeType: string;
-  sizeKb: number;
-}
