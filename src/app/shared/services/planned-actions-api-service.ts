@@ -1,8 +1,13 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment';
-import { PublicPlannedActionDto, PublicPlannedActionsQuery } from '../models/planned-action-dto.model';
+import { inject, Injectable } from '@angular/core';
+import type { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import type { IncidentDto } from '../models/incident-dto.model';
+import type {
+  CreatePlannedActionRequest,
+  PublicPlannedActionDto,
+  PublicPlannedActionsQuery,
+} from '../models/planned-action.model';
 
 @Injectable({ providedIn: 'root' })
 export class PlannedActionsApiService {
@@ -20,5 +25,9 @@ export class PlannedActionsApiService {
     return this.http.get<PublicPlannedActionDto[]>(`${environment.API_BASE_URL}/planned-actions`, {
       params,
     });
+  }
+
+  createPlannedAction(request: CreatePlannedActionRequest): Observable<IncidentDto> {
+    return this.http.post<IncidentDto>(`${environment.API_BASE_URL}/planned-actions`, request);
   }
 }
