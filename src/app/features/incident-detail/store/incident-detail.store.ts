@@ -13,7 +13,7 @@ import { IncidentManagementApiService } from '../../../shared/services/incident-
 import { PlannedActionsApiService } from '../../../shared/services/planned-actions-api-service';
 import { PublicIncidentsApiService } from '../../../shared/services/public-incidents-api-service';
 import type { CurrentUser, IncidentPermissionContext } from '../../../core/permissions/permissions.model';
-import type { PlannedActionCreatePayload } from '../components/incident-detail-controls/incident-detail-controls';
+import type { PlannedActionCreatePayload } from '../models/planned-action-create-payload.model';
 
 const CANNOT_MODIFY_MESSAGE = 'This incident cannot be modified.';
 
