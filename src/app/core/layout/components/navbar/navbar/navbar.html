@@ -1,6 +1,6 @@
 <nav id="desktop-navigation">
   <a class="company-logo" routerLink="/">
-    <img src="/icons/logo.svg" alt="">
+    <img ngSrc="/icons/logo.svg" width="42" height="42" alt="">
     <p>URBAN CORE</p>
   </a>
 
@@ -22,7 +22,7 @@
         @if (isSigningIn()) {
           <i class="fa-solid fa-spinner loading-icon" aria-hidden="true"></i>
         } @else {
-          <img src="icons/google-icon.svg" alt="Google Icon">
+          <img ngSrc="/icons/google-icon.svg" width="18" height="18" alt="Google Icon">
         }
         <span>{{ isSigningIn() ? 'Signing in...' : 'Sign in' }}</span>
       </button>
@@ -52,7 +52,7 @@
 >
   <header>
     <a class="company-logo" routerLink="/" (click)="onCloseMenuClick()">
-      <img src="/icons/logo.svg" alt="">
+      <img ngSrc="/icons/logo.svg" width="42" height="42" alt="">
       <p>URBAN CORE</p>
     </a>
     <button
@@ -90,7 +90,7 @@
         @if (isSigningIn()) {
           <i class="fa-solid fa-spinner loading-icon" aria-hidden="true"></i>
         } @else {
-          <img src="icons/google-icon.svg" alt="Google Icon">
+          <img ngSrc="/icons/google-icon.svg" width="18" height="18" alt="Google Icon">
         }
         <span>{{ isSigningIn() ? 'Signing in...' : 'Sign in with Google' }}</span>
       </button>

@@ -8,7 +8,7 @@
     aria-controls="avatar-desktop-menu"
     [attr.aria-label]="isDesktopMenuOpen ? 'Close user menu' : 'Open user menu'"
   >
-    <img [src]="imgUrl()" alt="User Avatar" referrerpolicy="no-referrer">
+    <img [src]="imgUrl()" width="40" height="40" loading="lazy" decoding="async" alt="User Avatar" referrerpolicy="no-referrer">
   </button>
   <div class="user-card__info">
     <div class="user_details">
