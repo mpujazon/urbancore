@@ -10,7 +10,7 @@ export class PermissionsService {
 
   canManageIncident(user: CurrentUser | null, incident: IncidentPermissionContext | null): boolean {
     if (!user || !incident || this.isReadOnlyIncident(incident)) return false;
-    return user.role === 'ROLE_ADMIN';
+    return user.role === 'ROLE_ADMIN' && this.isAdminFromIncidentCity(user, incident);
   }
 
   canEditIncident(
@@ -38,7 +38,7 @@ export class PermissionsService {
     if (this.isReadOnlyIncident(incident)) return false;
 
     if (user.role === 'ROLE_ADMIN') {
-      return incident.status === 'NEW';
+      return incident.status === 'NEW' && this.isAdminFromIncidentCity(user, incident);
     }
 
     const isOwner = incident.reporterId === user.id;
@@ -48,5 +48,9 @@ export class PermissionsService {
   isReadOnlyIncident(incident: IncidentPermissionContext | null): boolean {
     if (!incident) return false;
     return this.readOnlyStatuses.has(incident.status);
+  }
+
+  private isAdminFromIncidentCity(user: CurrentUser, incident: IncidentPermissionContext): boolean {
+    return Boolean(user.cityId && incident.cityId && user.cityId === incident.cityId);
   }
 }

@@ -54,6 +54,7 @@ export class IncidentDetailStore {
     return {
       id: dbUser.role === 'ROLE_CITIZEN' ? dbUser.firebaseUid : String(dbUser.id),
       role: dbUser.role,
+      cityId: dbUser.cityId,
     };
   });
 
@@ -66,6 +67,7 @@ export class IncidentDetailStore {
     return {
       id: incident.rawId,
       reporterId: this.ownedIncidentIds().has(incident.rawId) ? this.permissionUser()?.id : undefined,
+      cityId: incident.cityId,
       status: incident.status,
     };
   });

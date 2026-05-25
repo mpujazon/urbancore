@@ -28,6 +28,7 @@ export interface IncidentExplorerFilters {
 export interface IncidentDetailVm {
   id: string;
   rawId: string;
+  cityId?: string;
   status: IncidentStatus;
   reporterId?: string;
   header: IncidentDetailHeaderVm;

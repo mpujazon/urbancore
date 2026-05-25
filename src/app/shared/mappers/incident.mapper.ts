@@ -101,6 +101,7 @@ export const mapIncidentToDetailVm = (dto: IncidentDto): IncidentDetailVm => {
   return {
     id: `INC-${dto.id.slice(0,8)}`,
     rawId: dto.id,
+    cityId: dto.cityId,
     status: dto.status,
     reporterId: dto.reporter?.id,
     header: {
