@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">Modern city operations grid</title>
+  <desc id="desc">Abstract city blocks and signal paths in deep blue tones.</desc>
+  <defs>
+    <linearGradient id="sky" x1="120" y1="0" x2="1050" y2="900" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#071a3a"/>
+      <stop offset="0.52" stop-color="#002855"/>
+      <stop offset="1" stop-color="#0052cc"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d3e4ff" stop-opacity="0.92"/>
+      <stop offset="1" stop-color="#7aa8ff" stop-opacity="0.26"/>
+    </linearGradient>
+    <filter id="soft-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#001430" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="900" fill="url(#sky)"/>
+  <path d="M0 650c145-92 248-98 395-42 160 61 279 27 405-76 132-108 253-145 400-98v466H0Z" fill="#001430" opacity="0.42"/>
+  <g opacity="0.2" stroke="#d3e4ff" stroke-width="2">
+    <path d="M70 178h1060M70 318h1060M70 458h1060M70 598h1060M210 80v720M390 80v720M570 80v720M750 80v720M930 80v720"/>
+  </g>
+  <g filter="url(#soft-shadow)">
+    <path d="M140 365h170v370H140z" fill="#001430"/>
+    <path d="M330 250h190v485H330z" fill="#06214c"/>
+    <path d="M548 175h160v560H548z" fill="#001a40"/>
+    <path d="M735 305h205v430H735z" fill="#082b62"/>
+    <path d="M965 410h105v325H965z" fill="#001430"/>
+  </g>
+  <g fill="url(#panel)">
+    <rect x="174" y="405" width="42" height="32" rx="6"/>
+    <rect x="236" y="405" width="42" height="32" rx="6"/>
+    <rect x="174" y="472" width="42" height="32" rx="6"/>
+    <rect x="236" y="472" width="42" height="32" rx="6"/>
+    <rect x="174" y="539" width="42" height="32" rx="6"/>
+    <rect x="236" y="539" width="42" height="32" rx="6"/>
+    <rect x="370" y="302" width="48" height="34" rx="6"/>
+    <rect x="444" y="302" width="48" height="34" rx="6"/>
+    <rect x="370" y="382" width="48" height="34" rx="6"/>
+    <rect x="444" y="382" width="48" height="34" rx="6"/>
+    <rect x="370" y="462" width="48" height="34" rx="6"/>
+    <rect x="444" y="462" width="48" height="34" rx="6"/>
+    <rect x="586" y="226" width="36" height="44" rx="6"/>
+    <rect x="642" y="226" width="36" height="44" rx="6"/>
+    <rect x="586" y="330" width="36" height="44" rx="6"/>
+    <rect x="642" y="330" width="36" height="44" rx="6"/>
+    <rect x="586" y="434" width="36" height="44" rx="6"/>
+    <rect x="642" y="434" width="36" height="44" rx="6"/>
+    <rect x="782" y="356" width="50" height="36" rx="6"/>
+    <rect x="862" y="356" width="50" height="36" rx="6"/>
+    <rect x="782" y="446" width="50" height="36" rx="6"/>
+    <rect x="862" y="446" width="50" height="36" rx="6"/>
+    <rect x="997" y="456" width="42" height="32" rx="6"/>
+    <rect x="997" y="532" width="42" height="32" rx="6"/>
+  </g>
+  <g fill="none" stroke="#6ee7b7" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.92">
+    <path d="M242 606c88-82 166-101 244-58 92 50 172 30 239-60 72-98 160-117 264-60"/>
+    <path d="M242 606h-78M989 428h78"/>
+  </g>
+  <g fill="#6ee7b7">
+    <circle cx="242" cy="606" r="16"/>
+    <circle cx="486" cy="548" r="16"/>
+    <circle cx="725" cy="488" r="16"/>
+    <circle cx="989" cy="428" r="16"/>
+  </g>
+</svg>
