@@ -4,12 +4,12 @@ import { ActivatedRouteSnapshot, RedirectCommand, ResolveFn, Router } from '@ang
 import { catchError, map, throwError } from 'rxjs';
 import { mapIncidentToDetailVm } from '../../../shared/mappers/incident.mapper';
 import type { IncidentDetailVm } from '../../../shared/models/incident-vm.model';
-import { IncidentsApiService } from '../../../shared/services/incidents-api-service';
+import { PublicIncidentsApiService } from '../../../shared/services/public-incidents-api-service';
 
 export const publicIncidentDetailResolver: ResolveFn<IncidentDetailVm | RedirectCommand> = (
   route: ActivatedRouteSnapshot,
 ) => {
-  const incidentsApi = inject(IncidentsApiService);
+  const incidentsApi = inject(PublicIncidentsApiService);
   const router = inject(Router);
   const id = route.paramMap.get('id');
 

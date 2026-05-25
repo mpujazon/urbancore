@@ -7,7 +7,7 @@
           type="button"
           class="filter-toggle"
           [attr.aria-expanded]="showFilters()"
-          (click)="showFilters.set(!showFilters())"
+          (click)="toggleFilters()"
         >
           <i class="fa-solid fa-filter" aria-hidden="true"></i>
           Filters
@@ -22,8 +22,8 @@
           [filters]="store.filters()"
           [loading]="store.isLoading()"
           [activeFilterCount]="store.activeFilterCount()"
-          (filtersChange)="store.setFilters($event)"
-          (clear)="store.clearFilters()"
+          (filtersChange)="setFilters($event)"
+          (clear)="clearFilters()"
         />
       </div>
 
@@ -44,7 +44,7 @@
         <div class="state-message" role="status">
           <p>No incidents found matching your filters.</p>
           @if (store.activeFilterCount() > 0) {
-            <button type="button" class="retry-btn" (click)="store.clearFilters()">Clear filters</button>
+            <button type="button" class="retry-btn" (click)="clearFilters()">Clear filters</button>
           }
         </div>
       } @else {
@@ -69,8 +69,8 @@
           [first]="store.first()"
           [last]="store.last()"
           [loading]="store.isLoading()"
-          (pageChange)="store.setPage($event)"
-          (sizeChange)="store.setSize($event)"
+          (pageChange)="setPage($event)"
+          (sizeChange)="setSize($event)"
         />
       }
     </section>

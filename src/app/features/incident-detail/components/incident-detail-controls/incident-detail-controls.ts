@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import type { IncidentPriority, IncidentStatus } from '../../../../shared/models/incident-dto.model';
+import type { PlannedActionCreatePayload } from '../../models/planned-action-create-payload.model';
 
 type SelectOption<TValue extends string> = { value: TValue; label: string };
 
@@ -18,13 +19,6 @@ type PlannedActionFormGroup = FormGroup<{
   scheduledStart: FormControl<string>;
   scheduledEnd: FormControl<string>;
 }>;
-
-export interface PlannedActionCreatePayload {
-  title: string;
-  description?: string;
-  scheduledStart: string;
-  scheduledEnd?: string;
-}
 
 const INITIAL_STATUS: IncidentStatus = 'UNDER_REVIEW';
 const INITIAL_PRIORITY: IncidentPriority = 'MEDIUM';

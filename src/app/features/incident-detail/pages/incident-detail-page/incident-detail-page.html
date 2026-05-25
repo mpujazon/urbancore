@@ -1,11 +1,11 @@
 <section class="incident-detail-page">
-  <p class="sr-only" role="status" aria-live="polite" aria-atomic="true">{{ statusChangeAnnouncement() }}</p>
+  <p class="sr-only" role="status" aria-live="polite" aria-atomic="true">{{ store.statusChangeAnnouncement() }}</p>
 
-  @if (resolvedIncident(); as incident) {
+  @if (store.resolvedIncident(); as incident) {
     <app-incident-detail-header
       [incidentId]="incident.id"
       [header]="incident.header"
-      (back)="onBackToExplorer()"
+      (back)="store.onBackToExplorer()"
     />
     <div class="incident-detail-page__layout">
       <section class="incident-detail-page__main" aria-label="Incident details">
@@ -21,14 +21,14 @@
       </aside>
     </div>
 
-    @if (canManageIncident() || canDeleteIncident()) {
+    @if (store.canManageIncident() || store.canDeleteIncident()) {
       <app-incident-detail-controls
-        [canManage]="canManageIncident()"
-        [canDelete]="canDeleteIncident()"
-        (incidentDelete)="onDeleteIncident()"
-        (statusUpdate)="onUpdateIncidentStatus($event)"
-        (priorityUpdate)="onUpdateIncidentPriority($event)"
-        (plannedActionCreate)="onCreatePlannedAction($event)"
+        [canManage]="store.canManageIncident()"
+        [canDelete]="store.canDeleteIncident()"
+        (incidentDelete)="store.onDeleteIncident()"
+        (statusUpdate)="store.onUpdateIncidentStatus($event)"
+        (priorityUpdate)="store.onUpdateIncidentPriority($event)"
+        (plannedActionCreate)="store.onCreatePlannedAction($event)"
       />
     }
   }

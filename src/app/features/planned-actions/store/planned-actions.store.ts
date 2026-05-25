@@ -2,14 +2,15 @@ import { DestroyRef, Injectable, computed, effect, inject, signal, untracked } f
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject, catchError, map, of, switchMap, tap } from 'rxjs';
 import { CityContextService } from '../../../core/services/city-context-service';
+import { PlannedActionsApiService } from '../../../shared/services/planned-actions-api-service';
 import { mapPublicPlannedActionsToCalendarEvents } from '../mappers/planned-action.mapper';
-import { ApiError } from '../models/planned-action-dto.model';
+import { ApiError } from '../../../shared/models/planned-action.model';
 import {
   PlannedActionCalendarEventVm,
   PlannedActionsDateRange,
   PlannedActionsViewMode,
 } from '../models/planned-action-vm.model';
-import { PlannedActionsApiService } from '../services/planned-actions-api-service';
+import { toIsoDate } from '../utils/planned-action-date.util';
 
 type ResourceState<T> = {
   data: T;
@@ -200,13 +201,6 @@ export class PlannedActionsStore {
       cityId,
     });
   }
-}
-
-export function toIsoDate(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
 }
 
 function getHydratedRange(

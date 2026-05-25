@@ -1,4 +1,4 @@
-import { PublicPlannedActionDto, PlannedActionStatus } from '../models/planned-action-dto.model';
+import { PublicPlannedActionDto, PlannedActionStatus } from '../../../shared/models/planned-action.model';
 import { PlannedActionCalendarEventVm, PlannedActionTone } from '../models/planned-action-vm.model';
 
 const statusLabels: Record<PlannedActionStatus, string> = {

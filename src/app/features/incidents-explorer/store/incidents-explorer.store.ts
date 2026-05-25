@@ -11,29 +11,34 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject, switchMap, tap } from 'rxjs';
 import { CityContextService } from '../../../core/services/city-context-service';
 import {
-  IncidentExplorerQuery,
   IncidentListItemDto,
 } from '../../../shared/models/incident-dto.model';
 import { IncidentExplorerFilters } from '../../../shared/models/incident-vm.model';
-import { IncidentsApiService } from '../../../shared/services/incidents-api-service';
+import { PublicIncidentsApiService } from '../../../shared/services/public-incidents-api-service';
 import { PagedResponseDto } from '../../../shared/models/paged-response.model';
+import {
+  buildIncidentsExplorerQuery,
+  buildIncidentsExplorerQueryParams,
+  hydrateIncidentsExplorerState,
+  INCIDENTS_EXPLORER_DEFAULT_SIZE,
+  INCIDENTS_EXPLORER_DEFAULT_SORT,
+} from '../helpers/incidents-explorer-query.helper';
 
 @Injectable()
 export class IncidentsExplorerStore {
-  private readonly incidentService = inject(IncidentsApiService);
+  private readonly incidentService = inject(PublicIncidentsApiService);
   private readonly cityContext = inject(CityContextService);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly filters = signal<IncidentExplorerFilters>({});
   readonly page = signal<number>(0);
-  readonly size = signal<number>(10);
-  readonly sort = signal<string>('createdAt,desc');
+  readonly size = signal<number>(INCIDENTS_EXPLORER_DEFAULT_SIZE);
+  readonly sort = signal<string>(INCIDENTS_EXPLORER_DEFAULT_SORT);
 
   private readonly response = signal<PagedResponseDto<IncidentListItemDto> | null>(null);
   private readonly loadingState = signal<boolean>(false);
   private readonly errorState = signal<string | null>(null);
   private readonly hasHydrated = signal(false);
-  private incidentsContainer: HTMLElement | null = null;
   private lastCityId: string | undefined;
   private hasLoadedForCityContext = false;
 
@@ -76,7 +81,7 @@ export class IncidentsExplorerStore {
     return count;
   });
 
-  private readonly querySubject = new Subject<IncidentExplorerQuery>();
+  private readonly querySubject = new Subject<ReturnType<typeof buildIncidentsExplorerQuery>>();
 
   constructor() {
     this.querySubject
@@ -114,7 +119,6 @@ export class IncidentsExplorerStore {
 
       if (this.hasLoadedForCityContext && this.lastCityId !== cityId) {
         this.page.set(0);
-        this.scrollIncidentsContainerToTop();
       }
 
       this.lastCityId = cityId;
@@ -136,34 +140,29 @@ export class IncidentsExplorerStore {
       return next;
     });
     this.page.set(0);
-    this.scrollIncidentsContainerToTop();
     this.emitQuery();
   }
 
   clearFilters(): void {
     this.filters.set({});
     this.page.set(0);
-    this.scrollIncidentsContainerToTop();
     this.emitQuery();
   }
 
   setPage(page: number): void {
     this.page.set(page);
-    this.scrollIncidentsContainerToTop();
     this.emitQuery();
   }
 
   setSize(size: number): void {
     this.size.set(size);
     this.page.set(0);
-    this.scrollIncidentsContainerToTop();
     this.emitQuery();
   }
 
   setSort(sort: string): void {
     this.sort.set(sort);
     this.page.set(0);
-    this.scrollIncidentsContainerToTop();
     this.emitQuery();
   }
 
@@ -171,58 +170,23 @@ export class IncidentsExplorerStore {
     this.emitQuery();
   }
 
-  setIncidentsContainer(container: HTMLElement | null): void {
-    this.incidentsContainer = container;
-  }
-
-  scrollIncidentsContainerToTop(): void {
-    if (!this.incidentsContainer) {
-      return;
-    }
-
-    this.incidentsContainer.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  }
-
   hydrateFromQueryParams(params: Record<string, string | undefined>): void {
-    const filters: IncidentExplorerFilters = {};
+    const hydratedState = hydrateIncidentsExplorerState(params);
 
-    if (params['q']) filters.q = params['q'];
-    if (params['status']) filters.status = params['status'] as IncidentExplorerFilters['status'];
-    if (params['category']) filters.category = params['category'] as IncidentExplorerFilters['category'];
-    if (params['priority']) filters.priority = params['priority'] as IncidentExplorerFilters['priority'];
-    if (params['from']) filters.from = params['from'];
-    if (params['to']) filters.to = params['to'];
-
-    const page = params['page'] ? Number(params['page']) : 0;
-    const size = params['size'] ? Number(params['size']) : 10;
-    const sort = params['sort'] || 'createdAt,desc';
-
-    this.filters.set(filters);
-    this.page.set(Number.isNaN(page) ? 0 : page);
-    this.size.set(Number.isNaN(size) || size < 1 || size > 50 ? 10 : size);
-    this.sort.set(sort);
+    this.filters.set(hydratedState.filters);
+    this.page.set(hydratedState.page);
+    this.size.set(hydratedState.size);
+    this.sort.set(hydratedState.sort);
     this.hasHydrated.set(true);
   }
 
   buildQueryParams(): Record<string, string | undefined> {
-    const f = this.filters();
-    const params: Record<string, string | undefined> = {};
-
-    if (f.q?.trim()) params['q'] = f.q.trim();
-    if (f.status) params['status'] = f.status;
-    if (f.category) params['category'] = f.category;
-    if (f.priority) params['priority'] = f.priority;
-    if (f.from) params['from'] = f.from;
-    if (f.to) params['to'] = f.to;
-
-    params['page'] = this.page() > 0 ? String(this.page()) : undefined;
-    params['size'] = this.size() !== 10 ? String(this.size()) : undefined;
-    params['sort'] = this.sort() !== 'createdAt,desc' ? this.sort() : undefined;
-
-    return params;
+    return buildIncidentsExplorerQueryParams({
+      filters: this.filters(),
+      page: this.page(),
+      size: this.size(),
+      sort: this.sort(),
+    });
   }
 
   private emitQuery(cityId = this.cityContext.selectedCityId()): void {
@@ -230,20 +194,13 @@ export class IncidentsExplorerStore {
       return;
     }
 
-    const f = this.filters();
-    const query: IncidentExplorerQuery = {
+    const query = buildIncidentsExplorerQuery({
+      filters: this.filters(),
       page: this.page(),
       size: this.size(),
       sort: this.sort(),
-    };
-
-    if (f.q?.trim()) query.q = f.q.trim();
-    if (f.status) query.status = f.status;
-    if (f.category) query.category = f.category;
-    if (f.priority) query.priority = f.priority;
-    if (cityId) query.cityId = cityId;
-    if (f.from) query.from = f.from;
-    if (f.to) query.to = f.to;
+      cityId,
+    });
 
     this.querySubject.next(query);
   }

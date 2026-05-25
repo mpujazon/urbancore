@@ -2,25 +2,17 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  computed,
-  effect,
   ElementRef,
-  HostListener,
   inject,
   OnDestroy,
-  signal,
   ViewChild,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { IncidentCard } from '../../../../shared/components/incident-card/incident-card';
 import { IncidentExplorerMapFacade } from '../../services/incident-explorer-map-facade';
-import { LeafletMapService } from '../../../../shared/services/leaflet-map-service';
 import { IncidentsExplorerStore } from '../../store/incidents-explorer.store';
 import { ExplorerFilterBar } from '../../components/explorer-filter-bar/explorer-filter-bar';
 import { AppPagination } from '../../../../shared/components/app-pagination/app-pagination';
-import { mapIncidentListItemToCard } from '../../../../shared/mappers/incident.mapper';
-import { IncidentCardVm } from '../../../../shared/models/incident-vm.model';
-import * as L from 'leaflet';
+import { IncidentExplorerPageFacade } from '../../services/incident-explorer-page.facade';
 
 @Component({
   selector: 'app-incident-explorer-page',
@@ -32,126 +24,79 @@ import * as L from 'leaflet';
   templateUrl: './incident-explorer-page.html',
   styleUrl: './incident-explorer-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [IncidentExplorerMapFacade, IncidentsExplorerStore],
+  providers: [IncidentExplorerMapFacade, IncidentsExplorerStore, IncidentExplorerPageFacade],
+  host: {
+    '(window:resize)': 'onViewportResize()',
+  },
 })
 export class IncidentExplorerPage implements AfterViewInit, OnDestroy {
-  private readonly leafletMapService = inject(LeafletMapService);
-  protected readonly mapFacade = inject(IncidentExplorerMapFacade);
-  private readonly route = inject(ActivatedRoute);
-  private readonly router = inject(Router);
-
-  protected readonly store = inject(IncidentsExplorerStore);
+  protected readonly pageFacade = inject(IncidentExplorerPageFacade);
+  protected readonly mapFacade = this.pageFacade.mapFacade;
+  protected readonly store = this.pageFacade.store;
 
   @ViewChild('mapContainer', { static: true })
   private mapContainer?: ElementRef<HTMLElement>;
 
   @ViewChild('incidentsContainer')
   private set incidentsContainer(container: ElementRef<HTMLElement> | undefined) {
-    this.store.setIncidentsContainer(container?.nativeElement ?? null);
-  }
-
-  private readonly defaultCenter: L.LatLngTuple = [41.3874, 2.1686];
-  private readonly defaultZoom = 13;
-
-  protected readonly isMobileMapOpen = signal(false);
-  protected readonly showFilters = signal(false);
-
-  protected readonly incidentCards = computed<IncidentCardVm[]>(() =>
-    this.store.incidents().map(mapIncidentListItemToCard),
-  );
-
-  constructor() {
-    this.hydrateFromUrl();
-    this.syncUrl();
-  }
-
-  protected onIncidentCardClick(incidentId: string): void {
-    this.mapFacade.selectedIncidentId.set(incidentId);
-    this.mapFacade.flyToIncident(incidentId);
-
-    if (window.innerWidth < 992) {
-      this.openMobileMap();
-    }
-  }
-
-  private hydrateFromUrl(): void {
-    const params = this.route.snapshot.queryParamMap;
-    const record: Record<string, string | undefined> = {};
-
-    params.keys.forEach((key) => {
-      record[key] = params.get(key) ?? undefined;
-    });
-
-    this.store.hydrateFromQueryParams(record);
-  }
-
-  private syncUrl(): void {
-    effect(() => {
-      const queryParams = this.store.buildQueryParams();
-      const cleaned: Record<string, string | null> = { cityId: null };
-
-      Object.entries(queryParams).forEach(([key, value]) => {
-        if (value !== undefined) {
-          cleaned[key] = value;
-        }
-      });
-
-      this.router.navigate([], {
-        queryParams: cleaned,
-        queryParamsHandling: 'merge',
-        replaceUrl: true,
-      });
-    });
+    this.pageFacade.setIncidentsContainer(container?.nativeElement ?? null);
   }
 
   ngAfterViewInit(): void {
     if (!this.mapContainer) return;
 
-    this.mapFacade.setMap(
-      this.leafletMapService.createMap(
-        this.mapContainer.nativeElement,
-        this.defaultCenter,
-        this.defaultZoom,
-      ),
-    );
-
-    requestAnimationFrame(() => {
-      this.mapFacade.map()?.invalidateSize();
-    });
-
-    setTimeout(() => {
-      this.mapFacade.map()?.invalidateSize();
-    }, 200);
+    this.pageFacade.initMap(this.mapContainer.nativeElement);
   }
 
   ngOnDestroy(): void {
-    if (!this.mapFacade.map()) {
-      return;
-    }
-    this.mapFacade.destroy();
+    this.pageFacade.destroy();
   }
 
   protected openMobileMap(): void {
-    this.isMobileMapOpen.set(true);
-
-    requestAnimationFrame(() => {
-      this.mapFacade.map()?.invalidateSize();
-    });
-
-    setTimeout(() => {
-      this.mapFacade.map()?.invalidateSize();
-    }, 200);
+    this.pageFacade.openMobileMap();
   }
 
   protected closeMobileMap(): void {
-    this.isMobileMapOpen.set(false);
+    this.pageFacade.closeMobileMap();
   }
 
-  @HostListener('window:resize')
   protected onViewportResize(): void {
-    if (window.innerWidth >= 992 && this.isMobileMapOpen()) {
-      this.isMobileMapOpen.set(false);
-      this.mapFacade.map()?.invalidateSize();
-    }
+    this.pageFacade.onViewportResize();
+  }
+
+  protected onIncidentCardClick(incidentId: string): void {
+    this.pageFacade.onIncidentCardClick(incidentId);
+  }
+
+  protected toggleFilters(): void {
+    this.pageFacade.toggleFilters();
+  }
+
+  protected setFilters(filters: Parameters<IncidentsExplorerStore['setFilters']>[0]): void {
+    this.pageFacade.setFilters(filters);
+  }
+
+  protected clearFilters(): void {
+    this.pageFacade.clearFilters();
+  }
+
+  protected setPage(page: number): void {
+    this.pageFacade.setPage(page);
+  }
+
+  protected setSize(size: number): void {
+    this.pageFacade.setSize(size);
+  }
+
+  protected isMobileMapOpen(): boolean {
+    return this.pageFacade.isMobileMapOpen();
+  }
+
+  protected showFilters(): boolean {
+    return this.pageFacade.showFilters();
+  }
+
+  protected incidentCards() {
+    return this.pageFacade.incidentCards();
   }
 }
