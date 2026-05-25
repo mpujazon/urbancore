@@ -1,6 +1,24 @@
 # UrbanCore
 
-UrbanCore is an Angular web application for reporting, exploring, and managing city incidents. It connects citizens with municipal operations through public incident tracking, authenticated reporting, admin workflows, planned actions, and public statistics.
+UrbanCore is an Angular web application for reporting, exploring, and managing city incidents. It connects citizens with municipal operations through public incident tracking, authenticated reporting, admin workflows, planned actions, city-aware discovery, and public statistics.
+
+The product goal is to provide a centralized platform for municipalities to track, prioritize, and manage urban incidents while giving citizens a transparent way to report issues and follow their resolution.
+
+## Project Documentation
+
+Detailed product and delivery documentation lives in `docs/`:
+
+| Document | Contents |
+| --- | --- |
+| [`docs/Project 4. Design, Analysis and Flow Diagrams.md`](docs/Project%204.%20Design,%20Analysis%20and%20Flow%20Diagrams.md) | Product goals, scope, personas, requirements, use cases, information architecture, route map, domain model, data contracts, technical architecture notes, delivery phases, and Mermaid flow diagrams. |
+| [`docs/Project 4. Epics, User Stories and Tasks.md`](docs/Project%204.%20Epics,%20User%20Stories%20and%20Tasks.md) | Epics, user stories, acceptance criteria, technical notes, implementation tasks, suggested delivery order, and backend dependencies. |
+| [`docs/UrbanCore - Final Design.fig`](docs/UrbanCore%20-%20Final%20Design.fig) | Figma design file used as the visual reference for the project. |
+
+Use this README for setup and execution. Use the `docs/` files for product analysis, implementation planning, and architectural diagrams.
+
+## Design Note
+
+The Figma file was used as a design reference, not as a strict design system. Some screens and components were improved during development to better fit technical constraints, usability, responsiveness, accessibility, and the final product flow.
 
 ## Main Features
 
@@ -12,6 +30,7 @@ UrbanCore is an Angular web application for reporting, exploring, and managing c
 - Admin incident management for reviewing incidents, changing status, assigning priority, deleting reports, and creating planned actions.
 - Planned actions calendar and detail panel for scheduled municipal work.
 - Public statistics dashboard with charts and incident summary data.
+- City-aware discovery for explorer, planned actions, and statistics views.
 - Google/Firebase authentication with backend user synchronization and role-based route protection.
 
 ## Tech Stack
@@ -32,6 +51,7 @@ UrbanCore is an Angular web application for reporting, exploring, and managing c
 - pnpm `10.33.2` or newer
 - A running UrbanCore backend API
 - Firebase project credentials for authentication
+- Cloudinary-backed upload signing support from the backend for incident media uploads
 
 ## Setup
 
@@ -168,6 +188,8 @@ src/app/
 Routes are defined in `src/app/app.routes.ts` and lazy-load standalone components. Protected routes use `authGuard` and `roleGuard` with role rules from `src/app/core/routing/route-roles.ts`.
 
 HTTP requests go through Angular's `HttpClient` with the configured auth and error interceptors. Backend calls use `environment.API_BASE_URL`. Firebase Authentication provides the user session, and authenticated users are synchronized with the backend through `/auth/sync`.
+
+The broader product flows, domain rules, route map, API contract proposal, and Mermaid diagrams are documented in [`docs/Project 4. Design, Analysis and Flow Diagrams.md`](docs/Project%204.%20Design,%20Analysis%20and%20Flow%20Diagrams.md).
 
 ## Useful Commands
 
