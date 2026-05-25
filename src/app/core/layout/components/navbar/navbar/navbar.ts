@@ -1,4 +1,4 @@
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, HostListener, OnInit, computed, effect, inject, signal, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NavUserAvatar } from "../nav-user-avatar/nav-user-avatar";
@@ -8,7 +8,7 @@ import { AuthService } from '../../../../services/auth-service';
 
 @Component({
   selector: 'app-navbar',
-  imports: [NavUserAvatar, NavLink, RouterLink],
+  imports: [NgOptimizedImage, NavUserAvatar, NavLink, RouterLink],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
