@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "node ./tools/set-env.ts && ng build --configuration production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test:coverage": "pnpm test --watch=false --coverage --coverage-reporters=text-summary --coverage-reporters=json-summary --coverage-reporters=html"
   },
   "prettier": {
     "printWidth": 100,
@@ -44,6 +45,7 @@
     "@angular/compiler-cli": "^21.1.0",
     "@types/leaflet": "^1.9.21",
     "@types/ngeohash": "^0.6.8",
+    "@vitest/coverage-v8": "^4.1.4",
     "jsdom": "^27.1.0",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"
