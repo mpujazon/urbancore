@@ -1,4 +1,4 @@
-import { Component, ElementRef, viewChild } from '@angular/core';
+import { Component, ElementRef, inject, viewChild } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
@@ -6,6 +6,7 @@ import {Navbar} from './core/layout/components/navbar/navbar/navbar';
 import { Footer } from "./core/layout/components/footer/footer";
 import { ToastComponent } from "./shared/components/toast/toast";
 import { CitySelector } from './shared/components/city-selector/city-selector';
+import { SeoService } from './core/services/seo-service';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,7 @@ import { CitySelector } from './shared/components/city-selector/city-selector';
 })
 export class App {
   protected readonly mainContent = viewChild<ElementRef<HTMLElement>>('mainContent');
+  private readonly seo = inject(SeoService);
 
   constructor(public router: Router) {
     this.router.events
@@ -22,8 +24,9 @@ export class App {
         filter((event): event is NavigationEnd => event instanceof NavigationEnd),
         takeUntilDestroyed(),
       )
-      .subscribe(() => {
+      .subscribe((event) => {
         requestAnimationFrame(() => this.mainContent()?.nativeElement.focus({ preventScroll: true }));
+        this.seo.updateFromRoute(this.router.routerState.snapshot.root, event.urlAfterRedirects);
       });
   }
 }
