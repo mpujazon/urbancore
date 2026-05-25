@@ -1,59 +1,180 @@
-# Urbancore
+# UrbanCore
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.1.
+UrbanCore is an Angular web application for reporting, exploring, and managing city incidents. It connects citizens with municipal operations through public incident tracking, authenticated reporting, admin workflows, planned actions, and public statistics.
 
-## Development server
+## Main Features
 
-To start a local development server, run:
+- Public homepage with SEO metadata and city incident management positioning.
+- Public incident explorer with filters for status, category, city, and date range.
+- Incident detail pages with summary, status history, location, gallery, description, and planned actions.
+- Citizen dashboard for authenticated users to review their submitted incidents.
+- Incident reporting flow with category selection, map-based location, reverse geocoding, media upload, and AI-assisted suggestions.
+- Admin incident management for reviewing incidents, changing status, assigning priority, deleting reports, and creating planned actions.
+- Planned actions calendar and detail panel for scheduled municipal work.
+- Public statistics dashboard with charts and incident summary data.
+- Google/Firebase authentication with backend user synchronization and role-based route protection.
 
-```bash
-ng serve
-```
+## Tech Stack
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- Angular 21
+- Angular standalone components and lazy-loaded routes
+- Angular Fire and Firebase Authentication
+- RxJS
+- SCSS
+- Leaflet maps
+- Chart.js
+- Vitest through Angular's unit test builder
+- pnpm
 
-## Code scaffolding
+## Requirements
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- Node.js compatible with Angular 21
+- pnpm `10.33.2` or newer
+- A running UrbanCore backend API
+- Firebase project credentials for authentication
 
-```bash
-ng generate component component-name
-```
+## Setup
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Install dependencies:
 
 ```bash
-ng test
+pnpm install
 ```
 
-## Running end-to-end tests
+For local development, the app uses `src/environments/environment.development.ts`, which points to:
 
-For end-to-end (e2e) testing, run:
+```text
+http://localhost:8080/api
+```
+
+Make sure the backend API is available at that URL, or update `API_BASE_URL` in the environment file for your local setup.
+
+## Execution
+
+Start the local development server:
 
 ```bash
-ng e2e
+pnpm start
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Open the app at:
 
-## Additional Resources
+```text
+http://localhost:4200
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Create a production build:
+
+```bash
+pnpm build
+```
+
+The build script runs `tools/set-env.ts` before compiling. This generates `src/environments/environment.ts` from environment variables and then builds the app with Angular's production configuration.
+
+Run a development build in watch mode:
+
+```bash
+pnpm run watch
+```
+
+## Testing
+
+Run unit tests:
+
+```bash
+pnpm test
+```
+
+Tests are configured through Angular's unit test builder and Vitest. Existing test coverage includes services and report-incident location behavior.
+
+## Environment Variables
+
+Production builds read environment variables in `tools/set-env.ts` and generate `src/environments/environment.ts`.
+
+| Variable | Description | Default |
+| --- | --- | --- |
+| `API_BASE_URL` | Base URL for the UrbanCore backend API. | `http://localhost:8080/api` |
+| `FIREBASE_API_KEY` | Firebase web API key. | None |
+| `FIREBASE_AUTH_DOMAIN` | Firebase authentication domain. | None |
+| `FIREBASE_PROJECT_ID` | Firebase project ID. | None |
+| `FIREBASE_STORAGE_BUCKET` | Firebase storage bucket. | None |
+| `FIREBASE_MESSAGING_SENDER_ID` | Firebase messaging sender ID. | None |
+| `FIREBASE_APP_ID` | Firebase app ID. | None |
+| `FIREBASE_MEASUREMENT_ID` | Firebase measurement ID. | None |
+
+Example production build command:
+
+```bash
+API_BASE_URL="https://api.example.com/api" \
+FIREBASE_API_KEY="your-api-key" \
+FIREBASE_AUTH_DOMAIN="your-project.firebaseapp.com" \
+FIREBASE_PROJECT_ID="your-project-id" \
+FIREBASE_STORAGE_BUCKET="your-project.firebasestorage.app" \
+FIREBASE_MESSAGING_SENDER_ID="your-sender-id" \
+FIREBASE_APP_ID="your-app-id" \
+FIREBASE_MEASUREMENT_ID="your-measurement-id" \
+pnpm build
+```
+
+Do not commit real production secrets or private credentials. Firebase web configuration is public-facing by design, but production values should still be managed through the deployment environment.
+
+## Architecture Overview
+
+The application follows a feature-first Angular structure.
+
+```text
+src/app/
+  core/       Cross-cutting app infrastructure
+  features/   Route-level product areas
+  shared/     Reusable components, models, mappers, services, and utilities
+```
+
+### Core
+
+`src/app/core` contains application-wide infrastructure:
+
+- `guards`: authentication and role-based route guards.
+- `interceptors`: auth token attachment and API error handling.
+- `layout`: navbar, footer, avatar, and layout-related models and pipes.
+- `permissions`: user permission modeling and lookup logic.
+- `routing`: route role configuration.
+- `services`: authentication, city context, SEO, and toast notifications.
+
+### Features
+
+`src/app/features` contains route-level business areas:
+
+- `home`: public landing page.
+- `incidents-explorer`: public searchable incident map/list experience.
+- `incident-detail`: public and admin incident detail pages.
+- `report-incident`: authenticated citizen reporting wizard.
+- `citizen-dashboard`: citizen-owned incident tracking.
+- `admin-incidents`: administrative incident management.
+- `planned-actions`: planned municipal work calendar and detail panel.
+- `public-statistics`: public statistics dashboard.
+- `auth`: unauthorized access page.
+
+### Shared
+
+`src/app/shared` contains reusable building blocks:
+
+- UI components such as incident cards, status pills, pagination, city selector, and toast.
+- DTO and view-model definitions.
+- API services for public incidents, citizen incidents, incident management, and planned actions.
+- Data mappers and utility functions.
+
+### Routing And Data Flow
+
+Routes are defined in `src/app/app.routes.ts` and lazy-load standalone components. Protected routes use `authGuard` and `roleGuard` with role rules from `src/app/core/routing/route-roles.ts`.
+
+HTTP requests go through Angular's `HttpClient` with the configured auth and error interceptors. Backend calls use `environment.API_BASE_URL`. Firebase Authentication provides the user session, and authenticated users are synchronized with the backend through `/auth/sync`.
+
+## Useful Commands
+
+| Command | Purpose |
+| --- | --- |
+| `pnpm install` | Install dependencies. |
+| `pnpm start` | Start the local development server. |
+| `pnpm build` | Generate production environment config and build the app. |
+| `pnpm run watch` | Build in development watch mode. |
+| `pnpm test` | Run unit tests. |
