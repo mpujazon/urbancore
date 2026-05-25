@@ -99,13 +99,63 @@ pnpm run watch
 
 ## Testing
 
-Run unit tests:
+Tests are configured through Angular's unit test builder and Vitest (specs use `describe`/`it`/`vi` from Vitest, backed by jsdom). Angular CLI schematics are configured with `skipTests: true` in `angular.json`; specs are added manually alongside source files using the `.spec.ts` convention.
+
+### Run Tests
 
 ```bash
 pnpm test
 ```
 
-Tests are configured through Angular's unit test builder and Vitest. Existing test coverage includes services and report-incident location behavior.
+This runs the full suite once. Vitest runs in watch mode by default; `pnpm test` maps to `ng test --watch=false` so it exits after the run.
+
+### Run Coverage
+
+```bash
+pnpm test:coverage
+```
+
+Generates a text summary in the terminal, a JSON summary at `coverage/coverage-summary.json`, and an HTML report at `coverage/index.html`. Open the HTML report in a browser for per-directory and per-file breakdowns:
+
+```bash
+open coverage/index.html
+```
+
+### Coverage Thresholds
+
+The project aims for **≥ 70% line coverage** overall, with mandatory coverage for new services, stores, interceptors, guards, facades, mappers, utilities, and pipes. UI components (pages, layout) are tested where feasible but template-heavy components are lower priority.
+
+### Test Architecture
+
+| Pattern | Use |
+|---|---|
+| `TestBed.configureTestingModule` with `provideHttpClient`/`provideHttpClientTesting` | API service specs — mock `HttpTestingController` |
+| `TestBed.runInInjectionContext` | Functional guards and interceptors |
+| `TestBed.createComponent` + `fixture.componentRef.setInput` | Standalone component specs with signal inputs |
+| Plain function imports | Pure mappers, utilities, pipes, validators |
+| Store `@Injectable()` classes with mocked dependencies via `TestBed` | State store specs (`provide` dependency overrides) |
+| `vi.mock('@angular/fire/auth', ...)` | Firebase auth mocking for auth service |
+
+For guard specs, use a helper to unwrap `CanActivateFn` results (which can be `boolean`, `UrlTree`, `Observable`, or `Promise`):
+
+```ts
+import { firstValueFrom, isObservable } from 'rxjs';
+
+async function resolveGuardResult(result: unknown): Promise<unknown> {
+  const awaited = await result;
+  if (isObservable(awaited)) return firstValueFrom(awaited);
+  return awaited;
+}
+```
+
+### Source File Naming
+
+Specs live next to their target file:
+
+```text
+src/app/core/guards/auth-guard.ts
+src/app/core/guards/auth-guard.spec.ts
+```
 
 ## Environment Variables
 
