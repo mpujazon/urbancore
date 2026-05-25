@@ -39,7 +39,6 @@ export class IncidentsExplorerStore {
   private readonly loadingState = signal<boolean>(false);
   private readonly errorState = signal<string | null>(null);
   private readonly hasHydrated = signal(false);
-  private incidentsContainer: HTMLElement | null = null;
   private lastCityId: string | undefined;
   private hasLoadedForCityContext = false;
 
@@ -120,7 +119,6 @@ export class IncidentsExplorerStore {
 
       if (this.hasLoadedForCityContext && this.lastCityId !== cityId) {
         this.page.set(0);
-        this.scrollIncidentsContainerToTop();
       }
 
       this.lastCityId = cityId;
@@ -142,54 +140,34 @@ export class IncidentsExplorerStore {
       return next;
     });
     this.page.set(0);
-    this.scrollIncidentsContainerToTop();
     this.emitQuery();
   }
 
   clearFilters(): void {
     this.filters.set({});
     this.page.set(0);
-    this.scrollIncidentsContainerToTop();
     this.emitQuery();
   }
 
   setPage(page: number): void {
     this.page.set(page);
-    this.scrollIncidentsContainerToTop();
     this.emitQuery();
   }
 
   setSize(size: number): void {
     this.size.set(size);
     this.page.set(0);
-    this.scrollIncidentsContainerToTop();
     this.emitQuery();
   }
 
   setSort(sort: string): void {
     this.sort.set(sort);
     this.page.set(0);
-    this.scrollIncidentsContainerToTop();
     this.emitQuery();
   }
 
   reload(): void {
     this.emitQuery();
-  }
-
-  setIncidentsContainer(container: HTMLElement | null): void {
-    this.incidentsContainer = container;
-  }
-
-  scrollIncidentsContainerToTop(): void {
-    if (!this.incidentsContainer) {
-      return;
-    }
-
-    this.incidentsContainer.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
   }
 
   hydrateFromQueryParams(params: Record<string, string | undefined>): void {

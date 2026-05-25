@@ -72,6 +72,22 @@ export class IncidentExplorerPage implements AfterViewInit, OnDestroy {
     this.pageFacade.toggleFilters();
   }
 
+  protected setFilters(filters: Parameters<IncidentsExplorerStore['setFilters']>[0]): void {
+    this.pageFacade.setFilters(filters);
+  }
+
+  protected clearFilters(): void {
+    this.pageFacade.clearFilters();
+  }
+
+  protected setPage(page: number): void {
+    this.pageFacade.setPage(page);
+  }
+
+  protected setSize(size: number): void {
+    this.pageFacade.setSize(size);
+  }
+
   protected isMobileMapOpen(): boolean {
     return this.pageFacade.isMobileMapOpen();
   }

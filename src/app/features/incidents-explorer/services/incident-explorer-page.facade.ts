@@ -18,6 +18,7 @@ export class IncidentExplorerPageFacade {
 
   private readonly defaultCenter: L.LatLngTuple = [41.3874, 2.1686];
   private readonly defaultZoom = 13;
+  private incidentsContainer: HTMLElement | null = null;
 
   readonly isMobileMapOpen = signal(false);
   readonly showFilters = signal(false);
@@ -29,7 +30,27 @@ export class IncidentExplorerPageFacade {
   }
 
   setIncidentsContainer(container: HTMLElement | null): void {
-    this.store.setIncidentsContainer(container);
+    this.incidentsContainer = container;
+  }
+
+  setFilters(filters: Parameters<IncidentsExplorerStore['setFilters']>[0]): void {
+    this.store.setFilters(filters);
+    this.scrollIncidentsContainerToTop();
+  }
+
+  clearFilters(): void {
+    this.store.clearFilters();
+    this.scrollIncidentsContainerToTop();
+  }
+
+  setPage(page: number): void {
+    this.store.setPage(page);
+    this.scrollIncidentsContainerToTop();
+  }
+
+  setSize(size: number): void {
+    this.store.setSize(size);
+    this.scrollIncidentsContainerToTop();
   }
 
   initMap(container: HTMLElement): void {
@@ -112,5 +133,16 @@ export class IncidentExplorerPageFacade {
     setTimeout(() => {
       this.mapFacade.map()?.invalidateSize();
     }, 200);
+  }
+
+  private scrollIncidentsContainerToTop(): void {
+    if (!this.incidentsContainer) {
+      return;
+    }
+
+    this.incidentsContainer.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
   }
 }
