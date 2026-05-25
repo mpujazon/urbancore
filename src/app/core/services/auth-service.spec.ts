@@ -118,10 +118,12 @@ describe('AuthService', () => {
   it('shows error and rethrows when Google login fails', async () => {
     const error = new Error('popup closed');
     signInWithPopupMock.mockRejectedValue(error);
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
 
     await expect(service.loginWithGoogle()).rejects.toThrow('popup closed');
 
     expect(toastServiceMock.showError).toHaveBeenCalledWith('Authentication failed or was cancelled.');
+    consoleErrorSpy.mockRestore();
   });
 
   it('gets token from current Firebase user', async () => {
