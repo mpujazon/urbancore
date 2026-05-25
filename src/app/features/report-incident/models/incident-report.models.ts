@@ -1,5 +1,5 @@
 import type { IncidentDto } from '../../../shared/models/incident-dto.model';
-import type { IncidentImageDto } from './upload.models';
+import type { IncidentImageDto } from '../../../shared/models/incident-dto.model';
 
 export interface CreateIncidentRequest {
   title: string;

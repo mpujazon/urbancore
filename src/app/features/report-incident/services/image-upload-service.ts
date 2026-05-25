@@ -3,9 +3,9 @@ import { inject, Injectable } from '@angular/core';
 import { filter, map, Observable, switchMap } from 'rxjs';
 import {
   CloudinaryUploadResponse,
-  IncidentImageDto,
   UploadSignatureResponse,
 } from '../models/upload.models';
+import type { IncidentImageDto } from '../../../shared/models/incident-dto.model';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({

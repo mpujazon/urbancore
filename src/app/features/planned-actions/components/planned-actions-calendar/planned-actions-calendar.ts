@@ -6,7 +6,7 @@ import {
   PlannedActionsDateRange,
   PlannedActionsViewMode,
 } from '../../models/planned-action-vm.model';
-import { toIsoDate } from '../../store/planned-actions.store';
+import { toIsoDate } from '../../utils/planned-action-date.util';
 
 @Component({
   selector: 'app-planned-actions-calendar',

@@ -1,21 +1,16 @@
 import {computed, DestroyRef, inject, Injectable, signal} from '@angular/core';
-import {type IncidentListItemDto, IncidentStatus} from '../../../shared/models/incident-dto.model';
-import {IncidentsApiService} from '../../../shared/services/incidents-api-service';
+import { type IncidentListItemDto } from '../../../shared/models/incident-dto.model';
+import {CitizenIncidentsApiService} from '../../../shared/services/citizen-incidents-api-service';
 import {ResourceState} from '../../../shared/models/resource-state.model';
 import {mapIncidentListItemToCard} from '../../../shared/mappers/incident.mapper';
+import { isIncidentUnresolved } from '../../../shared/utils/incident-status.util';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 export type DashboardFilter = "ALL"|"UNRESOLVED"|"RESOLVED";
-const UNRESOLVED_STATUSES: readonly IncidentStatus[] = [
-  'NEW',
-  'UNDER_REVIEW',
-  'PLANNED',
-  'IN_PROGRESS',
-];
 
 @Injectable()
 export class CitizenDashboardStore {
-  private readonly incidentService = inject(IncidentsApiService);
+  private readonly incidentService = inject(CitizenIncidentsApiService);
   private readonly destroyRef = inject(DestroyRef);
 
   private readonly incidentsState = signal<ResourceState<IncidentListItemDto[]>>({
@@ -110,7 +105,7 @@ export class CitizenDashboardStore {
     }
 
     if (filter === 'UNRESOLVED') {
-      return UNRESOLVED_STATUSES.includes(incident.status);
+      return isIncidentUnresolved(incident.status);
     }
 
     return true;

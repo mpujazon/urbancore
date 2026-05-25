@@ -1,4 +1,3 @@
-import type { IncidentImageDto } from '../../features/report-incident/models/upload.models';
 import type { PlannedActionDto } from './planned-action.model';
 import type { UserRole } from './user-dto.model';
 
@@ -65,6 +64,14 @@ export interface IncidentStatusHistoryDto {
 export interface IncidentCoordinates{
   lat: number;
   lng: number;
+}
+
+export interface IncidentImageDto {
+  url: string;
+  thumbnailUrl: string;
+  publicId: string;
+  mimeType: string;
+  sizeKb: number;
 }
 
 export interface IncidentListItemDto {

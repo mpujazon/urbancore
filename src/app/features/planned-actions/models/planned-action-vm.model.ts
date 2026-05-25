@@ -1,4 +1,4 @@
-import { PlannedActionStatus } from './planned-action-dto.model';
+import { PlannedActionStatus } from '../../../shared/models/planned-action.model';
 
 export type PlannedActionTone = 'info' | 'success' | 'warning' | 'neutral' | 'danger';
 export type PlannedActionsViewMode = 'month' | 'week' | 'agenda';
