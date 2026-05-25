@@ -2,14 +2,14 @@ import { DestroyRef, Injectable, computed, effect, inject, signal, untracked } f
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject, catchError, map, of, switchMap, tap } from 'rxjs';
 import { CityContextService } from '../../../core/services/city-context-service';
+import { PlannedActionsApiService } from '../../../shared/services/planned-actions-api-service';
 import { mapPublicPlannedActionsToCalendarEvents } from '../mappers/planned-action.mapper';
-import { ApiError } from '../models/planned-action-dto.model';
+import { ApiError } from '../../../shared/models/planned-action.model';
 import {
   PlannedActionCalendarEventVm,
   PlannedActionsDateRange,
   PlannedActionsViewMode,
 } from '../models/planned-action-vm.model';
-import { PlannedActionsApiService } from '../services/planned-actions-api-service';
 
 type ResourceState<T> = {
   data: T;

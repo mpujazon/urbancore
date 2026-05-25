@@ -19,7 +19,10 @@ import { IncidentDetailSummaryComponent } from '../../components/incident-detail
 import { mapIncidentToDetailVm } from '../../../../shared/mappers/incident.mapper';
 import type { IncidentPriority, IncidentStatus } from '../../../../shared/models/incident-dto.model';
 import type { IncidentDetailVm } from '../../../../shared/models/incident-vm.model';
-import { IncidentsApiService } from '../../../../shared/services/incidents-api-service';
+import { CitizenIncidentsApiService } from '../../../../shared/services/citizen-incidents-api-service';
+import { IncidentManagementApiService } from '../../../../shared/services/incident-management-api-service';
+import { PlannedActionsApiService } from '../../../../shared/services/planned-actions-api-service';
+import { PublicIncidentsApiService } from '../../../../shared/services/public-incidents-api-service';
 import type { CurrentUser, IncidentPermissionContext } from '../../../../core/permissions/permissions.model';
 
 const INCIDENT_STATUS_LABELS: Record<IncidentStatus, string> = {
@@ -54,7 +57,10 @@ export class IncidentDetailPageComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly incidentsApi = inject(IncidentsApiService);
+  private readonly citizenIncidentsApi = inject(CitizenIncidentsApiService);
+  private readonly incidentManagementApi = inject(IncidentManagementApiService);
+  private readonly plannedActionsApi = inject(PlannedActionsApiService);
+  private readonly publicIncidentsApi = inject(PublicIncidentsApiService);
   private readonly toast = inject(ToastService);
   private readonly auth = inject(AuthService);
   private readonly permissions = inject(PermissionsService);
@@ -109,7 +115,7 @@ export class IncidentDetailPageComponent {
             return of(new Set<string>());
           }
 
-          return this.incidentsApi.getSignedInCitizenIncidents().pipe(
+          return this.citizenIncidentsApi.getSignedInCitizenIncidents().pipe(
             map((incidents) => new Set(incidents.map((item) => item.id))),
           );
         }),
@@ -129,7 +135,7 @@ export class IncidentDetailPageComponent {
       return;
     }
 
-    this.incidentsApi
+    this.incidentManagementApi
       .updateIncidentStatus(this.getApiIncidentId(), status)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(this.createIncidentUpdateObserver(
@@ -143,7 +149,7 @@ export class IncidentDetailPageComponent {
       return;
     }
 
-    this.incidentsApi
+    this.incidentManagementApi
       .updateIncidentPriority(this.getApiIncidentId(), priority)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(this.createIncidentUpdateObserver('Incident priority updated.', 'Could not update incident priority.'));
@@ -155,7 +161,7 @@ export class IncidentDetailPageComponent {
     }
 
     const incidentId = this.getApiIncidentId();
-    this.incidentsApi
+    this.plannedActionsApi
       .createPlannedAction({
         incidentId,
         title: payload.title,
@@ -165,7 +171,7 @@ export class IncidentDetailPageComponent {
       })
       .pipe(
         switchMap(() => {
-          return this.incidentsApi.updateIncidentStatus(incidentId, 'PLANNED').pipe(
+          return this.incidentManagementApi.updateIncidentStatus(incidentId, 'PLANNED').pipe(
             catchError(() => {
               this.toast.showError('Planned action was created, but incident status could not be changed to Planned.');
               return of(null);
@@ -174,7 +180,7 @@ export class IncidentDetailPageComponent {
         }),
         switchMap(() => {
           this.toast.showSuccess('Planned action created successfully.');
-          return this.incidentsApi.getPublicIncidentById(incidentId).pipe(
+          return this.publicIncidentsApi.getPublicIncidentById(incidentId).pipe(
             catchError(() => {
               this.toast.showError('Planned action was created, but incident refresh failed.');
               return EMPTY;
@@ -200,7 +206,7 @@ export class IncidentDetailPageComponent {
       return;
     }
 
-    this.incidentsApi
+    this.incidentManagementApi
       .deleteIncident(this.getApiIncidentId())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({

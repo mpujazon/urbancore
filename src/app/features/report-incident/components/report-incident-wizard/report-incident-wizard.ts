@@ -8,7 +8,8 @@ import type { CreateIncidentRequest } from '../../models/incident-report.models'
 import type { IncidentSuggestionFormValues, IncidentSuggestionResponse } from '../../models/incident-suggestion.model';
 import type { IncidentImageDto } from '../../models/upload.models';
 import { ImageUploadService } from '../../services/image-upload-service';
-import { IncidentsApiService } from '../../../../shared/services/incidents-api-service';
+import { IncidentSuggestionsApiService } from '../../services/incident-suggestions-api-service';
+import { ReportIncidentApiService } from '../../services/report-incident-api-service';
 import { ReportIncidentForm, ReportIncidentFormValues } from '../report-incident-form/report-incident-form';
 import { ReportIncidentLocation } from '../report-incident-location/report-incident-location';
 import { ReportIncidentMedia } from '../report-incident-media/report-incident-media';
@@ -26,7 +27,8 @@ const GEOHASH_PRECISION = 9;
 })
 export class ReportIncidentWizard {
   private readonly imageUploadService = inject(ImageUploadService);
-  private readonly incidentService = inject(IncidentsApiService);
+  private readonly reportIncidentApi = inject(ReportIncidentApiService);
+  private readonly incidentSuggestionsApi = inject(IncidentSuggestionsApiService);
   private readonly cityContext = inject(CityContextService);
   private readonly toastService = inject(ToastService);
   private readonly router = inject(Router);
@@ -120,7 +122,7 @@ export class ReportIncidentWizard {
       .pipe(
         tap((uploadedImages) => this.uploadedImages.set(uploadedImages)),
         switchMap((uploadedImages) =>
-          this.incidentService.createIncident(
+          this.reportIncidentApi.createIncident(
             this.buildCreateIncidentRequest(coordinates, addressLabel, citySlug, city, uploadedImages)
           )
         ),
@@ -156,7 +158,7 @@ export class ReportIncidentWizard {
     this.isAutocompleteLoading.set(true);
     this.autocompleteMessage.set('Generating suggestions from the first image...');
 
-    this.incidentService
+    this.incidentSuggestionsApi
       .getIncidentSuggestions(files[0])
       .pipe(finalize(() => this.isAutocompleteLoading.set(false)))
       .subscribe({

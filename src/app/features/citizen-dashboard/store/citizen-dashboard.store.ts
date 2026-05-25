@@ -1,6 +1,6 @@
 import {computed, DestroyRef, inject, Injectable, signal} from '@angular/core';
 import {type IncidentListItemDto, IncidentStatus} from '../../../shared/models/incident-dto.model';
-import {IncidentsApiService} from '../../../shared/services/incidents-api-service';
+import {CitizenIncidentsApiService} from '../../../shared/services/citizen-incidents-api-service';
 import {ResourceState} from '../../../shared/models/resource-state.model';
 import {mapIncidentListItemToCard} from '../../../shared/mappers/incident.mapper';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
@@ -15,7 +15,7 @@ const UNRESOLVED_STATUSES: readonly IncidentStatus[] = [
 
 @Injectable()
 export class CitizenDashboardStore {
-  private readonly incidentService = inject(IncidentsApiService);
+  private readonly incidentService = inject(CitizenIncidentsApiService);
   private readonly destroyRef = inject(DestroyRef);
 
   private readonly incidentsState = signal<ResourceState<IncidentListItemDto[]>>({

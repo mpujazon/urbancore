@@ -15,12 +15,12 @@ import {
   IncidentListItemDto,
 } from '../../../shared/models/incident-dto.model';
 import { IncidentExplorerFilters } from '../../../shared/models/incident-vm.model';
-import { IncidentsApiService } from '../../../shared/services/incidents-api-service';
+import { PublicIncidentsApiService } from '../../../shared/services/public-incidents-api-service';
 import { PagedResponseDto } from '../../../shared/models/paged-response.model';
 
 @Injectable()
 export class IncidentsExplorerStore {
-  private readonly incidentService = inject(IncidentsApiService);
+  private readonly incidentService = inject(PublicIncidentsApiService);
   private readonly cityContext = inject(CityContextService);
   private readonly destroyRef = inject(DestroyRef);
 
