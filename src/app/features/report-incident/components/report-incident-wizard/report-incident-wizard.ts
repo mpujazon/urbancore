@@ -155,6 +155,9 @@ export class ReportIncidentWizard {
       return;
     }
 
+    const reportFormElement = document.getElementById('report-incident-form');
+    reportFormElement?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
     this.isAutocompleteLoading.set(true);
     this.autocompleteMessage.set('Generating suggestions from the first image...');
 
