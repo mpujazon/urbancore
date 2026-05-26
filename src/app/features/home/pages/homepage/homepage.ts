@@ -1,20 +1,43 @@
 import { NgOptimizedImage } from '@angular/common';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import {
   afterNextRender,
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
   ElementRef,
+  computed,
+  effect,
   inject,
   signal,
+  untracked,
   viewChild,
   viewChildren,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
+import { catchError, map, of, Subject, switchMap, tap } from 'rxjs';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { CityContextService } from '../../../../core/services/city-context-service';
+import { environment } from '../../../../../environments/environment';
+import type { ResourceState } from '../../../../shared/models/resource-state.model';
+import type { IncidentSummaryResponse } from '../../../public-statistics/models/public-statistics-dashboard.model';
+import {
+  EMPTY_INCIDENT_SUMMARY,
+  INCIDENT_SUMMARY_ENDPOINT,
+} from '../../../public-statistics/config/public-statistics-dashboard.config';
 
 gsap.registerPlugin(ScrollTrigger);
+
+interface StatCardData {
+  value: number;
+  label: string;
+  subtitle: string;
+  icon: string;
+  accent: string;
+  isDecimal: boolean;
+}
 
 @Component({
   selector: 'app-homepage',
@@ -46,12 +69,118 @@ export class Homepage {
   readonly stepCards = viewChildren<ElementRef<HTMLElement>>('stepCard');
   readonly progressDots = viewChildren<ElementRef<HTMLElement>>('progressDot');
 
+  private readonly http = inject(HttpClient);
+  private readonly cityContext = inject(CityContextService);
   readonly destroyRef = inject(DestroyRef);
+
+  private readonly summaryResource = signal<ResourceState<IncidentSummaryResponse>>({
+    data: EMPTY_INCIDENT_SUMMARY,
+    status: 'loading',
+    error: null,
+  });
+
+  protected readonly summaryStatus = computed(() => this.summaryResource().status);
+  protected readonly summaryError = computed(() => this.summaryResource().error);
+
+  protected readonly statCardData = computed((): readonly StatCardData[] => {
+    const s = this.summaryResource().data;
+    return [
+      {
+        value: s.totalIncidents,
+        label: 'Total Reports',
+        subtitle: 'All submissions',
+        icon: 'total',
+        accent: '#3b82f6',
+        isDecimal: false,
+      },
+      {
+        value: s.resolvedIncidents,
+        label: 'Resolved',
+        subtitle: 'Successfully closed',
+        icon: 'resolved',
+        accent: '#22c55e',
+        isDecimal: false,
+      },
+      {
+        value: s.openIncidents,
+        label: 'Under Investigation',
+        subtitle: 'Currently in progress',
+        icon: 'open',
+        accent: '#f59e0b',
+        isDecimal: false,
+      },
+      {
+        value: s.averageResolutionDays,
+        label: 'Avg Resolution',
+        subtitle: 'From report to closure',
+        icon: 'time',
+        accent: '#8b5cf6',
+        isDecimal: true,
+      },
+    ];
+  });
+
+  private readonly summaryRequest = new Subject<string | undefined>();
+  private heroAnimationComplete = false;
+  private statsAnimationTriggered = false;
 
   private scrollTriggerInstances: ScrollTrigger[] = [];
 
   constructor() {
     afterNextRender(() => this.initAnimations());
+    this.initDataFetching();
+
+    effect(() => {
+      const cards = this.statCards();
+      if (cards.length > 0 && this.heroAnimationComplete && !this.statsAnimationTriggered) {
+        this.statsAnimationTriggered = true;
+        untracked(() => this.initStatsEntrance());
+      }
+    });
+  }
+
+  private initDataFetching(): void {
+    this.summaryRequest
+      .pipe(
+        tap(() =>
+          this.summaryResource.set({
+            data: this.summaryResource().data,
+            status: 'loading',
+            error: null,
+          }),
+        ),
+        switchMap((cityId) =>
+          this.http
+            .get<IncidentSummaryResponse>(
+              `${environment.API_BASE_URL}${INCIDENT_SUMMARY_ENDPOINT}`,
+              { params: this.buildCityParams(cityId) },
+            )
+            .pipe(
+              map((summary) => ({ data: summary, status: 'success' as const, error: null })),
+              catchError(() =>
+                of({
+                  data: EMPTY_INCIDENT_SUMMARY,
+                  status: 'error' as const,
+                  error: 'Could not load statistics. Please try again.',
+                }),
+              ),
+            ),
+        ),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((result) => this.summaryResource.set(result));
+
+    this.summaryRequest.next(undefined);
+
+    effect(() => {
+      if (!this.cityContext.citiesLoaded()) return;
+      const cityId = this.cityContext.selectedCityId();
+      untracked(() => this.summaryRequest.next(cityId));
+    });
+  }
+
+  private buildCityParams(cityId: string | undefined): HttpParams | undefined {
+    return cityId ? new HttpParams().set('cityId', cityId) : undefined;
   }
 
   private initAnimations(): void {
@@ -68,16 +197,6 @@ export class Homepage {
     const heroEls = this.heroElements().map((e) => e.nativeElement);
     if (heroEls.length) {
       gsap.set(heroEls, { opacity: 0, y: 50 });
-    }
-
-    const cardEls = this.statCards().map((e) => e.nativeElement);
-    if (cardEls.length) {
-      gsap.set(cardEls, { opacity: 0, y: 50, scale: 0.9 });
-    }
-
-    const stepEls = this.stepCards().map((e) => e.nativeElement);
-    if (stepEls.length) {
-      gsap.set(stepEls, { opacity: 0, y: 40 });
     }
   }
 
@@ -104,8 +223,8 @@ export class Homepage {
         {
           scaleY: 0,
           transformOrigin: 'bottom center',
-          duration: 0.8,
-          stagger: 0.1,
+          duration: 0.5,
+          stagger: 0.06,
           ease: 'power3.out',
         },
         0,
@@ -115,24 +234,24 @@ export class Homepage {
     if (title) {
       tl.from(
         title.nativeElement,
-        { y: 40, opacity: 0, duration: 0.6, ease: 'power2.out' },
-        '-=0.4',
+        { y: 30, opacity: 0, duration: 0.4, ease: 'power2.out' },
+        '-=0.25',
       );
     }
 
     if (subtitle) {
       tl.from(
         subtitle.nativeElement,
-        { y: 30, opacity: 0, duration: 0.5, ease: 'power2.out' },
-        '-=0.35',
+        { y: 20, opacity: 0, duration: 0.35, ease: 'power2.out' },
+        '-=0.2',
       );
     }
 
     if (tagline) {
       tl.from(
         tagline.nativeElement,
-        { opacity: 0, duration: 0.8, ease: 'power2.out' },
-        '-=0.5',
+        { opacity: 0, duration: 0.4, ease: 'power2.out' },
+        '-=0.3',
       );
     }
 
@@ -140,16 +259,16 @@ export class Homepage {
       tl.fromTo(
         progress.nativeElement,
         { width: '0%' },
-        { width: '100%', duration: 1, ease: 'power3.inOut' },
-        '-=0.6',
+        { width: '100%', duration: 0.6, ease: 'power3.inOut' },
+        '-=0.35',
       );
     }
 
     tl.to(loader.nativeElement, {
       y: '-100%',
-      duration: 0.9,
+      duration: 0.6,
       ease: 'power3.inOut',
-      delay: 0.6,
+      delay: 0.3,
     });
   }
 
@@ -158,21 +277,33 @@ export class Homepage {
     if (!elements.length) return;
 
     const tl = gsap.timeline({
-      onComplete: () => this.initScrollAnimations(),
+      onComplete: () => {
+        this.heroAnimationComplete = true;
+        this.initScrollAnimations();
+      },
     });
 
     tl.to(elements, {
       opacity: 1,
       y: 0,
-      duration: 0.8,
-      stagger: 0.15,
+      duration: 0.5,
+      stagger: 0.08,
       ease: 'power3.out',
     });
   }
 
   private initScrollAnimations(): void {
-    this.initStatsEntrance();
     this.initProcessHorizontalScroll();
+    this.maybeInitStatsEntrance();
+  }
+
+  private maybeInitStatsEntrance(): void {
+    if (this.statsAnimationTriggered) return;
+    const cards = this.statCards();
+    if (cards.length > 0) {
+      this.statsAnimationTriggered = true;
+      this.initStatsEntrance();
+    }
   }
 
   private initStatsEntrance(): void {
@@ -191,9 +322,9 @@ export class Homepage {
             opacity: 1,
             y: 0,
             scale: 1,
-            duration: 0.75,
+            duration: 0.7,
             ease: 'power3.out',
-            delay: i * 0.15,
+            delay: i * 0.12,
           });
 
           if (numbers[i]) {
@@ -207,11 +338,16 @@ export class Homepage {
                 value: target,
                 duration: 2.2,
                 ease: 'power2.out',
-                delay: i * 0.15 + 0.4,
+                delay: i * 0.12 + 0.4,
                 onUpdate: () => {
                   numbers[i].textContent = isDecimal
                     ? counter.value.toFixed(1)
                     : Math.round(counter.value).toLocaleString();
+                },
+                onComplete: () => {
+                  if (isDecimal) {
+                    numbers[i].textContent = target.toFixed(1);
+                  }
                 },
               });
             }
@@ -224,73 +360,75 @@ export class Homepage {
   }
 
   private initProcessHorizontalScroll(): void {
-    const section = this.processSection().nativeElement;
-    const track = this.stepsTrack().nativeElement;
-    const viewport = this.scrollViewport().nativeElement;
+    ScrollTrigger.matchMedia({
+      '(min-width: 1024px)': () => {
+        const section = this.processSection().nativeElement;
+        const track = this.stepsTrack().nativeElement;
+        const viewport = this.scrollViewport().nativeElement;
 
-    const getScrollDistance = (): number => {
-      return Math.max(0, track.scrollWidth - viewport.clientWidth);
-    };
+        const getScrollDistance = (): number => {
+          return Math.max(0, track.scrollWidth - viewport.clientWidth);
+        };
 
-    if (getScrollDistance() <= 0) return;
+        if (getScrollDistance() <= 0) return;
 
-    const stepEls = this.stepCards().map((c) => c.nativeElement);
-    const dots = this.progressDots().map((d) => d.nativeElement);
+        const stepEls = this.stepCards().map((c) => c.nativeElement);
+        const dots = this.progressDots().map((d) => d.nativeElement);
 
-    const indicator = this.scrollIndicator();
-    if (indicator) {
-      const indicatorSt = ScrollTrigger.create({
-        trigger: section,
-        start: 'top 92%',
-        end: 'top 50%',
-        scrub: true,
-        animation: gsap.to(indicator.nativeElement, { opacity: 0, duration: 1 }),
-      });
-      this.scrollTriggerInstances.push(indicatorSt);
-    }
+        gsap.set(stepEls, { opacity: 0, y: 40 });
 
-    if (stepEls.length) {
-      const stepSt = ScrollTrigger.create({
-        trigger: section,
-        start: 'top 80%',
-        once: true,
-        onEnter: () => {
-          gsap.to(stepEls, {
-            opacity: 1,
-            y: 0,
-            duration: 0.7,
-            stagger: 0.2,
-            ease: 'power3.out',
-          });
-        },
-      });
-      this.scrollTriggerInstances.push(stepSt);
-    }
-
-    const mainSt = ScrollTrigger.create({
-      trigger: section,
-      start: 'top top',
-      end: () => `+=${getScrollDistance() * 1.8}`,
-      scrub: 1.2,
-      pin: true,
-      anticipatePin: 1,
-      invalidateOnRefresh: true,
-      animation: gsap.to(track, {
-        x: () => -getScrollDistance(),
-        ease: 'none',
-      }),
-      onUpdate: (self) => {
-        if (dots.length) {
-          const activeIndex = Math.min(Math.floor(self.progress * dots.length), dots.length - 1);
-          dots.forEach((dot, i) => {
-            dot.classList.toggle('is-active', i === activeIndex);
+        const indicator = this.scrollIndicator();
+        if (indicator) {
+          ScrollTrigger.create({
+            trigger: section,
+            start: 'top 92%',
+            end: 'top 50%',
+            scrub: true,
+            animation: gsap.to(indicator.nativeElement, { opacity: 0, duration: 1 }),
           });
         }
+
+        if (stepEls.length) {
+          ScrollTrigger.create({
+            trigger: section,
+            start: 'top 80%',
+            once: true,
+            onEnter: () => {
+              gsap.to(stepEls, {
+                opacity: 1,
+                y: 0,
+                duration: 0.7,
+                stagger: 0.2,
+                ease: 'power3.out',
+              });
+            },
+          });
+        }
+
+        ScrollTrigger.create({
+          trigger: section,
+          start: 'top top',
+          end: () => `+=${getScrollDistance() * 1.8}`,
+          scrub: 1.2,
+          pin: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          animation: gsap.to(track, {
+            x: () => -getScrollDistance(),
+            ease: 'none',
+          }),
+          onUpdate: (self) => {
+            if (dots.length) {
+              const activeIndex = Math.min(Math.floor(self.progress * dots.length), dots.length - 1);
+              dots.forEach((dot, i) => {
+                dot.classList.toggle('is-active', i === activeIndex);
+              });
+            }
+          },
+        });
+
+        ScrollTrigger.refresh();
       },
     });
-
-    this.scrollTriggerInstances.push(mainSt);
-
-    ScrollTrigger.refresh();
   }
 }
