@@ -1,0 +1,96 @@
+<section class="lab">
+  <header class="lab-header">
+    <p class="eyebrow">Dev playground</p>
+    <h1>httpResource Lab</h1>
+    <p class="intro">
+      Reactive data fetching with <code>httpResource</code> against the public
+      JSONPlaceholder API. Change the post ID and the request is re-issued automatically.
+    </p>
+  </header>
+
+  <div class="panel controls" aria-label="Request controls">
+    <button
+      type="button"
+      class="btn btn-icon"
+      (click)="goToPreviousPost()"
+      aria-label="Go to previous post"
+    >
+      &larr;
+    </button>
+
+    <label class="field">
+      <span>Post ID (1–100)</span>
+      <input
+        type="number"
+        inputmode="numeric"
+        [min]="firstPostId"
+        [value]="draftId()"
+        (input)="onDraftInput($event)"
+        (keydown.enter)="loadDraft()"
+      />
+    </label>
+
+    <button type="button" class="btn btn-primary" (click)="loadDraft()">Load</button>
+
+    <button
+      type="button"
+      class="btn btn-icon"
+      (click)="goToNextPost()"
+      aria-label="Go to next post"
+    >
+      &rarr;
+    </button>
+
+    <button
+      type="button"
+      class="btn"
+      (click)="reloadPost()"
+      [disabled]="postResource.status() === 'idle'"
+    >
+      Reload
+    </button>
+  </div>
+
+  <ul class="panel chips">
+    <li class="chip">
+      <span class="chip-label">status</span>
+      {{ statusLabel() }}
+    </li>
+    <li class="chip">
+      <span class="chip-label">isLoading</span>
+      {{ postResource.isLoading() }}
+    </li>
+    <li class="chip">
+      <span class="chip-label">statusCode</span>
+      {{ postResource.statusCode() ?? '—' }}
+    </li>
+  </ul>
+
+  @if (postResource.isLoading()) {
+    <div class="panel state-card loading" role="status">
+      <span class="spinner" aria-hidden="true"></span>
+      <p>Loading post…</p>
+    </div>
+  } @else if (postResource.error()) {
+    <div class="panel state-card error" role="alert">
+      <h2>Request failed</h2>
+      <p>{{ postResource.error()?.message }}</p>
+      <p class="hint">Tip: IDs above 100 return a real 404 from the API.</p>
+    </div>
+  } @else if (postResource.hasValue()) {
+    <article class="panel post-card">
+      <p class="post-meta">Post #{{ postResource.value().id }} · User {{ postResource.value().userId }}</p>
+      <h2>{{ postResource.value().title }}</h2>
+      <p class="post-body">{{ postResource.value().body }}</p>
+      <details>
+        <summary>Raw JSON</summary>
+        <pre>{{ postResource.value() | json }}</pre>
+      </details>
+    </article>
+  } @else {
+    <div class="panel state-card idle">
+      <h2>No post selected</h2>
+      <p>Pick an ID between 1 and 100 to issue a request.</p>
+    </div>
+  }
+</section>

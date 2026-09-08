@@ -1,0 +1,270 @@
+@use 'styles/variables' as *;
+
+.lab {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+  width: min(100%, 56rem);
+  margin: 0 auto;
+  padding: $space-2xl $space-md;
+}
+
+.lab-header {
+  text-align: center;
+
+  .eyebrow {
+    display: inline-flex;
+    margin: 0 0 $space-sm-md;
+    border-radius: $radius-full;
+    background-color: $secondary-fixed;
+    padding: 0.3rem 0.75rem;
+    color: $secondary;
+    font-size: $label-sm;
+    font-weight: $font-weight-semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 0;
+    color: $primary-container;
+    font-family: $font-display;
+    font-size: clamp(2rem, 6vw, 2.8125rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+
+  .intro {
+    max-width: 38rem;
+    margin: $space-sm-md auto 0;
+    color: $neutral;
+    font-size: $body-lg;
+    line-height: 1.65;
+  }
+
+  code {
+    border-radius: $radius-sm;
+    background-color: $surface-container-high;
+    padding: 0.1rem 0.35rem;
+    font-size: 0.9em;
+  }
+}
+
+.panel {
+  border: 1px solid $outline-variant;
+  border-radius: 1rem;
+  background-color: $surface-container-lowest;
+  box-shadow: $shadow-lift;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: $space-sm-md;
+  padding: $space-md $space-lg;
+
+  .field {
+    display: grid;
+    gap: $space-xs;
+
+    span {
+      color: $neutral-variant;
+      font-size: $label-sm;
+      font-weight: $font-weight-semibold;
+    }
+
+    input {
+      width: 8rem;
+      border: 1px solid $outline-variant;
+      border-radius: $radius-lg;
+      background-color: $surface-container-lowest;
+      padding: 0.55rem 0.75rem;
+      font: inherit;
+      color: $on-surface;
+
+      &:focus-visible {
+        outline: 2px solid $secondary;
+        outline-offset: 2px;
+      }
+    }
+  }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid $outline-variant;
+  border-radius: $radius-lg;
+  background-color: $surface-container-lowest;
+  color: $primary;
+  padding: 0.55rem 1rem;
+  font-size: $label-md;
+  font-weight: $font-weight-semibold;
+  cursor: pointer;
+  transition: $transition-hover;
+
+  &:hover:not(:disabled),
+  &:focus-visible {
+    transform: translateY(-1px);
+    box-shadow: $shadow-lift;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.btn-primary {
+  border-color: transparent;
+  background: $gradient-primary-cta;
+  color: $on-primary;
+}
+
+.btn-icon {
+  min-width: 2.5rem;
+  padding-inline: 0.65rem;
+  font-size: 1rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-sm;
+  margin: 0;
+  padding: $space-md $space-lg;
+  list-style: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-sm;
+  border: 1px solid $status-new-border;
+  border-radius: $radius-full;
+  background-color: $surface-container-low;
+  padding: 0.3rem 0.8rem;
+  color: $on-surface;
+  font-family: $font-body;
+  font-size: $body-md;
+  font-variant-numeric: tabular-nums;
+
+  .chip-label {
+    color: $neutral-variant;
+    font-size: $label-sm;
+    font-weight: $font-weight-semibold;
+    letter-spacing: 0.04em;
+  }
+}
+
+.state-card {
+  display: grid;
+  justify-items: start;
+  gap: $space-xs;
+  padding: $space-xl $space-lg;
+
+  h2 {
+    margin: 0;
+    font-family: $font-display;
+    font-size: $headline-sm;
+  }
+
+  p {
+    margin: 0;
+    color: $neutral;
+    line-height: 1.6;
+  }
+
+  .hint {
+    color: $neutral-variant;
+    font-size: $body-md;
+  }
+
+  &.loading p {
+    font-weight: $font-weight-medium;
+  }
+}
+
+.state-card.error {
+  border-color: rgba($on-error-container, 0.3);
+  background-color: $error-container;
+
+  h2,
+  p {
+    color: $on-error-container;
+  }
+}
+
+.spinner {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 3px solid $secondary-fixed;
+  border-top-color: $secondary;
+  border-radius: $radius-full;
+  animation: spin 800ms linear infinite;
+}
+
+.post-card {
+  display: grid;
+  gap: $space-sm-md;
+  padding: $space-xl $space-lg;
+
+  .post-meta {
+    margin: 0;
+    color: $secondary;
+    font-size: $label-sm;
+    font-weight: $font-weight-semibold;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: 0;
+    color: $primary-container;
+    font-family: $font-display;
+    font-size: $headline-md;
+    line-height: 1.15;
+  }
+
+  .post-body {
+    margin: 0;
+    max-width: 44rem;
+    color: $neutral;
+    line-height: 1.7;
+  }
+
+  details {
+    margin-top: $space-sm;
+
+    summary {
+      color: $secondary;
+      font-size: $label-md;
+      font-weight: $font-weight-semibold;
+      cursor: pointer;
+
+      &:focus-visible {
+        outline: 2px solid $secondary;
+        outline-offset: 2px;
+      }
+    }
+
+    pre {
+      overflow-x: auto;
+      margin: $space-sm-md 0 0;
+      border: 1px solid $outline-variant;
+      border-radius: $radius-md;
+      background-color: $surface-container-low;
+      padding: $space-md;
+      font-size: $body-sm;
+      line-height: 1.6;
+    }
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

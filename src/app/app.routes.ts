@@ -147,6 +147,21 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'http-resource-lab',
+    title: 'HTTP Resource Lab | UrbanCore',
+    data: {
+      seo: {
+        description:
+          'Interactive playground to test Angular httpResource against a public API.',
+        noindex: true,
+      },
+    },
+    loadComponent: () =>
+      import(
+        './features/http-resource-lab/pages/http-resource-lab/http-resource-lab'
+      ).then((m) => m.HttpResourceLab),
+  },
+  {
     path: 'unauthorized',
     title: 'Unauthorized Access | UrbanCore',
     data: {
