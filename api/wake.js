@@ -5,7 +5,7 @@ module.exports = (req, res) => {
     return res.status(405).send('Method Not Allowed');
   }
 
-  const wakeUp = fetch('https://TU-BACKEND.onrender.com/health')
+  const wakeUp = fetch('https://urbancore-api.onrender.com/api/health')
     .then(async (response) => {
       console.log(`Render respondió con HTTP ${response.status}`);
     })
